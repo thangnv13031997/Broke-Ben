@@ -48,7 +48,7 @@ Horror Studio và Relatable Studio, nên không cài lại giọng đọc.
 - Thành phần tiền bạc tự tính số, không gõ tay: thẻ tiền đếm lên/xuống, biểu đồ lãi kép, hóa đơn in từng dòng, điện thoại số dư,
   cột so sánh, danh sách tích/gạch, đồng xu rơi vào heo.
 - 6 nền: lưới sổ kế toán, phòng của Ben, bàn làm việc, thành phố, **Ben's Notebook** (trang sổ kẻ dòng), nền trơn.
-- **Đoạn vẽ tay (Ben's Notebook)**: lật trang sổ, một bàn tay cầm bút dạ vẽ biểu đồ từng nét (đường, cột, tròn, sơ đồ dòng tiền)
+- **Đoạn vẽ tay (Ben's Notebook)**: lật trang sổ, một bàn tay cầm bút chì vàng (kiểu whiteboard, tay áo hoodie xanh) vẽ biểu đồ từng nét (đường, cột, tròn, sơ đồ dòng tiền)
   rồi viết chữ tay; có tiếng lật giấy và tiếng bút. Dùng `"show": {"type": "sketch", ...}` với `"bg": "notebook"`.
 - Nhạc nền và hiệu ứng tự tạo (không lo bản quyền); nhạc tự nhỏ lại khi có lời. Muốn dùng nhạc của bạn: xem `library\README.txt`.
 
