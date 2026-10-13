@@ -52,7 +52,7 @@ Horror Studio và Relatable Studio, nên không cài lại giọng đọc.
 - Chuyển cảnh tự động: vẽ tiếp trên sổ thì **lật trang**; đổi từ thẻ sang trang sổ, trang sang thẻ hay sang loại khác thì **trượt vào**.
 - **Đoạn vẽ tay (Ben's Notebook)**: trang sổ lò xo trượt vào (hoặc lật sang trang mới nếu vẽ tiếp), bàn tay cầm bút chì (ảnh CC0 từ Openclipart, nền trong suốt, xem `assets/hand/README.txt`) vẽ biểu đồ từng nét (đường, cột, tròn, sơ đồ dòng tiền); chữ viết và màu tô hiện dần theo ngòi bút
   rồi viết chữ tay; có tiếng lật giấy và tiếng bút. Dùng `"show": {"type": "sketch", ...}` với `"bg": "notebook"`.
-- Nhạc nền và hiệu ứng tự tạo (không lo bản quyền); nhạc tự nhỏ lại khi có lời. Tiếng bút chì khi vẽ nhỏ và mềm, chỉnh riêng ở tab 3 (thanh **Tiếng bút vẽ**, kéo về 0 để tắt). Muốn dùng nhạc của bạn: xem `library\README.txt`.
+- Nhạc nền và hiệu ứng tự tạo (không lo bản quyền); nhạc tự nhỏ lại khi có lời. Tiếng vẽ nhỏ và dịu; ở tab 3 chọn **Kiểu tiếng bút** (bút chì, bút bi, bút dạ, phấn bảng, gõ nhẹ) và chỉnh **Tiếng bút vẽ** (0 = tắt). Muốn dùng tiếng thật của bạn: đặt file `library\sfx\scribble.wav`. Muốn dùng nhạc của bạn: xem `library\README.txt`.
 
 ## Định dạng kịch bản
 - Hướng dẫn đầy đủ cho Claude: `docs/PROMPT_FOR_CLAUDE.md` (tiếng Anh).

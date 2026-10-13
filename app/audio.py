@@ -41,6 +41,72 @@ def _lowpass(x, k):
     return np.convolve(x, np.ones(k) / k, mode='same').astype(np.float32)
 
 
+DRAW_STYLES = ['pencil', 'ballpen', 'marker', 'chalk', 'tap']
+DRAW_STYLE = ['pencil']                                   # set from config.json "draw_sound" before mixing
+
+
+def _strokes(secs, rng, lo, hi, gap_lo, gap_hi):
+    """Envelope of short uneven strokes, like a hand writing."""
+    env = np.zeros(int(secs * SR), np.float32)
+    starts, pos = [], 0.0
+    while pos < secs:
+        ln = rng.uniform(lo, hi)
+        a, b = int(pos * SR), int(min(secs, pos + ln) * SR)
+        if b > a:
+            env[a:b] = np.sin(np.linspace(0, np.pi, b - a)) * rng.uniform(0.6, 1.0)
+            starts.append(a)
+        pos += ln + rng.uniform(gap_lo, gap_hi)
+    return env, starts
+
+
+def _fade(y, secs=0.15):
+    f = min(len(y) // 2, int(secs * SR))
+    y[:f] *= np.linspace(0, 1, f)
+    y[-f:] *= np.linspace(1, 0, f)
+    return y.astype(np.float32)
+
+
+def draw_sound(style='pencil', secs=1.6):
+    """Soft drawing sounds: pencil (paper shh), ballpen (light quick strokes), marker (felt-tip squeak),
+    chalk (gritty taps), tap (gentle wooden taps)."""
+    rng = np.random.default_rng(12)
+    n = _noise(secs, 11)
+    if style == 'ballpen':
+        env, starts = _strokes(secs, rng, 0.06, 0.15, 0.03, 0.08)
+        y = (_lowpass(n, 2) - _lowpass(n, 7)) * env * 0.22
+        for a in starts:                                   # the tiny tick of the ball touching paper
+            c = _lowpass(_noise(0.006, a), 2) * 0.12
+            y[a:a + len(c)] += c[:len(y) - a]
+        return _fade(y)
+    if style == 'marker':
+        env, _ = _strokes(secs, rng, 0.18, 0.4, 0.06, 0.14)
+        t = np.arange(len(n)) / SR
+        f = 1050 + 250 * np.sin(2 * np.pi * 3.1 * t) + 120 * np.sin(2 * np.pi * 7.7 * t)
+        squeak = np.sin(2 * np.pi * np.cumsum(f) / SR) * 0.035
+        y = ((_lowpass(n, 6) - _lowpass(n, 40)) * 0.3 + squeak) * env
+        return _fade(y)
+    if style == 'chalk':
+        env, starts = _strokes(secs, rng, 0.1, 0.25, 0.05, 0.12)
+        grit = (_lowpass(n, 3) - _lowpass(n, 12)) * (0.6 + 0.4 * (np.abs(_noise(secs, 21)) > 1.2))
+        y = grit * env * 0.3
+        for a in starts:
+            c = _lowpass(_noise(0.02, a + 1), 6) * _env(int(0.02 * SR), 0.001, 0.006) * 0.35
+            y[a:a + len(c)] += c[:len(y) - a]
+        return _fade(y)
+    if style == 'tap':
+        y = np.zeros(int(secs * SR), np.float32)
+        pos = 0.05
+        while pos < secs - 0.1:
+            a = int(pos * SR)
+            tick = _tone(rng.uniform(900, 1300), 0.05, 0.012, (1, 0.3)) * rng.uniform(0.3, 0.45)
+            y[a:a + len(tick)] += tick[:len(y) - a]
+            pos += rng.uniform(0.14, 0.26)
+        return _fade(y, 0.05)
+    env, _ = _strokes(secs, rng, 0.12, 0.28, 0.04, 0.12)  # pencil: a soft paper "shh"
+    y = (_lowpass(n, 4) - _lowpass(n, 18)) * env * 0.25
+    return _fade(y)
+
+
 def sfx(name):
     own = os.path.join(LIB, 'sfx', name + '.wav')
     if os.path.exists(own):
@@ -83,23 +149,8 @@ def sfx(name):
         t = np.linspace(0, 1, len(n))
         y = (n - _lowpass(n, 6)) * np.sin(np.pi * t) ** 1.5 * 0.5
         return y.astype(np.float32)
-    if name == 'scribble':                               # soft pencil on paper, ~1.6 s, kept quiet
-        n = _noise(1.6, 11)
-        band = _lowpass(n, 4) - _lowpass(n, 18)          # a soft paper "shh", no harsh hiss
-        rng = np.random.default_rng(12)
-        env = np.zeros(len(n), np.float32)               # short, uneven strokes like handwriting
-        pos = 0.0
-        while pos < 1.6:
-            ln = rng.uniform(0.12, 0.28)
-            a, b = int(pos * SR), int(min(1.6, pos + ln) * SR)
-            if b > a:
-                env[a:b] = np.sin(np.linspace(0, np.pi, b - a)) * rng.uniform(0.6, 1.0)
-            pos += ln + rng.uniform(0.04, 0.12)
-        y = band * env * 0.25
-        f = int(0.15 * SR)
-        y[:f] *= np.linspace(0, 1, f)
-        y[-f:] *= np.linspace(1, 0, f)
-        return y.astype(np.float32)
+    if name == 'scribble':                               # the drawing sound, ~1.6 s, kept quiet
+        return draw_sound(DRAW_STYLE[0])
     if name == 'thud':
         t = _t(0.3)
         f = 120 - 70 * t / 0.3
@@ -184,6 +235,7 @@ def mix(voice, events, total_secs, style, ff, cfg):
     out += bed[:n] * duck.astype(np.float32)
     vol = float(cfg.get('sfx_volume', 0.8))
     draw_vol = float(cfg.get('draw_volume', 0.5))           # the pencil has its own volume (0 = silent)
+    DRAW_STYLE[0] = cfg.get('draw_sound', 'pencil') if cfg.get('draw_sound') in DRAW_STYLES else 'pencil'
     for t, name in events:
         g = vol * (draw_vol if name == 'scribble' else 1.0)
         if g <= 0:
