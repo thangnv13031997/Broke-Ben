@@ -50,3 +50,8 @@ Hướng dẫn đầy đủ (tiếng Anh, để Claude đọc): `docs/PROMPT_FOR
 - **lines**: `text` (tiếng Anh để đọc, số viết bằng chữ, `*từ*` để tô vàng), **`vi`** (phụ đề tiếng Việt), `pause_after`, `speaker` ("none" để nhân vật không mấp máy miệng).
 - **sfx**: `{ "name": pop|coin|ding|whoosh|tick|thud|cash|page|scribble, "at_line": 0 }` (tool tự thêm tiếng lật trang, tiếng trượt "whoosh" và tiếng bút).
 - **transition**: `cut` hoặc `fade`.
+
+## Màn hình kết thúc (tool tự thêm)
+Sau cảnh cuối, tool tự thêm 12 giây kêu gọi đăng ký: Ben vẫy tay, con trỏ bấm nút SUBSCRIBE, chuông rung, và 2 khung
+"Watch next" để gắn video ở màn hình kết thúc của YouTube. Không cần tự viết cảnh "subscribe".
+- Đổi lời: `"end_card": {"text": "...", "vi": "...", "title": "..."}`; tắt: `"end_card": false`.

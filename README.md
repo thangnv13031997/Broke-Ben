@@ -52,6 +52,8 @@ nên `git pull` không bao giờ ghi đè nó. Giá trị mặc định nằm �
   **thẻ giá treo dây** lắc lư (tiền ra), **tờ tiền** (tiền vào/để dành), **thông báo ngân hàng** trượt vào từng cái,
   **giấy note vàng** viết tay cho danh sách, hóa đơn in từng dòng, biểu đồ lãi kép, cột so sánh, đồng xu rơi vào heo.
 - 6 nền: lưới sổ kế toán, phòng của Ben, bàn làm việc, thành phố, **Ben's Notebook** (sổ lò xo đặt nghiêng trên bàn), nền trơn.
+- **Cuối mỗi video** tool tự thêm 12 giây kêu gọi đăng ký kênh (nút Subscribe được bấm, chuông rung, 2 khung "Watch next"
+  để gắn video ở màn hình kết thúc của YouTube). Tắt bằng `"end_card": false` trong kịch bản.
 - Chuyển cảnh tự động: vẽ tiếp trên sổ thì **lật trang**; đổi từ thẻ sang trang sổ, trang sang thẻ hay sang loại khác thì **trượt vào**.
 - **Đoạn vẽ tay (Ben's Notebook)**: trang sổ lò xo trượt vào (hoặc lật sang trang mới nếu vẽ tiếp), bàn tay cầm bút chì (ảnh CC0 từ Openclipart, nền trong suốt, xem `assets/hand/README.txt`) vẽ biểu đồ từng nét (đường, cột, tròn, sơ đồ dòng tiền); chữ viết và màu tô hiện dần theo ngòi bút
   rồi viết chữ tay; có tiếng lật giấy và tiếng bút. Dùng `"show": {"type": "sketch", ...}` với `"bg": "notebook"`.
@@ -65,6 +67,11 @@ nên `git pull` không bao giờ ghi đè nó. Giá trị mặc định nằm �
 ## Ảnh kênh
 `branding/` có avatar (Ben vẫy tay), ảnh bìa, watermark và ảnh kiểm tra cỡ hiển thị. Muốn đổi chữ trên ảnh bìa: sửa
 `NAME`, `TAGLINE`, `SCHEDULE` ở đầu `tools/make_branding.py` rồi chạy `env\Scripts\python.exe tools\make_branding.py`.
+
+## Tốc độ xuất
+- Nhân vật được vẽ một lần rồi lưu trong thư mục `cache\sprites` (lần xuất đầu có bước "Chuẩn bị nhân vật", các lần sau
+  dùng lại ngay). Xóa thư mục `cache` nếu muốn vẽ lại.
+- Có card NVIDIA thì để bộ mã hóa `auto` (dùng NVENC, nhanh hơn nhiều).
 
 ## Khi có lỗi
 - Chạy **`debug (hien loi).bat`** để mở app kèm cửa sổ hiện lỗi. Nhật ký: `logs\app.log` (gửi file này cho Claude).

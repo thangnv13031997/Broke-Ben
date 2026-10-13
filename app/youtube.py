@@ -61,7 +61,9 @@ def write(script, chapters, total, path):
     out.append('- Category: Education | Video language: English')
     out.append('- Altered or synthetic content: No (hoạt hình, không giả người thật)')
     out.append('- Giờ đăng: Thứ Tư / Thứ Bảy, 9:00-11:00 sáng giờ miền Đông Mỹ (khoảng 20:00-22:00 giờ Việt Nam)')
-    out.append('- Thêm vào playlist đúng nhóm chủ đề; màn hình kết thúc trỏ tới video kế tiếp')
+    out.append('- Thêm vào playlist đúng nhóm chủ đề')
+    out.append('- Màn hình kết thúc (End screen): 12 giây cuối video đã có sẵn nút Subscribe và 2 khung "Watch next".'
+               ' Trong YouTube Studio > Editor > End screen, chọn mẫu "1 subscribe + 2 videos" và kéo 2 video vào đúng 2 khung')
     out.append(f'\nThời lượng video: {fmt_ts(total)}')
     with open(path, 'w', encoding='utf-8') as f:
         f.write('\n'.join(out) + '\n')

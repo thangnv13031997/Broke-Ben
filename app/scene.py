@@ -5,11 +5,13 @@ driven by the voice loudness, hops, pop-in/slide-in elements, Ben's spiral noteb
 the page flips when the drawing goes on, slides in when the scene changes kind), and a coin dropping into Piggy Ben.
 """
 import bisect
+import hashlib
 import math
+import os
 import random
 from PIL import Image, ImageDraw, ImageFilter
 from engine.flatkit import Pen, font
-from engine import charkit
+from engine import charkit, flatkit
 import elements as EL
 import sketch
 import timeline
@@ -26,6 +28,75 @@ SLIDE, FLIP = 0.45, 0.55                   # seconds for an element sliding in /
 
 def _ease_out_back(t):
     return EL.ease_out_back(t)
+
+
+# ---------------------------------------------------------------- character sprites, cached on disk
+# Drawing one Ben sprite takes ~1.5 s, so every (pose, mood, blink, talk) is drawn once and kept in
+# cache/sprites. The file name carries a hash of the drawing code, so a new art version redraws them.
+SPRITE_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'cache', 'sprites')
+_ART_VER = []
+
+
+def art_version():
+    if not _ART_VER:
+        h = hashlib.sha1()
+        for mod in (charkit, flatkit):
+            with open(mod.__file__, 'rb') as f:
+                h.update(f.read())
+        _ART_VER.append(h.hexdigest()[:10])
+    return _ART_VER[0]
+
+
+def _sprite_norm(who, pose, mood):
+    if who == 'piggy':
+        return 'piggy', '-', ('shock' if mood in ('shock', 'sad', 'worried', 'angry') else 'smile')
+    return 'ben', pose, mood
+
+
+def sprite_image(who, pose, mood, blink, talk):
+    """The full-canvas RGBA sprite, from the disk cache or freshly drawn (and then saved)."""
+    who, pose, mood = _sprite_norm(who, pose, mood)
+    path = os.path.join(SPRITE_DIR, f'{art_version()}_{who}_{pose}_{mood}_{int(bool(blink))}{int(bool(talk))}.png')
+    if os.path.exists(path):
+        try:
+            with Image.open(path) as im:
+                return im.convert('RGBA')
+        except Exception:
+            pass
+    if who == 'piggy':
+        im = charkit.piggy(mood=mood, blink=blink, talk=talk)
+    else:
+        im = charkit.ben(pose=pose, mood=mood, blink=blink, talk=talk)   # unknown values fall back inside
+    try:
+        os.makedirs(SPRITE_DIR, exist_ok=True)
+        tmp = path + f'.{os.getpid()}.tmp'
+        im.save(tmp, format='PNG')
+        os.replace(tmp, path)                     # atomic: parallel workers never read half a file
+    except OSError:
+        pass
+    return im
+
+
+def warm_sprite(args):
+    """Worker entry point used before rendering: draws one missing sprite into the cache."""
+    sprite_image(*args)
+    return True
+
+
+def sprites_needed(scenes):
+    out = set()
+    for sc in scenes:
+        for c in sc.get('chars') or []:
+            who, pose, mood = _sprite_norm(c.get('who', 'ben'), c.get('pose', 'idle'), c.get('mood', 'smile'))
+            for blink in (False, True):
+                for talk in (False, True):
+                    out.add((who, pose, mood, blink, talk))
+    return sorted(out)
+
+
+def sprite_cached(args):
+    who, pose, mood = _sprite_norm(*args[:3])
+    return os.path.exists(os.path.join(SPRITE_DIR, f'{art_version()}_{who}_{pose}_{mood}_{int(args[3])}{int(args[4])}.png'))
 
 
 class Renderer:
@@ -104,11 +175,7 @@ class Renderer:
     def sprite(self, who, pose, mood, blink, talk, height):
         key = (who, pose, mood, blink, talk, int(height))
         if key not in self._spr:
-            if who == 'piggy':
-                pm = 'shock' if mood in ('shock', 'sad', 'worried', 'angry') else 'smile'
-                im = charkit.piggy(mood=pm, blink=blink, talk=talk)
-            else:
-                im = charkit.ben(pose=pose, mood=mood, blink=blink, talk=talk)   # unknown values fall back inside
+            im = sprite_image(who, pose, mood, blink, talk)
             bb = im.getbbox()
             im = im.crop(bb)
             k = height / im.height
@@ -207,6 +274,8 @@ class Renderer:
         run while the line that announces the change is spoken; everything else builds over the scene."""
         show = sc.get('show') or {}
         lines = sc.get('_lines') or []
+        if show.get('type') == 'subscribe':               # the click lands at 3.0 s, with its sound
+            return EL.clamp(t / 6.0)
         if show.get('type') == 'sketch':                 # finish drawing at ~75% so the result can be read
             start = timeline.draw_start(sc)
             return EL.clamp((t - start) / max(1.2, sc['duration'] * 0.75 - start))
@@ -309,18 +378,13 @@ class Renderer:
         return img.convert('RGB')
 
     def _hand(self, img, tip):
-        """The drawing hand (marker tip on `tip`), its arm coming in from the bottom-right corner."""
-        k = self.k
-        x0, y0 = int(tip[0] - 60 * k), int(tip[1] - 60 * k)
-        w, h = self.W - x0, self.H - y0
-        if w <= 0 or h <= 0:
+        """The drawing hand with its pencil tip on `tip` (the picture is cached at output size)."""
+        im, (tx, ty) = sketch._hand_png(self.k)
+        x, y = int(round(tip[0])) - tx, int(round(tip[1])) - ty
+        sx, sy = max(0, -x), max(0, -y)
+        if sx >= im.width or sy >= im.height or x >= self.W or y >= self.H:
             return
-        p = Pen(int(w / k) + 1, int(h / k) + 1, 1 if self.S == 1 else 2)
-        sketch.draw_hand(p, 60, 60)
-        im = p.done()
-        if k != 1:
-            im = im.resize((max(1, int(im.width * k)), max(1, int(im.height * k))), Image.BILINEAR)
-        img.alpha_composite(im, (x0, y0))
+        img.alpha_composite(im, (max(0, x), max(0, y)), (sx, sy))
 
     # ------------------------------------------------------------ Ben's notebook
     def _page(self, pw, ph):

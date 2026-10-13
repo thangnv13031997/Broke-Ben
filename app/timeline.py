@@ -113,7 +113,7 @@ def build(script, cfg, voice, fps, test=False, progress=None, cancelled=lambda: 
             pause = float(ln.get('pause_after', 0.25))
             voice_parts.append(np.zeros(int(pause * tts.SR), np.float32))
             t += dur + pause
-        dur = max(MIN_SCENE, t + TAIL)
+        dur = max(MIN_SCENE, t + TAIL, float(sc.get('min_secs', 0)))
         pad = dur - t
         voice_parts.append(np.zeros(int(pad * tts.SR), np.float32))
         for ev in sc['sfx']:
@@ -163,7 +163,7 @@ def estimate(script, fps):
             sc['_lines'].append({'t0': t, 't1': t + dur, 'env': None, 'speaker': ln.get('speaker', 'narrator')})
             t += dur + float(ln.get('pause_after', 0.25))
         sc['start'] = t_global
-        sc['duration'] = max(MIN_SCENE, t + TAIL)
+        sc['duration'] = max(MIN_SCENE, t + TAIL, float(sc.get('min_secs', 0)))
         sc['frames'] = max(1, int(round(sc['duration'] * fps)))
         t_global += sc['frames'] / fps
     return t_global

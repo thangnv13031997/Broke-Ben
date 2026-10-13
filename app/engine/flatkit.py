@@ -145,6 +145,8 @@ class Pen:
         self.paste(lay, blur=r * 0.35)
 
     def done(self):
+        if self.img.size == (self.w * self.S, self.h * self.S) and self.S > 1:
+            return self.img.reduce(self.S)        # box-filter the supersampled image: fast, clean edges
         return self.img.resize((self.w, self.h), Image.LANCZOS)
 
 

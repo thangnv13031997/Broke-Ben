@@ -29,6 +29,7 @@ Vietnamese translation in `"vi"`** (used for Vietnamese subtitles and for the ow
 | A surprise number / twist every 2–3 minutes | | `rehook` |
 | Close the loop, one concrete action for this week | last 2 min | `payoff`, `action` |
 | Tease Ben's next mistake | ≤ 20 s | `outro` |
+| (added by the tool) Subscribe end card, 12 s, with two "Watch next" frames for YouTube end screens | last 12 s | — |
 
 Pacing: one scene = **3–7 seconds of narration** (1–2 short lines). Change the picture every scene.
 Put `"chapter"` on the first scene of each part (≥ 3 chapters, ≥ 10 s apart).
@@ -141,6 +142,12 @@ Put `"chapter"` on the first scene of each part (≥ 3 chapters, ≥ 10 s apart)
 - `transition`: `cut` (default) or `fade` (time jump / new chapter).
 - `music`: `light` (default), `thoughtful`, `none`. Voices: `am_michael` (default), `af_heart`, `am_fenrir`,
   `af_bella`, `bm_george`, `bm_lewis`.
+
+### End card (automatic)
+The tool appends a 12-second subscribe screen after your last scene (Ben waves, a cursor clicks SUBSCRIBE, the bell
+rings, two dashed "Watch next" frames for YouTube end-screen videos) with its own narration line. Do NOT write your
+own "subscribe" scene. Optional: `"end_card": {"text": "...", "vi": "...", "title": "NEW VIDEOS EVERY WED & SAT"}`
+to change its line, or `"end_card": false` to turn it off.
 
 ## 5. Self-check before answering
 - [ ] First line lands in the first second and matches the title/thumbnail promise.

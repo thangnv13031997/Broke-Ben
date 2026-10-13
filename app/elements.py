@@ -2,6 +2,7 @@
 its animation), so frames can be cached. Every number shown is computed here, never typed by hand.
 """
 import math
+from PIL import ImageDraw, ImageFilter
 from engine.flatkit import Pen
 import money_math
 
@@ -91,6 +92,24 @@ def card_style(spec):
     return {'red': 'tag', 'green': 'bill'}.get(spec.get('color'), 'sticker')
 
 
+_STATIC = {}
+
+
+def _cached_layer(pen, key, draw):
+    """A Pen layer whose drawing never changes during the animation, drawn once and reused."""
+    key = (key, pen.w, pen.h, pen.S)
+    if key not in _STATIC:
+        if len(_STATIC) > 40:
+            _STATIC.clear()
+        lay = pen.layer()
+        draw(lay)
+        _STATIC[key] = lay.img
+    lay = pen.layer()
+    lay.img = _STATIC[key].copy()
+    lay.d = ImageDraw.Draw(lay.img)
+    return lay
+
+
 def _soft_shadow(pen, shape, rotate=0, blur=10, alpha=60, off=(12, 16)):
     sh = pen.layer()
     sh.poly([(x + off[0], y + off[1]) for x, y in shape], (0, 0, 0, alpha))
@@ -128,19 +147,26 @@ def _price_tag(pen, w, h, label, txt, note, col, p):
     shape = [(x0 + 150, y0), (x0 + tw - 20, y0), (x0 + tw, y0 + 20), (x0 + tw, y0 + th - 20), (x0 + tw - 20, y0 + th),
              (x0 + 150, y0 + th), (x0, y0 + th / 2)]
     swing = 7 + 9 * math.exp(-8 * p) * math.cos(22 * p)
-    _soft_shadow(pen, shape, rotate=swing)
-    lay = pen.layer()
-    lay.line([hole, (hole[0] - 160, 0)], 5, INK)               # the string goes up out of the box
-    lay.poly(shape, (255, 238, 236) if col == RED else (238, 248, 240), INK, 6)
-    lay.circle(hole[0], hole[1], 26, (246, 241, 230), INK, 5)
-    lay.line([(x0 + 184, y0 + 40), (x0 + tw - 40, y0 + 40)], 3, (240, 190, 190) if col == RED else (190, 225, 200),
-             caps=False)
-    head = ' · '.join(x for x in ((label or '').upper(), (note or '').upper()) if x)
-    cx = x0 + 150 + (tw - 170) / 2
-    if head:
-        lay.text((cx, y0 + 100), head, 'bold', fit(lay, head, 'bold', 44, tw - 220), shade_of(col), anchor='mm')
-    lay.text((cx, y0 + th * 0.62), txt, 'display', fit(lay, txt, 'display', 190, tw - 220), col, anchor='mm')
-    pen.paste(lay, rotate=swing, center=hole)
+
+    def draw_shadow(sh):
+        sh.poly([(x + 12, y + 16) for x, y in shape], (0, 0, 0, 60))
+        sh.img = sh.img.filter(ImageFilter.GaussianBlur(10 * sh.S))
+
+    def draw_tag(lay):
+        lay.line([hole, (hole[0] - 160, 0)], 5, INK)               # the string goes up out of the box
+        lay.poly(shape, (255, 238, 236) if col == RED else (238, 248, 240), INK, 6)
+        lay.circle(hole[0], hole[1], 26, (246, 241, 230), INK, 5)
+        lay.line([(x0 + 184, y0 + 40), (x0 + tw - 40, y0 + 40)], 3,
+                 (240, 190, 190) if col == RED else (190, 225, 200), caps=False)
+        head = ' · '.join(x for x in ((label or '').upper(), (note or '').upper()) if x)
+        cx = x0 + 150 + (tw - 170) / 2
+        if head:
+            lay.text((cx, y0 + 100), head, 'bold', fit(lay, head, 'bold', 44, tw - 220), shade_of(col), anchor='mm')
+        lay.text((cx, y0 + th * 0.62), txt, 'display', fit(lay, txt, 'display', 190, tw - 220), col, anchor='mm')
+
+    key = ('tag', label, txt, note, col)
+    pen.paste(_cached_layer(pen, key + ('shadow',), draw_shadow), rotate=swing)
+    pen.paste(_cached_layer(pen, key, draw_tag), rotate=swing, center=hole)
 
 
 def _bill(pen, w, h, label, txt, note, p):
@@ -372,16 +398,23 @@ def checklist(pen, w, h, spec, p):
     nh = min(h - 70, (150 if title else 50) + rh * len(items) + 50)
     x0, y0 = (w - nw) / 2, (h - nh) / 2 + 10
     shape = [(x0, y0), (x0 + nw, y0), (x0 + nw, y0 + nh), (x0, y0 + nh)]
-    _soft_shadow(pen, shape, rotate=2, blur=12, alpha=55)
-    lay = pen.layer()
-    lay.poly(shape, (255, 232, 120))
-    lay.poly([(x0 + nw - 80, y0 + nh), (x0 + nw, y0 + nh - 80), (x0 + nw, y0 + nh)], (236, 205, 90))
-    y = y0 + 40
-    if title:
-        size = fit(lay, title, 'hand', 76, nw - 100)
-        lay.text((x0 + 50, y + 34), title, 'hand', size, INK, anchor='lm')
-        lay.line([(x0 + 50, y + 82), (x0 + 50 + min(nw - 100, lay.text_w(title, 'hand', size)), y + 79)], 4, RED)
-        y += 130
+
+    def draw_note(lay):
+        sh = lay.layer()
+        sh.poly([(x + 12, y + 16) for x, y in shape], (0, 0, 0, 55))
+        lay.paste(sh, blur=12)
+        lay.poly(shape, (255, 232, 120))
+        lay.poly([(x0 + nw - 80, y0 + nh), (x0 + nw, y0 + nh - 80), (x0 + nw, y0 + nh)], (236, 205, 90))
+        if title:
+            size = fit(lay, title, 'hand', 76, nw - 100)
+            lay.text((x0 + 50, y0 + 74), title, 'hand', size, INK, anchor='lm')
+            lay.line([(x0 + 50, y0 + 122), (x0 + 50 + min(nw - 100, lay.text_w(title, 'hand', size)), y0 + 119)], 4, RED)
+        tape = lay.layer()
+        tape.rect((w / 2 - 120, y0 - 26, w / 2 + 120, y0 + 30), (190, 220, 255, 170))
+        lay.paste(tape, rotate=-4)
+
+    lay = _cached_layer(pen, ('note', title, len(items), nw, nh), draw_note)
+    y = y0 + 40 + (130 if title else 0)
     shown = len(items) * seg(p, 0.0, 0.8)
     for i, it in enumerate(items):
         q = clamp(shown - i)
@@ -397,15 +430,14 @@ def checklist(pen, w, h, spec, p):
             _part_line(lay, [(x0 + 54, yy - 18), (x0 + 90, yy + 18)], clamp(mark * 2), 8, RED)
             _part_line(lay, [(x0 + 90, yy - 18), (x0 + 54, yy + 18)], clamp(mark * 2 - 1), 8, RED)
         size = fit(lay, text, 'hand', 60, nw - 170)
-        tl = lay.layer()                                     # the words are written left to right
-        tl.text((x0 + 120, yy + 2), text, 'hand', size, INK, anchor='lm')
-        if q < 1:
+        if q >= 1:
+            lay.text((x0 + 120, yy + 2), text, 'hand', size, INK, anchor='lm')
+        else:                                                # the words are written left to right
+            tl = lay.layer()
+            tl.text((x0 + 120, yy + 2), text, 'hand', size, INK, anchor='lm')
             cut = int((x0 + 120 + lay.text_w(text, 'hand', size) * q) * tl.S)
             tl.img.paste((0, 0, 0, 0), (cut, 0, tl.img.width, tl.img.height))
-        lay.paste(tl)
-    tape = lay.layer()
-    tape.rect((w / 2 - 120, y0 - 26, w / 2 + 120, y0 + 30), (190, 220, 255, 170))
-    lay.paste(tape, rotate=-4)
+            lay.paste(tl)
     pen.paste(lay, rotate=2)
 
 
@@ -449,8 +481,58 @@ def _checklist_plain(pen, w, h, spec, p):
         pen.text((110, yy), text, 'semi', fit(pen, text, 'semi', 46, w - 150), INK, anchor='lm')
 
 
+def subscribe(pen, w, h, spec, p):
+    """End card: a Subscribe button that a cursor clicks (it turns into SUBSCRIBED), the bell rings, and two
+    dashed "Watch next" frames mark where YouTube end-screen videos go."""
+    title = spec.get('text', 'NEW VIDEOS EVERY WED & SAT')
+    pen.text((w / 2, 60), title, 'display', fit(pen, title, 'display', 64, w - 60), INK, anchor='mm')
+    clicked = p >= 0.5
+    bx, by, bw, bh = w * 0.36, 230, 470, 120
+    squish = 1 - 0.08 * math.sin(math.pi * seg(p, 0.48, 0.56))
+    hw, hh = bw / 2 * squish, bh / 2 * squish
+    pen.rect((bx - hw + 8, by - hh + 10, bx + hw + 8, by + hh + 10), (0, 0, 0, 50), r=hh)
+    if clicked:
+        pen.rect((bx - hw, by - hh, bx + hw, by + hh), (229, 229, 229), INK, 4, r=hh)
+        pen.text((bx + 18, by + 2), 'SUBSCRIBED', 'display', 52, (90, 90, 90), anchor='mm')
+        pen.line([(bx - hw + 36, by), (bx - hw + 52, by + 16), (bx - hw + 80, by - 16)], 8, GREEN)
+    else:
+        pen.rect((bx - hw, by - hh, bx + hw, by + hh), (220, 30, 40), INK, 4, r=hh)
+        pen.text((bx, by + 2), 'SUBSCRIBE', 'display', 60, (255, 255, 255), anchor='mm')
+    # the bell, ringing after the click
+    cx, cy = bx + bw / 2 + 110, by
+    ring = math.sin(seg(p, 0.55, 0.9) * math.pi * 6) * 18 * (1 - seg(p, 0.55, 0.9)) if p > 0.55 else 0
+    bell = pen.layer()
+    bell.circle(cx, cy, 62, (255, 255, 255), INK, 4)
+    bell.poly([(cx - 30, cy + 22), (cx - 24, cy - 14), (cx - 12, cy - 30), (cx + 12, cy - 30), (cx + 24, cy - 14),
+               (cx + 30, cy + 22)], GOLD if clicked else (200, 200, 200), INK, 4)
+    bell.circle(cx, cy + 30, 8, INK)
+    bell.circle(cx, cy - 34, 6, INK)
+    pen.paste(bell, rotate=ring, center=(cx, cy - 34))
+    # the cursor glides in and clicks
+    if p < 0.75:
+        q = ease_in_out(seg(p, 0.15, 0.46))
+        mx = w * 0.95 + (bx + 60 - w * 0.95) * q
+        my = h * 0.95 + (by + 20 - h * 0.95) * q
+        s = 1.0 if not (0.46 <= p < 0.54) else 0.85
+        arrow = [(0, 0), (0, 64 * s), (16 * s, 50 * s), (28 * s, 76 * s), (40 * s, 70 * s), (28 * s, 45 * s), (48 * s, 45 * s)]
+        pen.poly([(mx + x, my + y) for x, y in arrow], (255, 255, 255), INK, 4)
+    # where the YouTube end-screen videos will sit
+    fw, fh = 500, 281
+    for i in range(2):
+        fx = w / 2 - fw - 20 if i == 0 else w / 2 + 20
+        fy = h - fh - 40
+        for k in range(0, int(fw), 30):
+            pen.line([(fx + k, fy), (fx + min(fw, k + 16), fy)], 4, MUTED, caps=False)
+            pen.line([(fx + k, fy + fh), (fx + min(fw, k + 16), fy + fh)], 4, MUTED, caps=False)
+        for k in range(0, int(fh), 30):
+            pen.line([(fx, fy + k), (fx, fy + min(fh, k + 16))], 4, MUTED, caps=False)
+            pen.line([(fx + fw, fy + k), (fx + fw, fy + min(fh, k + 16))], 4, MUTED, caps=False)
+        pen.text((fx + fw / 2, fy + fh / 2), 'WATCH NEXT', 'bold', 40, MUTED, anchor='mm')
+
+
 DRAW = {'money_card': money_card, 'big_text': big_text, 'invest_chart': invest_chart, 'chart': chart,
-        'receipt': receipt, 'phone': phone, 'compare': compare, 'list': checklist}
+        'receipt': receipt, 'phone': phone, 'compare': compare, 'list': checklist,
+        'subscribe': subscribe}
 
 
 def quantize(spec, p):
@@ -465,8 +547,10 @@ def quantize(spec, p):
         return 1.0
     if t == 'big_text':
         return 1.0
+    if t == 'subscribe':
+        return round(p * 60) / 60
     if t == 'list':
-        return round(p * 48) / 48
+        return round(p * 30) / 30
     if t == 'phone':
         return round(p * 60) / 60
     return round(p * 90) / 90

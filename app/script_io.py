@@ -3,7 +3,7 @@ import json
 import re
 
 BGS = ['grid', 'room', 'desk', 'notebook', 'city', 'plain']
-SHOWS = ['money_card', 'big_text', 'invest_chart', 'chart', 'receipt', 'phone', 'compare', 'list', 'coin_drop',
+SHOWS = ['subscribe', 'money_card', 'big_text', 'invest_chart', 'chart', 'receipt', 'phone', 'compare', 'list', 'coin_drop',
          'sketch']
 SKETCH_KINDS = ['line', 'bars', 'pie', 'flow']
 WHO = ['ben', 'piggy']
@@ -35,6 +35,21 @@ KIND = {'money_card': 'card', 'phone': 'card', 'list': 'card', 'receipt': 'card'
         'chart': 'chart', 'compare': 'chart', 'invest_chart': 'chart', 'sketch': 'chart', 'big_text': 'text'}
 
 
+END_CARD_EN = "If this helped, subscribe. Ben makes a new money mistake every week, so you don't have to."
+END_CARD_VI = "Nếu video có ích, hãy đăng ký kênh. Tuần nào Ben cũng mắc một lỗi tiền bạc mới, để bạn khỏi phải mắc."
+
+
+def end_card(opt):
+    """The closing subscribe screen the tool adds to every video (turn off with "end_card": false).
+    It lasts at least 12 seconds so YouTube end-screen elements fit over the two "Watch next" frames."""
+    return {'purpose': 'end_card', 'bg': opt.get('bg', 'grid'), 'transition': 'fade',
+            'chars': [{'who': 'ben', 'pose': 'wave', 'mood': 'smile', 'x': 0.14}],
+            'show': {'type': 'subscribe', 'text': opt.get('title', 'NEW VIDEOS EVERY WED & SAT')},
+            'lines': [{'text': opt.get('text', END_CARD_EN), 'vi': opt.get('vi', END_CARD_VI)}],
+            'sfx': [{'name': 'pop', 'at': 3.0}, {'name': 'ding', 'at': 3.5}],
+            'min_secs': float(opt.get('seconds', 12))}
+
+
 def normalise(s):
     s = dict(s)
     s.setdefault('title', 'Untitled')
@@ -49,7 +64,10 @@ def normalise(s):
     scenes = []
     prev_bg = 'grid'
     prev_kind = None
-    for i, sc in enumerate(s.get('scenes') or []):
+    raw = [sc for sc in (s.get('scenes') or []) if sc.get('purpose') != 'end_card']
+    if s.get('end_card', True) is not False and raw:
+        raw.append(end_card(s.get('end_card') if isinstance(s.get('end_card'), dict) else {}))
+    for i, sc in enumerate(raw):
         sc = dict(sc)
         sc['index'] = i
         sc.setdefault('purpose', 'beat')

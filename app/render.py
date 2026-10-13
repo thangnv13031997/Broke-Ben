@@ -122,6 +122,7 @@ class Job:
         wav = os.path.join(out_dir, '_mix.wav')
         tts.write_wav(wav, mixed[:int(total * tts.SR)])
 
+        self.warm_sprites([scenes[i] for i in ids])
         t_frames = time.time()
         frames = sum(scenes[i]['frames'] for i in ids)
         segs = self.render_video(ff, enc, out_dir, script, tl, ids, frames, t_frames, vertical=False)
@@ -166,6 +167,33 @@ class Job:
         return out_dir
 
     # ------------------------------------------------------------ video
+    def warm_sprites(self, scenes):
+        """Draws the character sprites this video needs (once, in parallel) into cache/sprites, so the
+        render workers only load them. Later exports reuse the cache."""
+        if HERE not in sys.path:
+            sys.path.insert(0, HERE)
+        import scene
+        todo = [a for a in scene.sprites_needed(scenes) if not scene.sprite_cached(a)]
+        if not todo:
+            return
+        self.report('frames', 0, f'Chuẩn bị nhân vật: {len(todo)} hình (chỉ lần đầu)...')
+        workers = self.cfg.get('workers', 'auto')
+        if workers in ('auto', None, 0):
+            workers = max(1, min(6, (os.cpu_count() or 2) - 1))
+        workers = max(1, min(int(workers), len(todo)))
+        if workers == 1:
+            for i, a in enumerate(todo):
+                scene.warm_sprite(a)
+                self.report('frames', 0, f'Chuẩn bị nhân vật {i + 1}/{len(todo)}')
+            return
+        import multiprocessing as mp
+        with mp.get_context('spawn').Pool(workers) as pool:
+            for i, _ in enumerate(pool.imap_unordered(scene.warm_sprite, todo)):
+                if self.cancel:
+                    pool.terminate()
+                    raise RuntimeError('Đã hủy')
+                self.report('frames', 0, f'Chuẩn bị nhân vật {i + 1}/{len(todo)} (chỉ lần đầu)')
+
     def render_video(self, ff, enc, out_dir, script, tl, ids, total_frames, t_frames, vertical, prefix='_seg',
                      shorts_info=None):
         import multiprocessing as mp
