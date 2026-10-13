@@ -5,8 +5,10 @@ import re
 BGS = ['grid', 'room', 'desk', 'notebook', 'city', 'plain']
 SHOWS = ['money_card', 'big_text', 'invest_chart', 'chart', 'receipt', 'phone', 'compare', 'list', 'coin_drop']
 WHO = ['ben', 'piggy']
-POSES = {'ben': ['idle', 'wave', 'point'], 'piggy': ['idle']}
-MOODS = ['smile', 'shock']
+POSES = {'ben': ['idle', 'wave', 'point', 'hold_head', 'cross_arms', 'phone', 'read', 'count_money', 'shrug',
+                 'think', 'celebrate', 'thumbs_up', 'facepalm', 'explain', 'sad'],
+         'piggy': ['idle']}
+MOODS = ['smile', 'shock', 'sad', 'worried', 'angry', 'smug']
 PURPOSES = ['hook', 'promise', 'setup', 'open_loop', 'beat', 'rehook', 'payoff', 'action', 'outro']
 TRANSITIONS = ['cut', 'fade', 'slide']
 MUSIC = ['light', 'thoughtful', 'none']

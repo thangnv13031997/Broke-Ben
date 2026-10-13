@@ -101,10 +101,10 @@ class Renderer:
         key = (who, pose, mood, blink, talk, int(height))
         if key not in self._spr:
             if who == 'piggy':
-                im = charkit.piggy(mood=mood if mood in ('smile', 'shock') else 'smile', blink=blink, talk=talk)
+                pm = 'shock' if mood in ('shock', 'sad', 'worried', 'angry') else 'smile'
+                im = charkit.piggy(mood=pm, blink=blink, talk=talk)
             else:
-                im = charkit.ben(pose=pose if pose in ('idle', 'wave', 'point') else 'idle',
-                                 mood=mood if mood in ('smile', 'shock') else 'smile', blink=blink, talk=talk)
+                im = charkit.ben(pose=pose, mood=mood, blink=blink, talk=talk)   # unknown values fall back inside
             bb = im.getbbox()
             im = im.crop(bb)
             k = height / im.height
@@ -249,10 +249,10 @@ class Renderer:
                         img.alpha_composite(el, (int(bx0), int(by0)))
 
         # ---- characters
-        base_h = (500 if side else 600) * k
+        base_h = (560 if side else 660) * k
         for ci, c in enumerate(sc['chars']):
             who = c['who']
-            h = base_h * float(c.get('size', 1.0)) * (0.62 if who == 'piggy' else 1.0)
+            h = base_h * float(c.get('size', 1.0)) * (0.5 if who == 'piggy' else 1.0)
             blink = ((t + ci * 1.3) % 3.7) < 0.12
             talk = self.talking(sc, t, ci, c)
             mood = c.get('mood', 'smile')
@@ -269,7 +269,7 @@ class Renderer:
             elif ent == 'pop' and t < 0.4:
                 s = max(0.05, _ease_out_back(t / 0.4))
                 sx, sy = sx * s, sy * s
-            if c.get('hop', mood == 'shock') and t < 0.35:
+            if c.get('hop', mood == 'shock' or c.get('pose') == 'celebrate') and t < 0.35:
                 y -= 60 * k * math.sin(math.pi * t / 0.35)
             if who == 'piggy' and show.get('type') == 'coin_drop':
                 y, sx, sy = self._coin_drop(img, t, dur, x, y, spr, bb, kk, sx, sy)

@@ -11,8 +11,8 @@ Vietnamese translation in `"vi"`** (used for Vietnamese subtitles and for the ow
 `youtube.title_vi` / `youtube.description_vi` explain the English texts in Vietnamese.
 
 ## 1. Channel rules
-- Mascots: **Ben** (chibi guy in a green hoodie, makes the money mistakes) and **Piggy Ben** (a cracked piggy bank
-  with a band-aid). The narrator talks to the viewer ("you"); Ben is the example ("Ben does this. You probably do too.").
+- Mascots: **Ben** (a young adult with messy brown hair, a green hoodie and a work ID badge on a lanyard; he makes the money mistakes, and he
+  is the channel avatar) and **Piggy Ben** (Ben's cracked piggy bank with a band-aid, the comic sidekick). The narrator talks to the viewer ("you"); Ben is the example ("Ben does this. You probably do too.").
 - Explain concepts only. Never tell viewers to buy or sell a specific stock or coin, never promise income,
   never "get rich quick". Ben is fictional; never say "true story".
 - Accuracy is the brand: compute every number (compound interest, loans, card payoff, budgets). Use typical
@@ -61,7 +61,7 @@ Put `"chapter"` on the first scene of each part (≥ 3 chapters, ≥ 10 s apart)
     "pinned_comment": "A question that invites comments."
   },
   "thumbnail": { "variants": [
-    { "layout": "face_number", "text": "ALWAYS *BROKE*?", "number": "$0.00", "who": "ben", "mood": "shock", "accent": "red" },
+    { "layout": "face_number", "text": "ALWAYS *BROKE*?", "number": "$0.00", "who": "ben", "pose": "hold_head", "mood": "shock", "accent": "red" },
     { "layout": "object", "text": "WHERE DID IT *GO*", "balance": 33, "items": [["Rent", 1450], ["Car loan", 489]], "who": "piggy", "mood": "shock" },
     { "layout": "split", "text": "PAYDAY VS *DAY 10*", "left": "$3,000", "right": "$33", "who": "ben", "mood": "shock" }
   ] },
@@ -88,8 +88,14 @@ Put `"chapter"` on the first scene of each part (≥ 3 chapters, ≥ 10 s apart)
 - `bg`: `grid` (ledger paper, default), `room` (Ben's room at night), `desk`, `city`, `notebook`
   ("Ben's Notebook": the element is drawn in by a pencil – use for ~20% of scenes, for concepts), `plain`.
   The background carries over to the next scene until you change it.
-- `chars`: 0–3 of `{ "who": "ben"|"piggy", "pose": "idle"|"wave"|"point" (Ben only), "mood": "smile"|"shock",
-  "x": 0..1 (optional), "enter": "left"|"right"|"pop" (optional), "size": 1.0 }`. Omit `chars` to show the
+- `chars`: 0–3 of `{ "who": "ben"|"piggy", "pose": ..., "mood": ..., "x": 0..1 (optional),
+  "enter": "left"|"right"|"pop" (optional), "size": 1.0 }`.
+  Ben poses: `idle`, `wave`, `point` (at the element), `hold_head` (money panic), `cross_arms` (skeptical),
+  `phone` (checking the bank app), `read` (holding a receipt/bill), `count_money` (fanning cash), `shrug`,
+  `think` (hand on chin), `celebrate` (both fists up), `thumbs_up`, `facepalm` (a money mistake), `explain`
+  (open hands), `sad` (slumped). Moods (Ben): `smile`, `shock`, `sad`, `worried`, `angry`, `smug`.
+  Piggy Ben has no poses; moods `smile` / `shock` (sad, worried, angry map to shock). Match pose and mood to the
+  line: `facepalm` + `sad` for a mistake, `celebrate` + `smile` for a win, `hold_head` + `shock` for a scary number. Omit `chars` to show the
   episode mascot; use `[]` for no character. `"mood": "shock"` makes the character hop once.
   The first character's mouth moves with the narration; set a line's `"speaker": "none"` to keep it still.
 - `show` (optional, one per scene; appears beside the characters):

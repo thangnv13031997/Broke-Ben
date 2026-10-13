@@ -5,7 +5,8 @@ Layouts:
   object      : a money object (phone balance or receipt) with the mascot peeking
   split       : before -> after, green number on the left, red on the right, mascot in the middle
 Spec (script.thumbnail.variants[i]): layout, text (wrap a word in *stars* for the accent colour),
-number, left, right, who (ben|piggy), mood (smile|shock), accent (red|green|gold).
+number, left, right, who (ben|piggy), pose (any Ben pose), mood (smile|shock|sad|worried|angry|smug),
+accent (red|green|gold).
 """
 import math
 from PIL import Image
@@ -29,8 +30,12 @@ def _bg(p, accent):
     p.paste(lay)
 
 
-def _mascot(who, mood, height):
-    im = charkit.piggy(mood=mood, scale=2) if who == 'piggy' else charkit.ben('idle', mood, scale=2)
+def _mascot(who, mood, height, pose=None):
+    if who == 'piggy':
+        im = charkit.piggy(mood='shock' if mood in ('shock', 'sad', 'worried', 'angry') else 'smile', scale=2)
+    else:
+        pose = pose or ('hold_head' if mood in ('shock', 'worried') else 'point')
+        im = charkit.ben(pose, mood, scale=2)
     im = im.crop(im.getbbox())
     k = height / im.height
     im = im.resize((int(im.width * k), int(height)), Image.LANCZOS)
@@ -80,7 +85,7 @@ def render(spec, script):
         if text:
             _headline(p, text, accent, TW / 2, 34, TW - 80, 92, anchor='ma')
         img = p.done()
-        m = _mascot(who, mood, TH * 0.4)
+        m = _mascot(who, mood, TH * 0.42, spec.get('pose'))
         img.alpha_composite(m, (int(TW / 2 - m.width / 2), TH - m.height + 10))
         return img
     if layout == 'object':
@@ -91,7 +96,7 @@ def render(spec, script):
             _headline(p, text, accent, 40, 40, TW * 0.52, 104)
         img = p.done()
         img.alpha_composite(el.rotate(-6, resample=Image.BICUBIC, expand=True), (int(TW * 0.6), 20))
-        m = _mascot(who, mood, TH * 0.62)
+        m = _mascot(who, mood, TH * 0.72, spec.get('pose'))
         img.alpha_composite(m, (int(TW * 0.2), TH - m.height + 20))
         return img
     # face_number
@@ -105,8 +110,8 @@ def render(spec, script):
         p.text((TW * 0.73, TH * 0.6), num, 'display', size, ACC.get(accent, ACC['red']), anchor='mm', stroke=6,
                stroke_fill=(255, 255, 255))
     img = p.done()
-    m = _mascot(who, mood, TH * 0.78)
-    img.alpha_composite(m, (int(TW * 0.25 - m.width / 2), TH - m.height + 30))
+    m = _mascot(who, mood, TH * 0.76, spec.get('pose'))
+    img.alpha_composite(m, (int(TW * 0.25 - m.width / 2), TH - m.height + 24))
     return img
 
 

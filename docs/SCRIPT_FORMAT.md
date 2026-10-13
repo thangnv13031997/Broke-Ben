@@ -18,8 +18,13 @@ Hướng dẫn đầy đủ (tiếng Anh, để Claude đọc): `docs/PROMPT_FOR
 - **purpose**: hook, promise, setup, open_loop, beat, rehook, payoff, action, outro.
 - **chapter**: tên chương YouTube (cần ≥ 3 chương).
 - **bg**: `grid`, `room`, `desk`, `city`, `notebook` (bút chì vẽ dần), `plain`. Giữ nguyên cho cảnh sau đến khi đổi.
-- **chars**: `who` (ben/piggy), `pose` (Ben: idle, wave, point), `mood` (smile, shock – sốc thì nhảy lên), `x` (0..1),
+- **chars**: `who` (ben/piggy), `pose`, `mood`, `x` (0..1),
   `enter` (left, right, pop), `size`. Bỏ trống thì hiện linh vật mặc định; `[]` là không có nhân vật.
+  - Dáng của Ben (15): idle (đứng), wave (vẫy tay), point (chỉ), hold_head (ôm đầu), cross_arms (khoanh tay),
+    phone (xem điện thoại), read (cầm hóa đơn), count_money (đếm tiền), shrug (nhún vai), think (suy nghĩ),
+    celebrate (ăn mừng – nhảy lên), thumbs_up (giơ ngón cái), facepalm (lấy tay che mặt), explain (giải thích), sad (buồn).
+  - Cảm xúc của Ben (6): smile, shock (sốc – nhảy lên), sad, worried (lo), angry (bực), smug (đắc ý).
+  - Piggy Ben: không có dáng; cảm xúc smile / shock.
 - **show** (thành phần bên phải nhân vật):
   - `money_card`: `label`, `value`, `to` (đếm từ value tới to), `to_label`, `color`, `note`
   - `big_text`: `text`, `sub`, `color`

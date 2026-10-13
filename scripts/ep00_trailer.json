@@ -2,7 +2,10 @@
   "title": "Meet Broke Ben (Channel Trailer)",
   "target_minutes": 1,
   "mascot": "ben",
-  "narrator": { "voice": "am_michael", "speed": 1.0 },
+  "narrator": {
+    "voice": "am_michael",
+    "speed": 1.0
+  },
   "music": "light",
   "youtube": {
     "title_options": [
@@ -15,96 +18,341 @@
     "description": "Ben makes $3,000 a month and still ends up broke by day ten. On this channel we take one money problem at a time and show you the real math, with pictures.",
     "description_vi": "Ben kiếm 3.000 đô mỗi tháng nhưng đến ngày thứ mười vẫn hết tiền. Kênh này giải thích từng vấn đề tiền bạc bằng con số thật và hình ảnh dễ hiểu.",
     "numbers": "$200/month, 7% average yearly return, compounded monthly, ages 25 to 65. Coffee: $5 a day vs $0.50 a day at home, 365 days. Examples, not promises.",
-    "tags": ["personal finance", "money explained", "why am i always broke", "budgeting", "compound interest", "broke ben", "animated finance"],
-    "hashtags": ["personalfinance", "moneytips", "brokeben"],
+    "tags": [
+      "personal finance",
+      "money explained",
+      "why am i always broke",
+      "budgeting",
+      "compound interest",
+      "broke ben",
+      "animated finance"
+    ],
+    "hashtags": [
+      "personalfinance",
+      "moneytips",
+      "brokeben"
+    ],
     "pinned_comment": "What's YOUR biggest money leak? Ben wants to know."
   },
-  "thumbnail": { "variants": [
-    { "layout": "face_number", "text": "WHERE DID IT *GO*?", "number": "$33", "who": "ben", "mood": "shock", "accent": "red" },
-    { "layout": "object", "text": "DAY *TEN*", "balance": 33, "items": [["Rent", 1450], ["Car loan", 489], ["Food delivery", 312]], "who": "piggy", "mood": "shock", "accent": "red" },
-    { "layout": "split", "text": "PAYDAY VS *DAY 10*", "left": "$3,000", "right": "$33", "who": "ben", "mood": "shock" }
-  ] },
-  "shorts": { "scenes": [1, 7], "hook_text": "WHERE DID $3,000 GO?", "end_text": "Subscribe: Broke Ben" },
+  "thumbnail": {
+    "variants": [
+      {
+        "layout": "face_number",
+        "text": "WHERE DID IT *GO*?",
+        "number": "$33",
+        "who": "ben",
+        "mood": "shock",
+        "accent": "red",
+        "pose": "hold_head"
+      },
+      {
+        "layout": "object",
+        "text": "DAY *TEN*",
+        "balance": 33,
+        "items": [
+          [
+            "Rent",
+            1450
+          ],
+          [
+            "Car loan",
+            489
+          ],
+          [
+            "Food delivery",
+            312
+          ]
+        ],
+        "who": "ben",
+        "pose": "phone",
+        "mood": "worried",
+        "accent": "red"
+      },
+      {
+        "layout": "split",
+        "text": "PAYDAY VS *DAY 10*",
+        "left": "$3,000",
+        "right": "$33",
+        "who": "ben",
+        "mood": "shock"
+      }
+    ]
+  },
+  "shorts": {
+    "scenes": [
+      1,
+      7
+    ],
+    "hook_text": "WHERE DID $3,000 GO?",
+    "end_text": "Subscribe: Broke Ben"
+  },
   "scenes": [
     {
       "purpose": "hook",
       "chapter": "The $33 problem",
       "bg": "grid",
-      "chars": [ { "who": "ben", "pose": "wave", "mood": "smile", "enter": "left" } ],
-      "show": { "type": "money_card", "label": "Monthly pay", "value": 3000, "to": 33, "to_label": "Left on day ten" },
-      "lines": [
-        { "text": "This is Ben. He makes *three thousand* dollars a month.", "vi": "Đây là Ben. Anh ấy kiếm 3.000 đô mỗi tháng." },
-        { "text": "By day ten... he has thirty-three left.", "vi": "Đến ngày thứ mười... anh ấy chỉ còn 33 đô." }
+      "chars": [
+        {
+          "who": "ben",
+          "pose": "wave",
+          "mood": "smile",
+          "enter": "left"
+        }
       ],
-      "sfx": [ { "name": "cash", "at_line": 1 } ]
+      "show": {
+        "type": "money_card",
+        "label": "Monthly pay",
+        "value": 3000,
+        "to": 33,
+        "to_label": "Left on day ten"
+      },
+      "lines": [
+        {
+          "text": "This is Ben. He makes *three thousand* dollars a month.",
+          "vi": "Đây là Ben. Anh ấy kiếm 3.000 đô mỗi tháng."
+        },
+        {
+          "text": "By day ten... he has thirty-three left.",
+          "vi": "Đến ngày thứ mười... anh ấy chỉ còn 33 đô."
+        }
+      ],
+      "sfx": [
+        {
+          "name": "cash",
+          "at_line": 1
+        }
+      ]
     },
     {
       "purpose": "setup",
       "bg": "room",
-      "chars": [ { "who": "ben", "pose": "idle", "mood": "shock" } ],
-      "show": { "type": "receipt", "title": "WHERE IT WENT", "income": 3000,
-                "items": [["Rent", 1450], ["Car payment", 489], ["Phone + streaming", 165], ["Food delivery", 312],
-                          ["Card minimum", 140], ["Coffee (22 cups)", 121], ["Impulse buys", 290]] },
-      "lines": [
-        { "text": "Rent, the car, the phone, food delivery...", "vi": "Tiền nhà, xe, điện thoại, đồ ăn giao tận nơi..." },
-        { "text": "Nothing crazy. And still, the money is *gone*.", "vi": "Chẳng có gì quá đáng. Vậy mà tiền vẫn *hết*." }
+      "chars": [
+        {
+          "who": "ben",
+          "pose": "read",
+          "mood": "worried"
+        }
       ],
-      "sfx": [ { "name": "tick", "at_line": 0 }, { "name": "thud", "at_line": 1 } ]
+      "show": {
+        "type": "receipt",
+        "title": "WHERE IT WENT",
+        "income": 3000,
+        "items": [
+          [
+            "Rent",
+            1450
+          ],
+          [
+            "Car payment",
+            489
+          ],
+          [
+            "Phone + streaming",
+            165
+          ],
+          [
+            "Food delivery",
+            312
+          ],
+          [
+            "Card minimum",
+            140
+          ],
+          [
+            "Coffee (22 cups)",
+            121
+          ],
+          [
+            "Impulse buys",
+            290
+          ]
+        ]
+      },
+      "lines": [
+        {
+          "text": "Rent, the car, the phone, food delivery...",
+          "vi": "Tiền nhà, xe, điện thoại, đồ ăn giao tận nơi..."
+        },
+        {
+          "text": "Nothing crazy. And still, the money is *gone*.",
+          "vi": "Chẳng có gì quá đáng. Vậy mà tiền vẫn *hết*."
+        }
+      ],
+      "sfx": [
+        {
+          "name": "tick",
+          "at_line": 0
+        },
+        {
+          "name": "thud",
+          "at_line": 1
+        }
+      ]
     },
     {
       "purpose": "promise",
       "bg": "grid",
-      "chars": [ { "who": "ben", "pose": "point", "mood": "smile" } ],
-      "show": { "type": "list", "title": "On this channel", "items": ["+ Where your money really goes", "+ The traps built to keep you broke", "+ The math nobody shows you"] },
+      "chars": [
+        {
+          "who": "ben",
+          "pose": "point",
+          "mood": "smile"
+        }
+      ],
+      "show": {
+        "type": "list",
+        "title": "On this channel",
+        "items": [
+          "+ Where your money really goes",
+          "+ The traps built to keep you broke",
+          "+ The math nobody shows you"
+        ]
+      },
       "lines": [
-        { "text": "On this channel, we take one money problem at a time.", "vi": "Ở kênh này, mỗi video giải quyết một vấn đề tiền bạc." },
-        { "text": "And we show you the *real math*, with pictures.", "vi": "Và cho bạn thấy *con số thật*, bằng hình ảnh." }
+        {
+          "text": "On this channel, we take one money problem at a time.",
+          "vi": "Ở kênh này, mỗi video giải quyết một vấn đề tiền bạc."
+        },
+        {
+          "text": "And we show you the *real math*, with pictures.",
+          "vi": "Và cho bạn thấy *con số thật*, bằng hình ảnh."
+        }
       ]
     },
     {
       "purpose": "beat",
       "chapter": "Small leaks",
       "bg": "desk",
-      "chars": [ { "who": "ben", "pose": "idle", "mood": "smile" } ],
-      "show": { "type": "compare", "title": "Coffee for one year", "left": { "label": "Coffee shop", "value": 1825, "color": "red" }, "right": { "label": "Brewed at home", "value": 182.5, "color": "green" } },
+      "chars": [
+        {
+          "who": "ben",
+          "pose": "facepalm",
+          "mood": "sad"
+        }
+      ],
+      "show": {
+        "type": "compare",
+        "title": "Coffee for one year",
+        "left": {
+          "label": "Coffee shop",
+          "value": 1825,
+          "color": "red"
+        },
+        "right": {
+          "label": "Brewed at home",
+          "value": 182.5,
+          "color": "green"
+        }
+      },
       "lines": [
-        { "text": "A five dollar coffee every day is over eighteen hundred a year.", "vi": "Mỗi ngày một ly cà phê 5 đô là hơn 1.800 đô một năm." },
-        { "text": "At home? Under two hundred.", "vi": "Tự pha ở nhà? Chưa tới 200 đô." }
+        {
+          "text": "A five dollar coffee every day is over eighteen hundred a year.",
+          "vi": "Mỗi ngày một ly cà phê 5 đô là hơn 1.800 đô một năm."
+        },
+        {
+          "text": "At home? Under two hundred.",
+          "vi": "Tự pha ở nhà? Chưa tới 200 đô."
+        }
       ]
     },
     {
       "purpose": "rehook",
       "bg": "notebook",
-      "chars": [ { "who": "ben", "pose": "point", "mood": "smile" } ],
-      "show": { "type": "invest_chart", "monthly": 200, "rate": 0.07, "years": 40, "start_age": 25, "compounding": "monthly" },
+      "chars": [
+        {
+          "who": "ben",
+          "pose": "think",
+          "mood": "smug"
+        }
+      ],
+      "show": {
+        "type": "invest_chart",
+        "monthly": 200,
+        "rate": 0.07,
+        "years": 40,
+        "start_age": 25,
+        "compounding": "monthly"
+      },
       "lines": [
-        { "text": "But here is the part nobody tells you.", "vi": "Nhưng đây là điều chẳng ai nói với bạn." },
-        { "text": "Two hundred a month, invested from twenty-five...", "vi": "200 đô mỗi tháng, đầu tư từ năm 25 tuổi..." },
-        { "text": "...can grow to over *half a million* by sixty-five.", "vi": "...có thể thành hơn *nửa triệu đô* khi 65 tuổi." }
+        {
+          "text": "But here is the part nobody tells you.",
+          "vi": "Nhưng đây là điều chẳng ai nói với bạn."
+        },
+        {
+          "text": "Two hundred a month, invested from twenty-five...",
+          "vi": "200 đô mỗi tháng, đầu tư từ năm 25 tuổi..."
+        },
+        {
+          "text": "...can grow to over *half a million* by sixty-five.",
+          "vi": "...có thể thành hơn *nửa triệu đô* khi 65 tuổi."
+        }
       ]
     },
     {
       "purpose": "beat",
       "chapter": "Meet Piggy Ben",
       "bg": "grid",
-      "chars": [ { "who": "ben", "pose": "idle", "mood": "smile", "x": 0.3 }, { "who": "piggy", "mood": "smile", "x": 0.68, "enter": "right" } ],
-      "show": { "type": "coin_drop" },
+      "chars": [
+        {
+          "who": "ben",
+          "pose": "count_money",
+          "mood": "smile",
+          "x": 0.3
+        },
+        {
+          "who": "piggy",
+          "mood": "smile",
+          "x": 0.68,
+          "enter": "right"
+        }
+      ],
+      "show": {
+        "type": "coin_drop"
+      },
       "lines": [
-        { "text": "So Ben starts small. One coin at a time.", "vi": "Vậy nên Ben bắt đầu từ việc nhỏ. Từng đồng xu một." },
-        { "text": "Meet Piggy Ben. He has seen things.", "vi": "Gặp Piggy Ben đi. Cậu ấy đã trải qua nhiều chuyện lắm." }
+        {
+          "text": "So Ben starts small. One coin at a time.",
+          "vi": "Vậy nên Ben bắt đầu từ việc nhỏ. Từng đồng xu một."
+        },
+        {
+          "text": "Meet Piggy Ben. He has seen things.",
+          "vi": "Gặp Piggy Ben đi. Cậu ấy đã trải qua nhiều chuyện lắm."
+        }
       ]
     },
     {
       "purpose": "outro",
       "bg": "grid",
       "transition": "fade",
-      "chars": [ { "who": "ben", "pose": "wave", "mood": "smile" } ],
-      "show": { "type": "big_text", "text": "BROKE BEN", "sub": "Money, explained before it's gone.", "color": "ink" },
-      "lines": [
-        { "text": "New videos every Wednesday and Saturday.", "vi": "Video mới vào thứ Tư và thứ Bảy hằng tuần." },
-        { "text": "Subscribe, and let's fix Ben's money.", "vi": "Đăng ký kênh, và cùng sửa chuyện tiền bạc của Ben nhé." }
+      "chars": [
+        {
+          "who": "ben",
+          "pose": "celebrate",
+          "mood": "smile"
+        }
       ],
-      "sfx": [ { "name": "ding", "at_line": 1 } ]
+      "show": {
+        "type": "big_text",
+        "text": "BROKE BEN",
+        "sub": "Money, explained before it's gone.",
+        "color": "ink"
+      },
+      "lines": [
+        {
+          "text": "New videos every Wednesday and Saturday.",
+          "vi": "Video mới vào thứ Tư và thứ Bảy hằng tuần."
+        },
+        {
+          "text": "Subscribe, and let's fix Ben's money.",
+          "vi": "Đăng ký kênh, và cùng sửa chuyện tiền bạc của Ben nhé."
+        }
+      ],
+      "sfx": [
+        {
+          "name": "ding",
+          "at_line": 1
+        }
+      ]
     }
   ]
 }

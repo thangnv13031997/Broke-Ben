@@ -4,7 +4,9 @@ Tool Windows biến kịch bản JSON thành video hoạt hình tài chính hoà
 (*Money, explained before it's gone.*). Tool dùng **giọng Kokoro có sẵn trên máy** (`E:\LocalTTS`), giống
 Horror Studio và Relatable Studio, nên không cài lại giọng đọc.
 
-![Hai phương án linh vật](branding/COMPARE_v2.jpg)
+![Ảnh bìa kênh](branding/banner_2560x1440.jpg)
+
+![Ben: 15 dáng và 6 cảm xúc](docs/ben_poses.png)
 
 ## Cài lần đầu (1 lần)
 1. Chép cả thư mục này về máy, ví dụ `E:\MoneyStudio`.
@@ -41,7 +43,8 @@ Horror Studio và Relatable Studio, nên không cài lại giọng đọc.
 | `render_report.txt` | Thời lượng, bộ mã hóa, các lưu ý về kịch bản |
 
 ## Video trông như thế nào
-- Nhân vật **Ben** (chibi, hoodie xanh) và **Piggy Ben** (heo đất nứt dán băng): thở, chớp mắt, **mấp máy miệng theo giọng đọc**, nhảy lên khi sốc, đi vào khung hình.
+- Nhân vật **Ben** (người trẻ đi làm: tóc rối kiểu hiện đại, hoodie xanh, thẻ nhân viên đeo cổ) với **15 dáng và 6 cảm xúc** (xem `docs/ben_poses.png`),
+  và **Piggy Ben** (heo đất nứt dán băng, vai phụ). Nhân vật thở, chớp mắt, **mấp máy miệng theo giọng đọc**, nhảy lên khi sốc hoặc ăn mừng.
 - Thành phần tiền bạc tự tính số, không gõ tay: thẻ tiền đếm lên/xuống, biểu đồ lãi kép, hóa đơn in từng dòng, điện thoại số dư,
   cột so sánh, danh sách tích/gạch, đồng xu rơi vào heo.
 - 6 nền: lưới sổ kế toán, phòng của Ben, bàn làm việc, thành phố, **Ben's Notebook** (bút chì vẽ dần), nền trơn.
@@ -51,6 +54,10 @@ Horror Studio và Relatable Studio, nên không cài lại giọng đọc.
 - Hướng dẫn đầy đủ cho Claude: `docs/PROMPT_FOR_CLAUDE.md` (tiếng Anh).
 - Tóm tắt tiếng Việt: `docs/SCRIPT_FORMAT.md`.
 - Tập mẫu: `scripts/ep00_trailer.json` (trailer kênh khoảng 1 phút, có đủ phụ đề Việt).
+
+## Ảnh kênh
+`branding/` có avatar (Ben vẫy tay), ảnh bìa, watermark và ảnh kiểm tra cỡ hiển thị. Muốn đổi chữ trên ảnh bìa: sửa
+`NAME`, `TAGLINE`, `SCHEDULE` ở đầu `tools/make_branding.py` rồi chạy `env\Scripts\python.exe tools\make_branding.py`.
 
 ## Khi có lỗi
 - Chạy **`debug (hien loi).bat`** để mở app kèm cửa sổ hiện lỗi. Nhật ký: `logs\app.log` (gửi file này cho Claude).
