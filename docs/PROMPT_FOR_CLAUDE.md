@@ -111,7 +111,9 @@ Put `"chapter"` on the first scene of each part (≥ 3 chapters, ≥ 10 s apart)
   - `chart`: `title`, `sub`, `labels` [..], `series` [{ `name`, `values` [..], `color` }], `prefix`
   - `receipt`: `title`, `income`, `items` [[label, amount], ...]; the tool computes LEFT OVER
   - `phone`: `label`, `balance`, `from` (optional, counts down), `items` [[label, amount], ...]
-  - `compare`: `title`, `left` {label, value, color}, `right` {label, value, color}, `prefix`
+  - `compare`: `title`, `left` {label, value, color}, `right` {label, value, color}, `prefix` (default "$"),
+    `suffix` (e.g. `"prefix": "", "suffix": "%"` for percentages)
+  - `money_card` also takes `decimals` (e.g. 2 for $4.80)
   - `list`: `title`, `items` ["+ good thing", "- bad thing"] (revealed one by one)
   - `coin_drop`: a coin drops into Piggy Ben (needs a piggy in `chars`)
   - `sketch` ("Ben's Notebook" hand drawing; best with `"bg": "notebook"`, which also opens with a page flip):

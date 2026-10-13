@@ -1,0 +1,2349 @@
+{
+ "title": "Why You're Always Broke (Even With a Good Salary)",
+ "target_minutes": 10,
+ "mascot": "ben",
+ "narrator": {
+  "voice": "am_michael",
+  "speed": 1.0
+ },
+ "music": "light",
+ "youtube": {
+  "title_options": [
+   "Why You're Always Broke (Even With a Good Salary)",
+   "$3,400 a Month and Still Broke: The 4 Hidden Leaks",
+   "Where Your Paycheck Really Goes (The Math Nobody Shows You)",
+   "Ben Makes $3,400 a Month. He Has $33 Left. Here's Why."
+  ],
+  "title_vi": "Vì sao bạn luôn hết tiền (dù lương khá)",
+  "description": "Why are you always broke, even with a good salary? We follow every dollar of Ben's $3,400 paycheck, find the four leaks that drain it, and the one fix that matters most: paying yourself first.\n\nThis video is for educational and entertainment purposes only and is not financial advice.",
+  "description_vi": "Vì sao bạn luôn hết tiền dù lương khá? Video lần theo từng đồng trong 3.400 đô lương của Ben, tìm 4 lỗ rò rút cạn nó, và cách sửa quan trọng nhất: trả cho bản thân trước.",
+  "numbers": "Ben's monthly take-home pay $3,400 (example budget). Car: $28,000 loan at 7.9% APR for 6 years = $490/month, $7,249 total interest; a $15,000 car on the same terms = $262/month, $3,883 interest. Burger: $14 menu price + $2 app markup + $3 service fee + $3 delivery fee + $4 tip = $26 (example). Card: $4,000 at 24% APR paying $120/month, no new spending = 56 months, $2,658 interest. Small stuff: $312 + $96 + $87 = $495/month, $5,940/year. Investing: $200/month at a 7% average yearly return, compounded monthly, 30 years = about $243,994 ($72,000 put in). Examples, not promises; returns vary and can be negative.",
+  "tags": [
+   "why am i always broke",
+   "personal finance",
+   "budgeting",
+   "lifestyle creep",
+   "pay yourself first",
+   "credit card interest",
+   "car loan",
+   "money tips",
+   "where does my money go",
+   "paycheck to paycheck",
+   "broke ben",
+   "money explained",
+   "saving money",
+   "animated finance"
+  ],
+  "hashtags": [
+   "personalfinance",
+   "moneytips",
+   "brokeben"
+  ],
+  "pinned_comment": "Which of Ben's 4 leaks hits YOU hardest: rent, car, small stuff, or the card? 👇"
+ },
+ "thumbnail": {
+  "variants": [
+   {
+    "layout": "face_number",
+    "text": "ALWAYS *BROKE*?",
+    "number": "$33",
+    "who": "ben",
+    "pose": "hold_head",
+    "mood": "shock",
+    "accent": "red"
+   },
+   {
+    "layout": "object",
+    "text": "WHERE DID IT *GO*",
+    "balance": 33,
+    "items": [
+     [
+      "Rent",
+      1450
+     ],
+     [
+      "Car",
+      490
+     ],
+     [
+      "Delivery",
+      312
+     ]
+    ],
+    "who": "ben",
+    "pose": "phone",
+    "mood": "worried",
+    "accent": "red"
+   },
+   {
+    "layout": "split",
+    "text": "PAYDAY VS *DAY 28*",
+    "left": "$3,400",
+    "right": "$33",
+    "who": "ben",
+    "mood": "shock"
+   }
+  ]
+ },
+ "shorts": {
+  "scenes": [
+   1,
+   9
+  ],
+  "hook_text": "WHERE DID $3,400 GO?",
+  "end_text": "Full video on Broke Ben"
+ },
+ "scenes": [
+  {
+   "purpose": "hook",
+   "chapter": "The $33 problem",
+   "bg": "grid",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "phone",
+     "mood": "shock"
+    }
+   ],
+   "show": {
+    "type": "money_card",
+    "label": "Monthly take-home pay",
+    "value": 3400,
+    "to": 33,
+    "to_label": "Left on day 28"
+   },
+   "lines": [
+    {
+     "text": "Ben makes *three thousand four hundred* dollars a month.",
+     "vi": "Ben kiếm 3.400 đô mỗi tháng."
+    },
+    {
+     "text": "On day twenty-eight... he has *thirty-three* left.",
+     "vi": "Đến ngày 28... anh ấy chỉ còn 33 đô."
+    }
+   ],
+   "sfx": [
+    {
+     "name": "cash",
+     "at_line": 0
+    },
+    {
+     "name": "thud",
+     "at_line": 1
+    }
+   ]
+  },
+  {
+   "purpose": "hook",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "shrug",
+     "mood": "worried"
+    }
+   ],
+   "show": {
+    "type": "list",
+    "title": "Ben is NOT",
+    "items": [
+     "- A gambler",
+     "- A big spender",
+     "- Unemployed"
+    ]
+   },
+   "lines": [
+    {
+     "text": "He doesn't gamble. He doesn't buy sports cars.",
+     "vi": "Ben không cờ bạc. Không mua xe thể thao."
+    },
+    {
+     "text": "He has a decent job and a *good* salary.",
+     "vi": "Anh ấy có việc ổn và lương khá."
+    }
+   ]
+  },
+  {
+   "purpose": "hook",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "hold_head",
+     "mood": "shock"
+    }
+   ],
+   "show": {
+    "type": "big_text",
+    "text": "WHERE DID IT GO?",
+    "color": "red"
+   },
+   "lines": [
+    {
+     "text": "So where does all that money *go*?",
+     "vi": "Vậy toàn bộ số tiền đó đi đâu?"
+    }
+   ]
+  },
+  {
+   "purpose": "promise",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "point",
+     "mood": "smile"
+    }
+   ],
+   "show": {
+    "type": "list",
+    "title": "Today",
+    "items": [
+     "+ Follow every dollar",
+     "+ Find the 4 leaks",
+     "+ One fix that matters"
+    ]
+   },
+   "lines": [
+    {
+     "text": "In the next few minutes, we'll follow every dollar.",
+     "vi": "Trong vài phút tới, ta sẽ lần theo từng đồng."
+    },
+    {
+     "text": "You'll see the *four leaks* that drain a normal paycheck.",
+     "vi": "Bạn sẽ thấy 4 lỗ rò rút cạn một khoản lương bình thường."
+    }
+   ]
+  },
+  {
+   "purpose": "promise",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "thumbs_up",
+     "mood": "smile"
+    }
+   ],
+   "show": {
+    "type": "big_text",
+    "text": "ONE FIX",
+    "sub": "that actually matters",
+    "color": "green"
+   },
+   "lines": [
+    {
+     "text": "And the one fix that actually matters.",
+     "vi": "Và một cách sửa thật sự có tác dụng."
+    }
+   ]
+  },
+  {
+   "purpose": "setup",
+   "bg": "room",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "wave",
+     "mood": "smile",
+     "enter": "left"
+    }
+   ],
+   "show": {
+    "type": "big_text",
+    "text": "BEN, 26",
+    "sub": "Office job. Good salary.",
+    "color": "ink"
+   },
+   "lines": [
+    {
+     "text": "Meet Ben. He's twenty-six and works in an office.",
+     "vi": "Đây là Ben. 26 tuổi, làm văn phòng."
+    },
+    {
+     "text": "That badge around his neck? He's very proud of it.",
+     "vi": "Cái thẻ đeo cổ kia? Anh ấy rất tự hào về nó."
+    }
+   ]
+  },
+  {
+   "purpose": "setup",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "hug_piggy",
+     "mood": "worried",
+     "x": 0.32
+    },
+    {
+     "who": "piggy",
+     "mood": "shock",
+     "x": 0.7,
+     "enter": "right"
+    }
+   ],
+   "show": {
+    "type": "big_text",
+    "text": "$0",
+    "sub": "Savings",
+    "color": "red"
+   },
+   "lines": [
+    {
+     "text": "And this is Piggy Ben, his savings.",
+     "vi": "Còn đây là Piggy Ben, khoản tiết kiệm của anh."
+    },
+    {
+     "text": "Piggy has been *empty* for a while.",
+     "vi": "Piggy đã trống rỗng từ lâu rồi."
+    }
+   ]
+  },
+  {
+   "purpose": "setup",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "idle",
+     "mood": "tired"
+    }
+   ],
+   "show": {
+    "type": "big_text",
+    "text": "7:45 AM",
+    "sub": "snooze x3",
+    "color": "ink"
+   },
+   "lines": [
+    {
+     "text": "Ben's mornings start the same way.",
+     "vi": "Buổi sáng của Ben luôn bắt đầu như nhau."
+    },
+    {
+     "text": "Alarm. Snooze. Snooze again.",
+     "vi": "Báo thức. Tắt. Rồi tắt thêm lần nữa."
+    }
+   ]
+  },
+  {
+   "purpose": "setup",
+   "bg": "city",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "coffee",
+     "mood": "smile"
+    }
+   ],
+   "show": {
+    "type": "money_card",
+    "label": "Coffee",
+    "value": 4.8,
+    "decimals": 2,
+    "note": "every workday"
+   },
+   "lines": [
+    {
+     "text": "No time for breakfast, so he grabs a coffee on the way.",
+     "vi": "Không kịp ăn sáng, nên anh mua cà phê trên đường đi."
+    },
+    {
+     "text": "Four dollars and eighty cents. Every workday.",
+     "vi": "4 đô 80. Mỗi ngày làm việc."
+    }
+   ]
+  },
+  {
+   "purpose": "setup",
+   "bg": "room",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "phone",
+     "mood": "tired"
+    }
+   ],
+   "show": {
+    "type": "money_card",
+    "label": "Dinner, delivered",
+    "value": 26,
+    "color": "red"
+   },
+   "lines": [
+    {
+     "text": "At night he's too tired to cook.",
+     "vi": "Tối về anh quá mệt để nấu ăn."
+    },
+    {
+     "text": "So dinner arrives in a paper bag.",
+     "vi": "Thế là bữa tối đến trong túi giấy."
+    }
+   ]
+  },
+  {
+   "purpose": "setup",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "celebrate",
+     "mood": "money_eyes"
+    }
+   ],
+   "show": {
+    "type": "phone",
+    "label": "Payday",
+    "balance": 3400
+   },
+   "lines": [
+    {
+     "text": "Payday feels amazing. Ben feels *rich* for about a week.",
+     "vi": "Ngày nhận lương thật tuyệt. Ben thấy mình giàu khoảng một tuần."
+    }
+   ],
+   "sfx": [
+    {
+     "name": "cash",
+     "at_line": 0
+    }
+   ]
+  },
+  {
+   "purpose": "setup",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "read",
+     "mood": "worried"
+    }
+   ],
+   "show": {
+    "type": "receipt",
+    "title": "BEN'S MONTH",
+    "income": 3400,
+    "items": [
+     [
+      "Rent",
+      1450
+     ],
+     [
+      "Car payment",
+      490
+     ],
+     [
+      "Gas + insurance",
+      255
+     ],
+     [
+      "Groceries",
+      290
+     ],
+     [
+      "Food delivery",
+      312
+     ],
+     [
+      "Phone + internet",
+      140
+     ],
+     [
+      "Subscriptions",
+      87
+     ],
+     [
+      "Coffee",
+      96
+     ],
+     [
+      "Card minimum",
+      120
+     ],
+     [
+      "Going out",
+      127
+     ]
+    ]
+   },
+   "lines": [
+    {
+     "text": "Then the bills arrive. One by one.",
+     "vi": "Rồi hóa đơn đến. Từng cái một."
+    }
+   ],
+   "sfx": [
+    {
+     "name": "tick",
+     "at_line": 0
+    }
+   ]
+  },
+  {
+   "purpose": "setup",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "empty_pockets",
+     "mood": "sad"
+    }
+   ],
+   "show": {
+    "type": "money_card",
+    "label": "Left over",
+    "value": 33,
+    "color": "red",
+    "note": "every month"
+   },
+   "lines": [
+    {
+     "text": "Add it all up, and this is what's left.",
+     "vi": "Cộng hết lại, đây là số còn lại."
+    },
+    {
+     "text": "Thirty-three dollars. Every single month.",
+     "vi": "33 đô. Tháng nào cũng vậy."
+    }
+   ],
+   "sfx": [
+    {
+     "name": "thud",
+     "at_line": 1
+    }
+   ]
+  },
+  {
+   "purpose": "open_loop",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "think",
+     "mood": "smug"
+    }
+   ],
+   "show": {
+    "type": "big_text",
+    "text": "NOT ON THE RECEIPT",
+    "sub": "We'll get there.",
+    "color": "gold"
+   },
+   "lines": [
+    {
+     "text": "Now, you might think the problem is coffee.",
+     "vi": "Có thể bạn nghĩ vấn đề là cà phê."
+    },
+    {
+     "text": "It's not. And the *biggest* leak isn't even on this receipt.",
+     "vi": "Không phải. Và lỗ rò lớn nhất thậm chí không có trên hóa đơn này."
+    }
+   ]
+  },
+  {
+   "purpose": "open_loop",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "point",
+     "mood": "smile"
+    }
+   ],
+   "show": {
+    "type": "big_text",
+    "text": "???",
+    "color": "ink"
+   },
+   "lines": [
+    {
+     "text": "Stay with me. We'll find it near the end.",
+     "vi": "Hãy theo dõi. Ta sẽ tìm ra nó gần cuối video."
+    }
+   ]
+  },
+  {
+   "purpose": "beat",
+   "chapter": "Leak 1: The rent wall",
+   "bg": "room",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "sit_desk",
+     "mood": "tired"
+    }
+   ],
+   "show": {
+    "type": "money_card",
+    "label": "Rent",
+    "value": 1450,
+    "color": "red"
+   },
+   "lines": [
+    {
+     "text": "Leak number one is the biggest bill. Rent.",
+     "vi": "Lỗ rò số một là hóa đơn lớn nhất. Tiền nhà."
+    },
+    {
+     "text": "Ben pays *fourteen fifty* a month for a one-bedroom.",
+     "vi": "Ben trả 1.450 đô mỗi tháng cho căn hộ một phòng ngủ."
+    }
+   ],
+   "transition": "fade"
+  },
+  {
+   "purpose": "beat",
+   "bg": "notebook",
+   "chars": [],
+   "show": {
+    "type": "sketch",
+    "kind": "pie",
+    "title": "Ben's $3,400",
+    "items": [
+     [
+      "Rent",
+      1450
+     ],
+     [
+      "Car",
+      745
+     ],
+     [
+      "Food",
+      698
+     ],
+     [
+      "Everything else",
+      474
+     ],
+     [
+      "Left",
+      33
+     ]
+    ]
+   },
+   "lines": [
+    {
+     "text": "Here's Ben's paycheck as a pie.",
+     "vi": "Đây là lương của Ben dưới dạng biểu đồ tròn."
+    }
+   ]
+  },
+  {
+   "purpose": "beat",
+   "bg": "grid",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "present",
+     "mood": "worried",
+     "x": 0.25
+    }
+   ],
+   "show": {
+    "type": "compare",
+    "title": "Rent as a share of pay",
+    "left": {
+     "label": "Ben",
+     "value": 43,
+     "color": "red"
+    },
+    "right": {
+     "label": "Guideline",
+     "value": 30,
+     "color": "green"
+    },
+    "prefix": "",
+    "suffix": "%"
+   },
+   "lines": [
+    {
+     "text": "Rent alone eats *forty-three percent* of it.",
+     "vi": "Riêng tiền nhà đã ăn mất 43%."
+    },
+    {
+     "text": "A common guideline says to aim for about thirty.",
+     "vi": "Một hướng dẫn phổ biến khuyên nên khoảng 30%."
+    }
+   ]
+  },
+  {
+   "purpose": "beat",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "explain",
+     "mood": "smile"
+    }
+   ],
+   "show": {
+    "type": "big_text",
+    "text": "30%",
+    "sub": "a target, not a law",
+    "color": "gold"
+   },
+   "lines": [
+    {
+     "text": "That's not a rule. It's a rough target.",
+     "vi": "Đó không phải luật. Chỉ là mục tiêu tham khảo."
+    },
+    {
+     "text": "In big cities, lots of people pay more than that.",
+     "vi": "Ở thành phố lớn, rất nhiều người trả nhiều hơn mức đó."
+    }
+   ]
+  },
+  {
+   "purpose": "beat",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "cross_arms",
+     "mood": "worried"
+    }
+   ],
+   "show": {
+    "type": "list",
+    "title": "Fixed costs",
+    "items": [
+     "- Leave first",
+     "- Same every month",
+     "- Hard to change fast"
+    ]
+   },
+   "lines": [
+    {
+     "text": "But here's why it matters so much.",
+     "vi": "Nhưng đây là lý do nó quan trọng."
+    },
+    {
+     "text": "Rent is a *fixed* cost. It leaves first, every month, no matter what.",
+     "vi": "Tiền nhà là chi phí cố định. Nó đi trước tiên, tháng nào cũng thế."
+    }
+   ]
+  },
+  {
+   "purpose": "beat",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "hold_head",
+     "mood": "shock"
+    }
+   ],
+   "show": {
+    "type": "money_card",
+    "label": "Flat tire",
+    "value": 180,
+    "color": "red"
+   },
+   "lines": [
+    {
+     "text": "When fixed costs are too high, there's no room for mistakes.",
+     "vi": "Khi chi phí cố định quá cao, không còn chỗ cho sai lầm."
+    },
+    {
+     "text": "One flat tire, and Ben is in trouble.",
+     "vi": "Một lần thủng lốp là Ben gặp rắc rối."
+    }
+   ],
+   "sfx": [
+    {
+     "name": "thud",
+     "at_line": 1
+    }
+   ]
+  },
+  {
+   "purpose": "beat",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "facepalm",
+     "mood": "smile"
+    }
+   ],
+   "show": {
+    "type": "big_text",
+    "text": "ROOFTOP POOL",
+    "sub": "used twice",
+    "color": "gold"
+   },
+   "lines": [
+    {
+     "text": "Ben picked his place for the rooftop pool.",
+     "vi": "Ben chọn căn hộ này vì có hồ bơi trên sân thượng."
+    },
+    {
+     "text": "He has used it *twice*.",
+     "vi": "Anh đã dùng nó đúng hai lần."
+    }
+   ]
+  },
+  {
+   "purpose": "beat",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "think",
+     "mood": "smile"
+    }
+   ],
+   "show": {
+    "type": "list",
+    "title": "Rent options",
+    "items": [
+     "+ Roommate",
+     "+ Cheaper place at renewal",
+     "+ Negotiate the lease"
+    ]
+   },
+   "lines": [
+    {
+     "text": "Ben's options are small but real.",
+     "vi": "Ben có vài lựa chọn nhỏ nhưng thật."
+    },
+    {
+     "text": "A roommate, a cheaper place at renewal, or *negotiating* the lease.",
+     "vi": "Ở ghép, đổi chỗ rẻ hơn khi gia hạn, hoặc thương lượng hợp đồng."
+    }
+   ]
+  },
+  {
+   "purpose": "beat",
+   "chapter": "Leak 2: The car",
+   "bg": "city",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "point",
+     "mood": "smug"
+    }
+   ],
+   "show": {
+    "type": "big_text",
+    "text": "THE CAR",
+    "color": "red"
+   },
+   "lines": [
+    {
+     "text": "Leak number two lives in the parking lot.",
+     "vi": "Lỗ rò số hai nằm ở bãi đỗ xe."
+    }
+   ],
+   "sfx": [
+    {
+     "name": "whoosh",
+     "at_line": 0
+    }
+   ],
+   "transition": "fade"
+  },
+  {
+   "purpose": "beat",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "celebrate",
+     "mood": "money_eyes"
+    }
+   ],
+   "show": {
+    "type": "money_card",
+    "label": "Raise",
+    "value": 300,
+    "color": "green",
+    "note": "per month"
+   },
+   "lines": [
+    {
+     "text": "Last year, Ben got a small raise.",
+     "vi": "Năm ngoái, Ben được tăng lương một chút."
+    },
+    {
+     "text": "So he traded his old car for a *newer* one.",
+     "vi": "Thế là anh đổi xe cũ lấy một chiếc mới hơn."
+    }
+   ]
+  },
+  {
+   "purpose": "beat",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "credit_card",
+     "mood": "smile"
+    }
+   ],
+   "show": {
+    "type": "big_text",
+    "text": "\"WHAT CAN YOU AFFORD?\"",
+    "color": "ink"
+   },
+   "lines": [
+    {
+     "text": "The dealer asked one question.",
+     "vi": "Người bán xe chỉ hỏi một câu."
+    },
+    {
+     "text": "What monthly payment can you *afford*?",
+     "vi": "Mỗi tháng anh trả được bao nhiêu?"
+    }
+   ]
+  },
+  {
+   "purpose": "beat",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "phone",
+     "mood": "smile"
+    }
+   ],
+   "show": {
+    "type": "money_card",
+    "label": "Car loan",
+    "value": 28000,
+    "note": "6 years at 7.9%"
+   },
+   "lines": [
+    {
+     "text": "Ben said about five hundred. Done.",
+     "vi": "Ben nói khoảng 500. Xong."
+    },
+    {
+     "text": "Twenty-eight thousand dollars, six years, seven point nine percent.",
+     "vi": "28.000 đô, 6 năm, lãi 7,9%."
+    }
+   ]
+  },
+  {
+   "purpose": "beat",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "facepalm",
+     "mood": "sad"
+    }
+   ],
+   "show": {
+    "type": "compare",
+    "title": "Raise vs car payment",
+    "left": {
+     "label": "Raise",
+     "value": 300,
+     "color": "green"
+    },
+    "right": {
+     "label": "Car payment",
+     "value": 490,
+     "color": "red"
+    },
+    "prefix": "$"
+   },
+   "lines": [
+    {
+     "text": "That's four hundred ninety dollars a month.",
+     "vi": "Tức là 490 đô mỗi tháng."
+    },
+    {
+     "text": "That's *more* than his whole raise.",
+     "vi": "Còn nhiều hơn cả khoản tăng lương."
+    }
+   ]
+  },
+  {
+   "purpose": "rehook",
+   "bg": "notebook",
+   "chars": [],
+   "show": {
+    "type": "sketch",
+    "kind": "bars",
+    "title": "What the $28,000 car really costs",
+    "items": [
+     [
+      "Car price",
+      28000,
+      "ink"
+     ],
+     [
+      "Interest",
+      7249,
+      "red"
+     ],
+     [
+      "Total paid",
+      35249,
+      "red"
+     ]
+    ]
+   },
+   "lines": [
+    {
+     "text": "Here's the part the dealer didn't say out loud.",
+     "vi": "Đây là phần người bán xe không nói ra."
+    },
+    {
+     "text": "Over six years, Ben pays *seven thousand two hundred* in interest.",
+     "vi": "Trong 6 năm, Ben trả hơn 7.200 đô tiền lãi."
+    }
+   ]
+  },
+  {
+   "purpose": "beat",
+   "bg": "city",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "read",
+     "mood": "worried"
+    }
+   ],
+   "show": {
+    "type": "list",
+    "title": "The car, every month",
+    "items": [
+     "- Payment: $490",
+     "- Gas + insurance: $255"
+    ]
+   },
+   "lines": [
+    {
+     "text": "And that's before gas and insurance.",
+     "vi": "Và đó là chưa tính xăng và bảo hiểm."
+    },
+    {
+     "text": "Another two hundred fifty-five a month.",
+     "vi": "Thêm 255 đô mỗi tháng nữa."
+    }
+   ]
+  },
+  {
+   "purpose": "beat",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "hold_head",
+     "mood": "shock"
+    }
+   ],
+   "show": {
+    "type": "money_card",
+    "label": "Car, all in",
+    "value": 745,
+    "color": "red",
+    "note": "per month"
+   },
+   "lines": [
+    {
+     "text": "So the car costs Ben *seven forty-five* every month.",
+     "vi": "Vậy chiếc xe tốn của Ben 745 đô mỗi tháng."
+    }
+   ],
+   "sfx": [
+    {
+     "name": "thud",
+     "at_line": 0
+    }
+   ]
+  },
+  {
+   "purpose": "beat",
+   "bg": "notebook",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "shrug",
+     "mood": "tired"
+    }
+   ],
+   "show": {
+    "type": "sketch",
+    "kind": "flow",
+    "title": "Lifestyle creep",
+    "steps": [
+     "Raise +$300",
+     "Newer car -$490",
+     "Same $33 left"
+    ]
+   },
+   "lines": [
+    {
+     "text": "This has a name. *Lifestyle creep*.",
+     "vi": "Hiện tượng này có tên. Lạm phát lối sống."
+    },
+    {
+     "text": "Every raise quietly turns into a bigger bill.",
+     "vi": "Mỗi lần tăng lương lặng lẽ biến thành hóa đơn lớn hơn."
+    }
+   ]
+  },
+  {
+   "purpose": "beat",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "think",
+     "mood": "smile"
+    }
+   ],
+   "show": {
+    "type": "compare",
+    "title": "Monthly payment, same loan terms",
+    "left": {
+     "label": "$28,000 car",
+     "value": 490,
+     "color": "red"
+    },
+    "right": {
+     "label": "$15,000 car",
+     "value": 262,
+     "color": "green"
+    },
+    "prefix": "$"
+   },
+   "lines": [
+    {
+     "text": "What if Ben had bought a reliable used car instead?",
+     "vi": "Nếu Ben mua một chiếc xe cũ đáng tin cậy thì sao?"
+    },
+    {
+     "text": "Fifteen thousand dollars, same rate, same six years.",
+     "vi": "15.000 đô, cùng lãi suất, cùng 6 năm."
+    }
+   ]
+  },
+  {
+   "purpose": "beat",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "count_money",
+     "mood": "money_eyes"
+    }
+   ],
+   "show": {
+    "type": "money_card",
+    "label": "Kept every month",
+    "value": 228,
+    "color": "green"
+   },
+   "lines": [
+    {
+     "text": "That's two hundred twenty-eight dollars a month back in his pocket.",
+     "vi": "Tức là 228 đô mỗi tháng quay về túi anh."
+    },
+    {
+     "text": "And about *three thousand four hundred* less interest.",
+     "vi": "Và ít hơn khoảng 3.400 đô tiền lãi."
+    }
+   ],
+   "sfx": [
+    {
+     "name": "cash",
+     "at_line": 0
+    }
+   ]
+  },
+  {
+   "purpose": "beat",
+   "bg": "grid",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "explain",
+     "mood": "smile"
+    }
+   ],
+   "show": {
+    "type": "big_text",
+    "text": "ASK THE TOTAL",
+    "sub": "not the monthly payment",
+    "color": "green"
+   },
+   "lines": [
+    {
+     "text": "The lesson isn't never buy a car.",
+     "vi": "Bài học không phải là đừng bao giờ mua xe."
+    },
+    {
+     "text": "It's this: ask the *total price*, not the monthly payment.",
+     "vi": "Mà là: hãy hỏi tổng giá, đừng hỏi số tiền trả mỗi tháng."
+    }
+   ]
+  },
+  {
+   "purpose": "beat",
+   "chapter": "Leak 3: The small stuff",
+   "bg": "desk",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "coffee",
+     "mood": "smile"
+    }
+   ],
+   "show": {
+    "type": "money_card",
+    "label": "Coffee",
+    "value": 96,
+    "note": "per month"
+   },
+   "lines": [
+    {
+     "text": "Leak number three is the small stuff.",
+     "vi": "Lỗ rò số ba là những khoản nhỏ."
+    },
+    {
+     "text": "And yes, this is where the coffee lives.",
+     "vi": "Và đúng vậy, cà phê nằm ở đây."
+    }
+   ],
+   "transition": "fade"
+  },
+  {
+   "purpose": "beat",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "phone",
+     "mood": "money_eyes"
+    }
+   ],
+   "show": {
+    "type": "money_card",
+    "label": "Food delivery",
+    "value": 312,
+    "color": "red",
+    "note": "per month"
+   },
+   "lines": [
+    {
+     "text": "But coffee is the smallest part.",
+     "vi": "Nhưng cà phê là phần nhỏ nhất."
+    },
+    {
+     "text": "Food delivery is *three hundred twelve* a month.",
+     "vi": "Đồ ăn giao tận nơi tốn 312 đô mỗi tháng."
+    }
+   ]
+  },
+  {
+   "purpose": "beat",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "read",
+     "mood": "shock"
+    }
+   ],
+   "show": {
+    "type": "list",
+    "title": "One burger = $26",
+    "items": [
+     "+ Burger (menu price): $14",
+     "- App price markup: $2",
+     "- Service fee: $3",
+     "- Delivery fee: $3",
+     "- Tip: $4"
+    ]
+   },
+   "lines": [
+    {
+     "text": "Look at one delivery order up close.",
+     "vi": "Hãy nhìn kỹ một đơn giao đồ ăn."
+    },
+    {
+     "text": "A fourteen dollar burger becomes *twenty-six* at the door.",
+     "vi": "Chiếc burger 14 đô thành 26 đô khi đến cửa."
+    }
+   ],
+   "sfx": [
+    {
+     "name": "tick",
+     "at_line": 0
+    }
+   ]
+  },
+  {
+   "purpose": "beat",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "shrug",
+     "mood": "smile"
+    }
+   ],
+   "show": {
+    "type": "compare",
+    "title": "One burger",
+    "left": {
+     "label": "Menu price",
+     "value": 14,
+     "color": "green"
+    },
+    "right": {
+     "label": "At your door",
+     "value": 26,
+     "color": "red"
+    },
+    "prefix": "$"
+   },
+   "lines": [
+    {
+     "text": "That's not a crime. Convenience costs money.",
+     "vi": "Đó không phải tội. Sự tiện lợi thì tốn tiền."
+    },
+    {
+     "text": "But twelve times a month, it adds up fast.",
+     "vi": "Nhưng 12 lần một tháng, nó cộng lại rất nhanh."
+    }
+   ]
+  },
+  {
+   "purpose": "beat",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "sit_desk",
+     "mood": "tired"
+    }
+   ],
+   "show": {
+    "type": "list",
+    "title": "Subscriptions: $87",
+    "items": [
+     "- Streaming x3",
+     "- Music",
+     "- Gym (unused)",
+     "- Cloud storage"
+    ]
+   },
+   "lines": [
+    {
+     "text": "Then subscriptions. Streaming, music, a gym he skips.",
+     "vi": "Rồi các gói đăng ký. Phim, nhạc, phòng gym anh không đi."
+    },
+    {
+     "text": "Eighty-seven dollars, charged quietly.",
+     "vi": "87 đô, bị trừ lặng lẽ."
+    }
+   ]
+  },
+  {
+   "purpose": "beat",
+   "bg": "notebook",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "calculator",
+     "mood": "shock",
+     "x": 0.2
+    }
+   ],
+   "show": {
+    "type": "sketch",
+    "kind": "bars",
+    "title": "The small stuff: $495 a month",
+    "items": [
+     [
+      "Delivery",
+      312,
+      "red"
+     ],
+     [
+      "Coffee",
+      96,
+      "red"
+     ],
+     [
+      "Subscriptions",
+      87,
+      "red"
+     ]
+    ]
+   },
+   "lines": [
+    {
+     "text": "Each one feels tiny on its own.",
+     "vi": "Mỗi khoản nghe thì nhỏ."
+    },
+    {
+     "text": "Together? *Four hundred ninety-five* dollars a month.",
+     "vi": "Cộng lại? 495 đô mỗi tháng."
+    }
+   ],
+   "sfx": [
+    {
+     "name": "ding",
+     "at_line": 1
+    }
+   ]
+  },
+  {
+   "purpose": "beat",
+   "bg": "desk",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "hold_head",
+     "mood": "shock"
+    }
+   ],
+   "show": {
+    "type": "money_card",
+    "label": "Small stuff, one year",
+    "value": 5940,
+    "color": "red"
+   },
+   "lines": [
+    {
+     "text": "That's nearly *six thousand* dollars a year.",
+     "vi": "Gần 6.000 đô mỗi năm."
+    }
+   ],
+   "sfx": [
+    {
+     "name": "thud",
+     "at_line": 0
+    }
+   ]
+  },
+  {
+   "purpose": "beat",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "phone",
+     "mood": "smile"
+    }
+   ],
+   "show": {
+    "type": "big_text",
+    "text": "ONE TAP",
+    "sub": "no pain, no decision",
+    "color": "ink"
+   },
+   "lines": [
+    {
+     "text": "Here's the trick. Small costs don't feel like decisions.",
+     "vi": "Mẹo ở đây là: khoản nhỏ không có cảm giác như một quyết định."
+    },
+    {
+     "text": "One tap, and it's done. No pain.",
+     "vi": "Chạm một cái là xong. Không đau."
+    }
+   ]
+  },
+  {
+   "purpose": "beat",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "thumbs_up",
+     "mood": "smile"
+    }
+   ],
+   "show": {
+    "type": "list",
+    "title": "Keep or cancel",
+    "items": [
+     "+ Keep: coffee with friends",
+     "+ Keep: one streaming app",
+     "- Cancel: unused gym",
+     "- Cancel: 2 streaming apps"
+    ]
+   },
+   "lines": [
+    {
+     "text": "The fix isn't to quit everything you enjoy.",
+     "vi": "Cách sửa không phải bỏ hết mọi thứ bạn thích."
+    },
+    {
+     "text": "Keep the two you love. *Cancel* the ones you forgot.",
+     "vi": "Giữ hai thứ bạn thích nhất. Hủy những thứ bạn đã quên."
+    }
+   ]
+  },
+  {
+   "purpose": "rehook",
+   "bg": "grid",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "point",
+     "mood": "smile",
+     "x": 0.32
+    },
+    {
+     "who": "piggy",
+     "mood": "smile",
+     "x": 0.7
+    }
+   ],
+   "show": {
+    "type": "list",
+    "title": "Found so far",
+    "items": [
+     "- Rent: 43% of pay",
+     "- Car: $745/month",
+     "- Small stuff: $495/month"
+    ]
+   },
+   "lines": [
+    {
+     "text": "Quick pause. Ben has found three leaks already.",
+     "vi": "Dừng một chút. Ben đã tìm ra ba lỗ rò."
+    },
+    {
+     "text": "Piggy is starting to look hopeful.",
+     "vi": "Piggy bắt đầu có vẻ hy vọng."
+    }
+   ]
+  },
+  {
+   "purpose": "beat",
+   "chapter": "Leak 4: The card",
+   "bg": "grid",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "credit_card",
+     "mood": "worried"
+    }
+   ],
+   "show": {
+    "type": "money_card",
+    "label": "Card balance",
+    "value": 4000,
+    "color": "red"
+   },
+   "lines": [
+    {
+     "text": "Leak number four is the sneakiest.",
+     "vi": "Lỗ rò số bốn là thứ lén lút nhất."
+    },
+    {
+     "text": "Ben has *four thousand* dollars on a credit card.",
+     "vi": "Ben đang nợ thẻ tín dụng 4.000 đô."
+    }
+   ],
+   "transition": "fade"
+  },
+  {
+   "purpose": "beat",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "read",
+     "mood": "worried"
+    }
+   ],
+   "show": {
+    "type": "list",
+    "title": "Ben's card",
+    "items": [
+     "- Balance: $4,000",
+     "- APR: 24%",
+     "- Paying: $120/month"
+    ]
+   },
+   "lines": [
+    {
+     "text": "The interest rate is twenty-four percent a year.",
+     "vi": "Lãi suất là 24% một năm."
+    },
+    {
+     "text": "Ben pays a flat one hundred twenty a month.",
+     "vi": "Ben trả cố định 120 đô mỗi tháng."
+    }
+   ]
+  },
+  {
+   "purpose": "beat",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "thumbs_up",
+     "mood": "smug"
+    }
+   ],
+   "show": {
+    "type": "big_text",
+    "text": "RESPONSIBLE?",
+    "color": "gold"
+   },
+   "lines": [
+    {
+     "text": "Sounds responsible, right?",
+     "vi": "Nghe có vẻ có trách nhiệm, đúng không?"
+    }
+   ]
+  },
+  {
+   "purpose": "rehook",
+   "bg": "notebook",
+   "chars": [],
+   "show": {
+    "type": "sketch",
+    "kind": "line",
+    "title": "$4,000 at 24%, paying $120 a month",
+    "labels": [
+     "Now",
+     "Year 1",
+     "Year 2",
+     "Year 3",
+     "Year 4",
+     "4.7 yrs"
+    ],
+    "series": [
+     {
+      "name": "Balance",
+      "values": [
+       4000,
+       3464,
+       2783,
+       1920,
+       826,
+       0
+      ],
+      "color": "red"
+     }
+    ]
+   },
+   "lines": [
+    {
+     "text": "Here's the math nobody shows you.",
+     "vi": "Đây là phép tính không ai cho bạn xem."
+    },
+    {
+     "text": "At that pace, it takes Ben *almost five years* to pay it off.",
+     "vi": "Với tốc độ đó, Ben mất gần 5 năm mới trả hết."
+    }
+   ]
+  },
+  {
+   "purpose": "beat",
+   "bg": "grid",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "facepalm",
+     "mood": "sad"
+    }
+   ],
+   "show": {
+    "type": "compare",
+    "title": "What $4,000 really costs",
+    "left": {
+     "label": "Borrowed",
+     "value": 4000,
+     "color": "ink"
+    },
+    "right": {
+     "label": "Interest",
+     "value": 2658,
+     "color": "red"
+    },
+    "prefix": "$"
+   },
+   "lines": [
+    {
+     "text": "And he pays *two thousand six hundred fifty-eight* dollars in interest.",
+     "vi": "Và anh trả 2.658 đô tiền lãi."
+    },
+    {
+     "text": "That's if he never uses the card again.",
+     "vi": "Đó là nếu anh không quẹt thẻ thêm lần nào."
+    }
+   ]
+  },
+  {
+   "purpose": "beat",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "shopping_bags",
+     "mood": "money_eyes"
+    }
+   ],
+   "show": {
+    "type": "big_text",
+    "text": "SWIPE NOW",
+    "sub": "pay later... with interest",
+    "color": "red"
+   },
+   "lines": [
+    {
+     "text": "And the card makes spending feel free.",
+     "vi": "Và chiếc thẻ khiến việc tiêu tiền có cảm giác như miễn phí."
+    },
+    {
+     "text": "No cash leaves your hand. The bill comes later.",
+     "vi": "Không có tờ tiền nào rời tay. Hóa đơn đến sau."
+    }
+   ]
+  },
+  {
+   "purpose": "beat",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "explain",
+     "mood": "worried"
+    }
+   ],
+   "show": {
+    "type": "big_text",
+    "text": "24%",
+    "sub": "the most expensive money Ben uses",
+    "color": "red"
+   },
+   "lines": [
+    {
+     "text": "Credit card interest is one of the most expensive debts there is.",
+     "vi": "Lãi thẻ tín dụng là một trong những khoản nợ đắt nhất."
+    },
+    {
+     "text": "That's why paying it down beats almost everything else.",
+     "vi": "Vì vậy trả bớt nó gần như luôn đáng ưu tiên."
+    }
+   ]
+  },
+  {
+   "purpose": "payoff",
+   "chapter": "The biggest leak",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "present",
+     "mood": "smile",
+     "x": 0.25
+    }
+   ],
+   "show": {
+    "type": "list",
+    "title": "The 4 leaks",
+    "items": [
+     "- Rent: 43% of pay",
+     "- Car: $745/month",
+     "- Small stuff: $495/month",
+     "- Card: $2,658 interest"
+    ]
+   },
+   "lines": [
+    {
+     "text": "So, rent, the car, the small stuff, the card.",
+     "vi": "Vậy là: tiền nhà, xe, khoản nhỏ, thẻ tín dụng."
+    },
+    {
+     "text": "Four leaks. But I promised you a bigger one.",
+     "vi": "Bốn lỗ rò. Nhưng tôi đã hứa một lỗ rò lớn hơn."
+    }
+   ],
+   "transition": "fade"
+  },
+  {
+   "purpose": "payoff",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "think",
+     "mood": "worried"
+    }
+   ],
+   "show": {
+    "type": "receipt",
+    "title": "BEN'S MONTH",
+    "income": 3400,
+    "items": [
+     [
+      "Rent",
+      1450
+     ],
+     [
+      "Car payment",
+      490
+     ],
+     [
+      "Gas + insurance",
+      255
+     ],
+     [
+      "Groceries",
+      290
+     ],
+     [
+      "Food delivery",
+      312
+     ],
+     [
+      "Phone + internet",
+      140
+     ],
+     [
+      "Subscriptions",
+      87
+     ],
+     [
+      "Coffee",
+      96
+     ],
+     [
+      "Card minimum",
+      120
+     ],
+     [
+      "Going out",
+      127
+     ]
+    ]
+   },
+   "lines": [
+    {
+     "text": "Look at Ben's receipt again. Something is missing.",
+     "vi": "Nhìn lại hóa đơn của Ben. Có gì đó bị thiếu."
+    }
+   ],
+   "sfx": [
+    {
+     "name": "tick",
+     "at_line": 0
+    }
+   ]
+  },
+  {
+   "purpose": "payoff",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "sad",
+     "mood": "sad"
+    }
+   ],
+   "show": {
+    "type": "big_text",
+    "text": "NO LINE FOR BEN",
+    "color": "red"
+   },
+   "lines": [
+    {
+     "text": "There's no line for *Ben*.",
+     "vi": "Không có dòng nào dành cho chính Ben."
+    },
+    {
+     "text": "Everyone gets paid first. The landlord, the bank, the apps.",
+     "vi": "Ai cũng được trả trước. Chủ nhà, ngân hàng, các ứng dụng."
+    }
+   ],
+   "sfx": [
+    {
+     "name": "thud",
+     "at_line": 0
+    }
+   ]
+  },
+  {
+   "purpose": "payoff",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "empty_pockets",
+     "mood": "cry",
+     "x": 0.32
+    },
+    {
+     "who": "piggy",
+     "mood": "shock",
+     "x": 0.7
+    }
+   ],
+   "show": {
+    "type": "money_card",
+    "label": "Saved this month",
+    "value": 0,
+    "color": "red"
+   },
+   "lines": [
+    {
+     "text": "Ben saves whatever is left at the end of the month.",
+     "vi": "Ben chỉ để dành phần còn thừa cuối tháng."
+    },
+    {
+     "text": "And there's never anything left.",
+     "vi": "Mà cuối tháng chẳng bao giờ còn gì."
+    }
+   ]
+  },
+  {
+   "purpose": "payoff",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "facepalm",
+     "mood": "sad"
+    }
+   ],
+   "show": {
+    "type": "big_text",
+    "text": "PAYS HIMSELF LAST",
+    "color": "red"
+   },
+   "lines": [
+    {
+     "text": "That's the biggest leak. Ben *pays himself last*.",
+     "vi": "Đó là lỗ rò lớn nhất. Ben trả cho bản thân sau cùng."
+    }
+   ]
+  },
+  {
+   "purpose": "payoff",
+   "bg": "notebook",
+   "chars": [],
+   "show": {
+    "type": "sketch",
+    "kind": "flow",
+    "title": "Pay yourself first",
+    "steps": [
+     "Payday +$3,400",
+     "Savings -$200",
+     "Bills",
+     "Spend the rest"
+    ]
+   },
+   "lines": [
+    {
+     "text": "The fix is to flip the order.",
+     "vi": "Cách sửa là đảo ngược thứ tự."
+    },
+    {
+     "text": "Money for future Ben moves *on payday*, automatically.",
+     "vi": "Tiền cho Ben của tương lai được chuyển ngay ngày lương, tự động."
+    }
+   ]
+  },
+  {
+   "purpose": "payoff",
+   "bg": "grid",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "think",
+     "mood": "smile"
+    }
+   ],
+   "show": {
+    "type": "big_text",
+    "text": "OUT OF SIGHT",
+    "sub": "out of the spending",
+    "color": "green"
+   },
+   "lines": [
+    {
+     "text": "Why does this work? Because you can't spend what you don't see.",
+     "vi": "Vì sao cách này hiệu quả? Vì bạn không tiêu được thứ bạn không thấy."
+    },
+    {
+     "text": "Ben's spending will shrink to fit what's left.",
+     "vi": "Chi tiêu của Ben sẽ tự co lại cho vừa phần còn lại."
+    }
+   ]
+  },
+  {
+   "purpose": "payoff",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "hug_piggy",
+     "mood": "smile",
+     "x": 0.32
+    },
+    {
+     "who": "piggy",
+     "mood": "smile",
+     "x": 0.7
+    }
+   ],
+   "show": {
+    "type": "money_card",
+    "label": "Starter cushion",
+    "value": 1000,
+    "color": "green"
+   },
+   "lines": [
+    {
+     "text": "The first goal isn't investing. It's a small cushion.",
+     "vi": "Mục tiêu đầu tiên chưa phải đầu tư. Mà là một khoản đệm nhỏ."
+    },
+    {
+     "text": "One thousand dollars, so a flat tire isn't a crisis.",
+     "vi": "1.000 đô, để một lần thủng lốp không thành khủng hoảng."
+    }
+   ]
+  },
+  {
+   "purpose": "payoff",
+   "bg": "grid",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "hug_piggy",
+     "mood": "smile",
+     "x": 0.32
+    },
+    {
+     "who": "piggy",
+     "mood": "smile",
+     "x": 0.7
+    }
+   ],
+   "show": {
+    "type": "coin_drop"
+   },
+   "lines": [
+    {
+     "text": "Even a small amount works, because it happens *first*.",
+     "vi": "Chỉ một khoản nhỏ cũng có tác dụng, vì nó diễn ra đầu tiên."
+    }
+   ],
+   "sfx": [
+    {
+     "name": "coin",
+     "at_line": 0
+    }
+   ]
+  },
+  {
+   "purpose": "rehook",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "calculator",
+     "mood": "smile"
+    }
+   ],
+   "show": {
+    "type": "list",
+    "title": "Finding $200 a month",
+    "items": [
+     "+ Cancel 2 apps + gym: $62",
+     "+ Order delivery less: $108",
+     "+ Coffee at home some days: $30"
+    ]
+   },
+   "lines": [
+    {
+     "text": "Where does Ben find two hundred dollars?",
+     "vi": "Ben lấy đâu ra 200 đô?"
+    },
+    {
+     "text": "From the leaks we just found.",
+     "vi": "Từ chính những lỗ rò vừa tìm thấy."
+    }
+   ]
+  },
+  {
+   "purpose": "rehook",
+   "bg": "notebook",
+   "chars": [],
+   "show": {
+    "type": "sketch",
+    "kind": "line",
+    "title": "$200 a month at a 7% average",
+    "invest": {
+     "monthly": 200,
+     "rate": 0.07,
+     "years": 30,
+     "start_age": 26
+    }
+   },
+   "lines": [
+    {
+     "text": "And here's why it matters.",
+     "vi": "Và đây là lý do nó quan trọng."
+    },
+    {
+     "text": "Two hundred a month, invested for thirty years.",
+     "vi": "200 đô mỗi tháng, đầu tư trong 30 năm."
+    }
+   ]
+  },
+  {
+   "purpose": "rehook",
+   "bg": "grid",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "celebrate",
+     "mood": "money_eyes"
+    }
+   ],
+   "show": {
+    "type": "compare",
+    "title": "After 30 years (example)",
+    "left": {
+     "label": "Ben put in",
+     "value": 72000,
+     "color": "ink"
+    },
+    "right": {
+     "label": "Could grow to",
+     "value": 243994,
+     "color": "green"
+    },
+    "prefix": "$"
+   },
+   "lines": [
+    {
+     "text": "At a seven percent average, that could grow to about *two hundred forty-four thousand*.",
+     "vi": "Với mức trung bình 7%, số đó có thể thành khoảng 244.000 đô."
+    },
+    {
+     "text": "Ben only put in seventy-two thousand.",
+     "vi": "Ben chỉ bỏ vào 72.000 đô."
+    }
+   ],
+   "sfx": [
+    {
+     "name": "ding",
+     "at_line": 0
+    }
+   ]
+  },
+  {
+   "purpose": "rehook",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "explain",
+     "mood": "smile"
+    }
+   ],
+   "show": {
+    "type": "big_text",
+    "text": "TIME DOES THE WORK",
+    "sub": "Example only, not a promise",
+    "color": "green"
+   },
+   "lines": [
+    {
+     "text": "Returns are never guaranteed. Some years go down.",
+     "vi": "Lợi nhuận không bao giờ được đảm bảo. Có năm sẽ giảm."
+    },
+    {
+     "text": "But time does most of the work.",
+     "vi": "Nhưng thời gian làm phần lớn công việc."
+    }
+   ]
+  },
+  {
+   "purpose": "action",
+   "chapter": "Your move this week",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "point",
+     "mood": "smile"
+    }
+   ],
+   "show": {
+    "type": "big_text",
+    "text": "THIS WEEK",
+    "sub": "3 steps, 15 minutes",
+    "color": "gold"
+   },
+   "lines": [
+    {
+     "text": "So here's your move for this week.",
+     "vi": "Đây là việc bạn làm trong tuần này."
+    },
+    {
+     "text": "Three steps. Fifteen minutes.",
+     "vi": "Ba bước. Mười lăm phút."
+    }
+   ],
+   "transition": "fade"
+  },
+  {
+   "purpose": "action",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "phone",
+     "mood": "smile"
+    }
+   ],
+   "show": {
+    "type": "list",
+    "title": "Step 1",
+    "items": [
+     "+ Open your bank app",
+     "+ Add up last month",
+     "+ Circle your 4 biggest leaks"
+    ]
+   },
+   "lines": [
+    {
+     "text": "One. Open your bank app and add up last month.",
+     "vi": "Một. Mở ứng dụng ngân hàng, cộng lại chi tiêu tháng trước."
+    },
+    {
+     "text": "Find *your* four leaks.",
+     "vi": "Tìm bốn lỗ rò của riêng bạn."
+    }
+   ]
+  },
+  {
+   "purpose": "action",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "sit_desk",
+     "mood": "smile"
+    }
+   ],
+   "show": {
+    "type": "list",
+    "title": "Step 2",
+    "items": [
+     "- One forgotten subscription",
+     "+ Money back every month"
+    ]
+   },
+   "lines": [
+    {
+     "text": "Two. Cancel one thing you forgot you pay for.",
+     "vi": "Hai. Hủy một thứ bạn quên là mình đang trả tiền."
+    }
+   ]
+  },
+  {
+   "purpose": "action",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "hug_piggy",
+     "mood": "smile",
+     "x": 0.32
+    },
+    {
+     "who": "piggy",
+     "mood": "smile",
+     "x": 0.7
+    }
+   ],
+   "show": {
+    "type": "coin_drop"
+   },
+   "lines": [
+    {
+     "text": "Three. Set an automatic transfer for payday.",
+     "vi": "Ba. Cài lệnh chuyển tiền tự động vào ngày lương."
+    },
+    {
+     "text": "Fifty dollars is fine. *First* matters more than *big*.",
+     "vi": "50 đô cũng được. Đi trước quan trọng hơn số lớn."
+    }
+   ],
+   "sfx": [
+    {
+     "name": "coin",
+     "at_line": 1
+    }
+   ]
+  },
+  {
+   "purpose": "action",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "beg",
+     "mood": "worried"
+    }
+   ],
+   "show": {
+    "type": "money_card",
+    "label": "Start with",
+    "value": 10,
+    "color": "green",
+    "note": "per payday"
+   },
+   "lines": [
+    {
+     "text": "What if you're like Ben, with almost nothing left?",
+     "vi": "Nếu bạn giống Ben, gần như không còn gì thì sao?"
+    },
+    {
+     "text": "Start with ten dollars. The habit matters more than the amount.",
+     "vi": "Bắt đầu với 10 đô. Thói quen quan trọng hơn số tiền."
+    }
+   ]
+  },
+  {
+   "purpose": "action",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "celebrate",
+     "mood": "smile"
+    }
+   ],
+   "show": {
+    "type": "big_text",
+    "text": "PAY YOURSELF FIRST",
+    "color": "green"
+   },
+   "lines": [
+    {
+     "text": "That's it. You just stopped paying yourself last.",
+     "vi": "Vậy thôi. Bạn vừa thôi trả cho bản thân sau cùng."
+    }
+   ],
+   "sfx": [
+    {
+     "name": "ding",
+     "at_line": 0
+    }
+   ]
+  },
+  {
+   "purpose": "outro",
+   "bg": "room",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "read",
+     "mood": "shock"
+    }
+   ],
+   "show": {
+    "type": "big_text",
+    "text": "NEXT: THE MINIMUM PAYMENT",
+    "color": "red"
+   },
+   "lines": [
+    {
+     "text": "Next time, Ben opens his first credit card statement.",
+     "vi": "Lần tới, Ben mở bảng sao kê thẻ tín dụng đầu tiên."
+    },
+    {
+     "text": "And finds out what minimum payment really means.",
+     "vi": "Và hiểu khoản trả tối thiểu thực sự nghĩa là gì."
+    }
+   ],
+   "transition": "fade"
+  },
+  {
+   "purpose": "outro",
+   "chars": [
+    {
+     "who": "ben",
+     "pose": "wave",
+     "mood": "smile"
+    }
+   ],
+   "show": {
+    "type": "big_text",
+    "text": "BROKE BEN",
+    "sub": "Money, explained before it's gone.",
+    "color": "ink"
+   },
+   "lines": [
+    {
+     "text": "I'm Broke Ben. Money, explained before it's gone.",
+     "vi": "Đây là Broke Ben. Giải thích tiền bạc trước khi nó biến mất."
+    }
+   ]
+  }
+ ]
+}

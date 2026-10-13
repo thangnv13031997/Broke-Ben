@@ -205,7 +205,7 @@ def phone(pen, w, h, spec, p):
 
 def compare(pen, w, h, spec, p):
     L, Rr = spec.get('left', {}), spec.get('right', {})
-    prefix = spec.get('prefix', '$')
+    prefix, suffix = spec.get('prefix', '$'), spec.get('suffix', '')
     vals = [float(L.get('value', 0)), float(Rr.get('value', 0))]
     vmax = max(vals) or 1
     if spec.get('title'):
@@ -221,7 +221,7 @@ def compare(pen, w, h, spec, p):
         pen.text((cx, base + 22), side.get('label', ''), 'semi', fit(pen, side.get('label', ''), 'semi', 38, w * 0.42),
                  INK, anchor='mt')
         if k > 0.6:
-            pen.text((cx, base - bh - 16), money(val * k, prefix), 'display', 64, col, anchor='mb')
+            pen.text((cx, base - bh - 16), money(val * k, prefix) + suffix, 'display', 64, col, anchor='mb')
     pen.line([(40, base), (w - 40, base)], 4, INK, caps=False)
 
 
