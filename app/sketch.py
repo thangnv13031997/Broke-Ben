@@ -237,38 +237,56 @@ def _text_left(pen, x, s, size, anchor):
     return x - tw if anchor == 'r' else x - tw / 2 if anchor == 'c' else x
 
 
-# The drawing hand, traced from a whiteboard-style reference (units: reference pixels, pencil tip at REF_TIP).
+# The drawing hand, traced from the creator's whiteboard reference (units: reference pixels, pencil tip at REF_TIP).
+# Plain line art: white hand, thin black outline, bare forearm running off the frame, grey pencil.
 REF_TIP = (213, 420)
 HAND_SCALE = 0.27
-_PALM = [(342, 392), (385, 370), (450, 334), (515, 296), (548, 286), (590, 296), (660, 330), (722, 360),
-         (790, 388), (818, 412), (832, 455), (846, 545), (872, 650), (930, 740), (1000, 800),
-         (800, 950), (760, 830), (705, 778), (620, 740), (540, 680), (470, 615), (420, 600), (370, 598),
-         (346, 570), (342, 520), (334, 455)]
+HAND_FILL, HAND_LINE = (255, 255, 255), (20, 20, 20)
+PENCIL, PENCIL_LIGHT = (214, 214, 214), (236, 236, 236)
+_OUTER = [(342, 392), (385, 370), (450, 334), (515, 296), (548, 286), (590, 296), (660, 330), (722, 360),
+          (790, 388), (818, 412), (832, 455), (846, 545), (872, 650), (930, 760), (1022, 850)]
+_INNER = [(334, 455), (342, 520), (346, 570), (370, 598), (420, 600), (470, 615), (540, 680), (620, 740),
+          (705, 778), (760, 830), (880, 970)]
 _FINGERS = [((370, 522), (38, 25)), ((372, 566), (34, 23)), ((398, 600), (30, 19))]
 _INDEX = [(338, 400), (352, 384), (392, 374), (440, 384), (474, 410), (440, 428), (380, 420), (346, 414)]
 _THUMB = [(318, 430), (330, 410), (360, 404), (410, 422), (452, 456), (474, 496), (452, 516), (404, 514),
           (362, 490), (330, 464)]
-_SLEEVE = [(985, 755), (1555, 1450), (1330, 1640), (760, 925)]         # hoodie sleeve, runs off the frame
-_CUFF = [(985, 755), (1035, 815), (810, 985), (760, 925)]
 _CREASES = [[(536, 300), (548, 322)], [(430, 372), (446, 388)], [(372, 425), (396, 436)],
             [(520, 660), (560, 682)], [(352, 540), (372, 538)], [(356, 578), (378, 576)]]
-PENCIL, PENCIL_SH, WOOD, LEAD = (255, 196, 61), (226, 160, 40), (240, 214, 170), (38, 44, 62)
+_WEB = [[(470, 470), (520, 440), (560, 452)], [(480, 520), (530, 500), (590, 520)]]   # under the pencil
 
 
 def draw_hand(pen, x, y):
-    """A hand holding a pencil, whiteboard-animation style; the pencil tip sits on (x, y).
-    The arm (green hoodie sleeve) comes in from the bottom right. Drawn by the scene on the full frame so the
-    arm is never clipped by the chart box."""
+    """A hand holding a pencil in plain whiteboard line art; the pencil tip sits on (x, y).
+    The bare forearm comes in from the bottom right. Drawn by the scene on the full frame so the arm is
+    never clipped by the chart box."""
     s = HAND_SCALE
 
     def P(pt):
         return (x + (pt[0] - REF_TIP[0]) * s, y + (pt[1] - REF_TIP[1]) * s)
 
-    def shape(pts, fill, w=3):
-        pen.poly([P(q) for q in pts], fill, OUTLINE, w)
+    def shape(pts, fill, w=2.2):
+        pen.poly([P(q) for q in pts], fill, HAND_LINE, w)
 
-    # pencil frame: u along the pencil (tip -> end), v across it
-    ex, ey = 880, 506
+    # forearm edges continue off the frame along their last direction
+    def run_off(edge):
+        (ax, ay), (bx, by) = edge[-2], edge[-1]
+        d = math.hypot(bx - ax, by - ay)
+        return edge + [(bx + (bx - ax) / d * 6000, by + (by - ay) / d * 6000)]
+
+    outer, inner = run_off(_OUTER), run_off(_INNER)
+    pen.poly([P(q) for q in outer + inner[::-1]], HAND_FILL)
+    pen.line([P(q) for q in outer], 2.4, HAND_LINE)
+    pen.line([P(q) for q in inner], 2.4, HAND_LINE)
+    pen.line([P(_OUTER[0]), P(_INNER[0])], 2.4, HAND_LINE)
+    for (cx, cy), (rx, ry) in _FINGERS:
+        shape([(cx + rx * math.cos(t), cy + ry * math.sin(t)) for t in (i * math.pi / 14 for i in range(28))],
+              HAND_FILL)
+    for c in _WEB:
+        pen.line([P(q) for q in c], 1.6, HAND_LINE)
+
+    # the pencil, in a frame u along it (tip -> end) and v across it
+    ex, ey = 930, 510
     L = math.hypot(ex - REF_TIP[0], ey - REF_TIP[1])
     du = ((ex - REF_TIP[0]) / L, (ey - REF_TIP[1]) / L)
     dv = (-du[1], du[0])
@@ -276,24 +294,13 @@ def draw_hand(pen, x, y):
     def Q(u, v):
         return (REF_TIP[0] + du[0] * u + dv[0] * v, REF_TIP[1] + du[1] * u + dv[1] * v)
 
-    shape(_PALM, SKIN)
-    pen.poly([P(q) for q in [(470, 615), (540, 680), (620, 740), (705, 778), (760, 830), (800, 950),
-                             (830, 925), (790, 800), (700, 740), (600, 690), (520, 630)]], SKIN_SH)
-    shape(_SLEEVE, HOOD)
-    pen.poly([P(q) for q in [(790, 960), (1360, 1620), (1420, 1570), (840, 920)]], HOOD_SH)
-    shape(_CUFF, HOOD_SH)
-    for (cx, cy), (rx, ry) in _FINGERS:
-        shape([(cx + rx * math.cos(t), cy + ry * math.sin(t)) for t in (i * math.pi / 14 for i in range(28))],
-              SKIN, 2.5)
-    # the pencil: lead, sharpened wood, yellow body with a shaded lower half
-    shape([Q(0, 0), Q(92, -30), Q(92, 30)], WOOD, 2.5)
-    pen.poly([P(Q(0, 0)), P(Q(30, -10)), P(Q(30, 10))], LEAD)
-    shape([Q(92, -30), Q(L, -30), Q(L, 30), Q(92, 30)], PENCIL, 2.5)
-    pen.poly([P(Q(94, 8)), P(Q(L - 2, 8)), P(Q(L - 2, 28)), P(Q(94, 28))], PENCIL_SH)
-    shape(_INDEX, SKIN, 2.5)
-    shape(_THUMB, SKIN, 2.5)
+    shape([Q(0, 0), Q(92, -32), Q(L, -32), Q(L, 32), Q(92, 32)], PENCIL)
+    pen.poly([P(Q(4, -1)), P(Q(92, -30)), P(Q(L - 2, -30)), P(Q(L - 2, -6)), P(Q(92, -6))], PENCIL_LIGHT)
+    pen.line([P(Q(92, -32)), P(Q(92, 32))], 2.2, HAND_LINE)
+    shape(_INDEX, HAND_FILL)
+    shape(_THUMB, HAND_FILL)
     for c in _CREASES:
-        pen.line([P(q) for q in c], 1.8, OUTLINE)
+        pen.line([P(q) for q in c], 1.6, HAND_LINE)
 
 
 def render(spec, w, h, p, S=2):
