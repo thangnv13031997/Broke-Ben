@@ -240,23 +240,23 @@ def _text_left(pen, x, s, size, anchor):
 def draw_hand(pen, x, y):
     """A hand holding a marker; the marker tip sits on (x, y). The arm comes in from the bottom right.
     Drawn by the scene on the full frame so the arm is never clipped by the chart box."""
-    ang = math.radians(35)
+    ang = math.radians(40)
     dx, dy = math.cos(ang), math.sin(ang)
-    tip = (x, y)
-    m1 = (x + dx * 26, y + dy * 26)
-    m2 = (x + dx * 150, y + dy * 150)
     nx, ny = -dy, dx
-    pen.poly([tip, (m1[0] + nx * 9, m1[1] + ny * 9), (m1[0] - nx * 9, m1[1] - ny * 9)], INK)
-    pen.poly([(m1[0] + nx * 12, m1[1] + ny * 12), (m2[0] + nx * 12, m2[1] + ny * 12),
-              (m2[0] - nx * 12, m2[1] - ny * 12), (m1[0] - nx * 12, m1[1] - ny * 12)], (230, 70, 60), OUTLINE, 3)
-    hx, hy = x + dx * 92, y + dy * 92
-    far = 2400                                             # the arm runs off the frame
-    pen.line([(hx + dx * 40, hy + dy * 40), (hx + dx * far, hy + dy * far)], 66, OUTLINE)
-    pen.line([(hx + dx * 40, hy + dy * 40), (hx + dx * far, hy + dy * far)], 58, HOOD)
-    pen.line([(hx + dx * 44 - nx * 16, hy + dy * 44 - ny * 16), (hx + dx * far - nx * 16, hy + dy * far - ny * 16)],
-             18, HOOD_SH)
-    pen.ellipse((hx - 34, hy - 30, hx + 34, hy + 30), SKIN, OUTLINE, 4)
-    pen.ellipse((hx - 40 + dx * -8, hy - 8, hx - 14, hy + 16), SKIN, OUTLINE, 3)
+    tip = (x, y)
+    m1 = (x + dx * 18, y + dy * 18)
+    m2 = (x + dx * 118, y + dy * 118)
+    pen.poly([tip, (m1[0] + nx * 6, m1[1] + ny * 6), (m1[0] - nx * 6, m1[1] - ny * 6)], INK)
+    pen.poly([(m1[0] + nx * 8, m1[1] + ny * 8), (m2[0] + nx * 8, m2[1] + ny * 8),
+              (m2[0] - nx * 8, m2[1] - ny * 8), (m1[0] - nx * 8, m1[1] - ny * 8)], (230, 70, 60), OUTLINE, 2.5)
+    hx, hy = x + dx * 70, y + dy * 70
+    far = 2400                                             # the slim arm runs off the frame
+    pen.line([(hx + dx * 26, hy + dy * 26), (hx + dx * far, hy + dy * far)], 34, OUTLINE)
+    pen.line([(hx + dx * 26, hy + dy * 26), (hx + dx * far, hy + dy * far)], 28, HOOD)
+    pen.line([(hx + dx * 30 - nx * 8, hy + dy * 30 - ny * 8), (hx + dx * far - nx * 8, hy + dy * far - ny * 8)],
+             9, HOOD_SH)
+    pen.ellipse((hx - 22, hy - 19, hx + 22, hy + 19), SKIN, OUTLINE, 3)
+    pen.ellipse((hx - 27, hy - 4, hx - 9, hy + 12), SKIN, OUTLINE, 2.5)
 
 
 def render(spec, w, h, p, S=2):

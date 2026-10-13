@@ -6,7 +6,7 @@ Horror Studio và Relatable Studio, nên không cài lại giọng đọc.
 
 ![Ảnh bìa kênh](branding/banner_2560x1440.jpg)
 
-![Ben: 15 dáng và 6 cảm xúc](docs/ben_poses.png)
+![Ben: 25 dáng và 9 cảm xúc](docs/ben_poses.png)
 
 ## Cài lần đầu (1 lần)
 1. Chép cả thư mục này về máy, ví dụ `E:\MoneyStudio`.
