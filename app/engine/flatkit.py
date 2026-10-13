@@ -19,7 +19,7 @@ def font(kind, size):
     if key not in _FONTS:
         name, wght = {'display': ('Anton-Regular.ttf', None), 'bold': ('Oswald-Variable.ttf', 700),
                       'semi': ('Oswald-Variable.ttf', 600), 'body': ('Oswald-Variable.ttf', 400),
-                      'type': ('SpecialElite-Regular.ttf', None)}[kind]
+                      'type': ('SpecialElite-Regular.ttf', None), 'hand': ('PatrickHand-Regular.ttf', None)}[kind]
         f = ImageFont.truetype(os.path.join(FONT_DIR, name), int(size))
         if wght:
             f.set_variation_by_axes([wght])

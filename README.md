@@ -43,11 +43,13 @@ Horror Studio và Relatable Studio, nên không cài lại giọng đọc.
 | `render_report.txt` | Thời lượng, bộ mã hóa, các lưu ý về kịch bản |
 
 ## Video trông như thế nào
-- Nhân vật **Ben** (người trẻ đi làm: tóc rối kiểu hiện đại, hoodie xanh, thẻ nhân viên đeo cổ) với **15 dáng và 6 cảm xúc** (xem `docs/ben_poses.png`),
+- Nhân vật **Ben** (người trẻ đi làm: tóc rối kiểu hiện đại, hoodie xanh, thẻ nhân viên đeo cổ) với **25 dáng và 9 cảm xúc** (xem `docs/ben_poses.png`),
   và **Piggy Ben** (heo đất nứt dán băng, vai phụ). Nhân vật thở, chớp mắt, **mấp máy miệng theo giọng đọc**, nhảy lên khi sốc hoặc ăn mừng.
 - Thành phần tiền bạc tự tính số, không gõ tay: thẻ tiền đếm lên/xuống, biểu đồ lãi kép, hóa đơn in từng dòng, điện thoại số dư,
   cột so sánh, danh sách tích/gạch, đồng xu rơi vào heo.
-- 6 nền: lưới sổ kế toán, phòng của Ben, bàn làm việc, thành phố, **Ben's Notebook** (bút chì vẽ dần), nền trơn.
+- 6 nền: lưới sổ kế toán, phòng của Ben, bàn làm việc, thành phố, **Ben's Notebook** (trang sổ kẻ dòng), nền trơn.
+- **Đoạn vẽ tay (Ben's Notebook)**: lật trang sổ, một bàn tay cầm bút dạ vẽ biểu đồ từng nét (đường, cột, tròn, sơ đồ dòng tiền)
+  rồi viết chữ tay; có tiếng lật giấy và tiếng bút. Dùng `"show": {"type": "sketch", ...}` với `"bg": "notebook"`.
 - Nhạc nền và hiệu ứng tự tạo (không lo bản quyền); nhạc tự nhỏ lại khi có lời. Muốn dùng nhạc của bạn: xem `library\README.txt`.
 
 ## Định dạng kịch bản

@@ -2,7 +2,7 @@
 
 Built-in sounds are synthesised, so there is no copyright risk. To use your own music, drop a licensed
 file into library/music/<style>/ (light, thoughtful); your file always wins over the built-in bed.
-Your own effects go in library/sfx/<name>.wav (pop, coin, ding, whoosh, tick, thud, cash).
+Your own effects go in library/sfx/<name>.wav (pop, coin, ding, whoosh, tick, thud, cash, page, scribble).
 """
 import glob
 import os
@@ -78,6 +78,20 @@ def sfx(name):
         return y * np.sin(np.pi * t) * 1.4
     if name == 'tick':
         return _tone(3000, 0.03, 0.008, (1,)) * 0.35
+    if name == 'page':                                   # paper page turning
+        n = _noise(0.55, 9)
+        t = np.linspace(0, 1, len(n))
+        y = (n - _lowpass(n, 6)) * np.sin(np.pi * t) ** 1.5 * 0.5
+        return y.astype(np.float32)
+    if name == 'scribble':                               # marker on paper, ~1.6 s
+        n = _noise(1.6, 11)
+        t = np.arange(len(n)) / SR
+        strokes = 0.5 + 0.5 * np.sin(2 * np.pi * 5.3 * t) * np.sin(2 * np.pi * 1.7 * t + 1)
+        y = (n - _lowpass(n, 3)) * np.clip(strokes, 0, 1) * 0.22
+        f = int(0.08 * SR)
+        y[:f] *= np.linspace(0, 1, f)
+        y[-f:] *= np.linspace(1, 0, f)
+        return y.astype(np.float32)
     if name == 'thud':
         t = _t(0.3)
         f = 120 - 70 * t / 0.3

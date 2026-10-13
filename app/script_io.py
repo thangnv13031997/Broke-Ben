@@ -3,16 +3,20 @@ import json
 import re
 
 BGS = ['grid', 'room', 'desk', 'notebook', 'city', 'plain']
-SHOWS = ['money_card', 'big_text', 'invest_chart', 'chart', 'receipt', 'phone', 'compare', 'list', 'coin_drop']
+SHOWS = ['money_card', 'big_text', 'invest_chart', 'chart', 'receipt', 'phone', 'compare', 'list', 'coin_drop',
+         'sketch']
+SKETCH_KINDS = ['line', 'bars', 'pie', 'flow']
 WHO = ['ben', 'piggy']
 POSES = {'ben': ['idle', 'wave', 'point', 'hold_head', 'cross_arms', 'phone', 'read', 'count_money', 'shrug',
-                 'think', 'celebrate', 'thumbs_up', 'facepalm', 'explain', 'sad'],
+                 'think', 'celebrate', 'thumbs_up', 'facepalm', 'explain', 'sad',
+                 'sit_desk', 'empty_pockets', 'credit_card', 'shopping_bags', 'coffee', 'calculator', 'beg',
+                 'throw_money', 'hug_piggy', 'present'],
          'piggy': ['idle']}
-MOODS = ['smile', 'shock', 'sad', 'worried', 'angry', 'smug']
+MOODS = ['smile', 'shock', 'sad', 'worried', 'angry', 'smug', 'money_eyes', 'tired', 'cry']
 PURPOSES = ['hook', 'promise', 'setup', 'open_loop', 'beat', 'rehook', 'payoff', 'action', 'outro']
 TRANSITIONS = ['cut', 'fade', 'slide']
 MUSIC = ['light', 'thoughtful', 'none']
-SFX = ['pop', 'coin', 'ding', 'whoosh', 'tick', 'thud', 'cash']
+SFX = ['pop', 'coin', 'ding', 'whoosh', 'tick', 'thud', 'cash', 'page', 'scribble']
 SUB_LANGS = {'en': 'Tiếng Anh', 'vi': 'Tiếng Việt', 'none': 'Không phụ đề'}
 
 
@@ -88,6 +92,8 @@ def check(s):
         if sc['bg'] not in BGS:
             out.append(('LỖI', f'Cảnh {n}: nền "{sc["bg"]}" không có. Dùng: {", ".join(BGS)}'))
         show = sc.get('show')
+        if show and show.get('type') == 'sketch' and show.get('kind', 'line') not in SKETCH_KINDS:
+            out.append(('LỖI', f'Cảnh {n}: sketch kind "{show.get("kind")}" không có. Dùng: {", ".join(SKETCH_KINDS)}'))
         if show and show.get('type') not in SHOWS:
             out.append(('LỖI', f'Cảnh {n}: show.type "{show.get("type")}" không có. Dùng: {", ".join(SHOWS)}'))
         for c in sc['chars']:

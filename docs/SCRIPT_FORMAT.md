@@ -20,10 +20,14 @@ Hướng dẫn đầy đủ (tiếng Anh, để Claude đọc): `docs/PROMPT_FOR
 - **bg**: `grid`, `room`, `desk`, `city`, `notebook` (bút chì vẽ dần), `plain`. Giữ nguyên cho cảnh sau đến khi đổi.
 - **chars**: `who` (ben/piggy), `pose`, `mood`, `x` (0..1),
   `enter` (left, right, pop), `size`. Bỏ trống thì hiện linh vật mặc định; `[]` là không có nhân vật.
-  - Dáng của Ben (15): idle (đứng), wave (vẫy tay), point (chỉ), hold_head (ôm đầu), cross_arms (khoanh tay),
+  - Dáng của Ben (25): idle (đứng), wave (vẫy tay), point (chỉ), hold_head (ôm đầu), cross_arms (khoanh tay),
     phone (xem điện thoại), read (cầm hóa đơn), count_money (đếm tiền), shrug (nhún vai), think (suy nghĩ),
-    celebrate (ăn mừng – nhảy lên), thumbs_up (giơ ngón cái), facepalm (lấy tay che mặt), explain (giải thích), sad (buồn).
-  - Cảm xúc của Ben (6): smile, shock (sốc – nhảy lên), sad, worried (lo), angry (bực), smug (đắc ý).
+    celebrate (ăn mừng), thumbs_up (giơ ngón cái), facepalm (che mặt), explain (giải thích), sad (buồn),
+    sit_desk (ngồi bàn laptop), empty_pockets (móc túi rỗng), credit_card (quẹt thẻ), shopping_bags (xách đồ mua sắm),
+    coffee (cầm cà phê), calculator (bấm máy tính), beg (chắp tay xin), throw_money (tung tiền), hug_piggy (ôm heo),
+    present (cầm que chỉ biểu đồ).
+  - Cảm xúc của Ben (9): smile, shock (nhảy lên), sad, worried (lo), angry (bực), smug (đắc ý), money_eyes (mắt đô la),
+    tired (mệt), cry (khóc).
   - Piggy Ben: không có dáng; cảm xúc smile / shock.
 - **show** (thành phần bên phải nhân vật):
   - `money_card`: `label`, `value`, `to` (đếm từ value tới to), `to_label`, `color`, `note`
@@ -35,7 +39,10 @@ Hướng dẫn đầy đủ (tiếng Anh, để Claude đọc): `docs/PROMPT_FOR
   - `compare`: `title`, `left`, `right`
   - `list`: `title`, `items` ("+ ..." tích xanh, "- ..." gạch đỏ)
   - `coin_drop`: đồng xu rơi vào Piggy Ben (cần piggy trong `chars`)
+  - `sketch`: **Ben's Notebook** – lật trang sổ, bàn tay cầm bút vẽ biểu đồ từng nét rồi viết chữ tay.
+    `kind`: `line` (đường, hoặc `invest` tự tính lãi kép), `bars` (cột), `pie` (tròn, tự tính %), `flow` (sơ đồ dòng tiền).
+    Dùng với `"bg": "notebook"`; `"chars": []` để vẽ cả trang. Nên dùng khoảng 20% số cảnh, để giải thích khái niệm.
   - thêm `"enter": "slide"` để trượt vào thay vì bật ra.
 - **lines**: `text` (tiếng Anh để đọc, số viết bằng chữ, `*từ*` để tô vàng), **`vi`** (phụ đề tiếng Việt), `pause_after`, `speaker` ("none" để nhân vật không mấp máy miệng).
-- **sfx**: `{ "name": pop|coin|ding|whoosh|tick|thud|cash, "at_line": 0 }`.
+- **sfx**: `{ "name": pop|coin|ding|whoosh|tick|thud|cash|page|scribble, "at_line": 0 }` (cảnh vẽ tay tự có tiếng lật trang và tiếng bút).
 - **transition**: `cut` hoặc `fade`.

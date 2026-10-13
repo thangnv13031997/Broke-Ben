@@ -112,7 +112,16 @@ def build(script, cfg, voice, fps, test=False, progress=None, cancelled=lambda: 
         for ev in sc['sfx']:
             if 'at' in ev:
                 sfx_events.append((t_global + float(ev['at']), ev.get('name', 'pop')))
-        if sc.get('show') and not any(ev.get('name') for ev in sc['sfx']):
+        stype = (sc.get('show') or {}).get('type')
+        flip = sc['bg'] == 'notebook' and sc.get('page_flip', True)
+        if flip:
+            sfx_events.append((t_global + 0.02, 'page'))
+        if stype == 'sketch':                                          # marker sounds while the hand draws
+            t_draw, end = (0.6 if flip else 0.2), dur * 0.75
+            while t_draw < end - 0.4:
+                sfx_events.append((t_global + t_draw, 'scribble'))
+                t_draw += 1.6
+        elif sc.get('show') and not any(ev.get('name') for ev in sc['sfx']):
             sfx_events.append((t_global + 0.15, 'pop'))           # element pops in
         if (sc.get('show') or {}).get('type') == 'coin_drop':
             sfx_events.append((t_global + dur * 0.48, 'coin'))

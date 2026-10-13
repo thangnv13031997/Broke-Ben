@@ -129,8 +129,8 @@
       "chars": [
         {
           "who": "ben",
-          "pose": "read",
-          "mood": "worried"
+          "pose": "empty_pockets",
+          "mood": "sad"
         }
       ],
       "show": {
@@ -226,8 +226,8 @@
       "chars": [
         {
           "who": "ben",
-          "pose": "facepalm",
-          "mood": "sad"
+          "pose": "coffee",
+          "mood": "tired"
         }
       ],
       "show": {
@@ -258,20 +258,17 @@
     {
       "purpose": "rehook",
       "bg": "notebook",
-      "chars": [
-        {
-          "who": "ben",
-          "pose": "think",
-          "mood": "smug"
-        }
-      ],
+      "chars": [],
       "show": {
-        "type": "invest_chart",
-        "monthly": 200,
-        "rate": 0.07,
-        "years": 40,
-        "start_age": 25,
-        "compounding": "monthly"
+        "type": "sketch",
+        "kind": "line",
+        "title": "$200 a month, invested at 7%",
+        "invest": {
+          "monthly": 200,
+          "rate": 0.07,
+          "years": 40,
+          "start_age": 25
+        }
       },
       "lines": [
         {

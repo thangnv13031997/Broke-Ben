@@ -90,10 +90,15 @@ Put `"chapter"` on the first scene of each part (≥ 3 chapters, ≥ 10 s apart)
   The background carries over to the next scene until you change it.
 - `chars`: 0–3 of `{ "who": "ben"|"piggy", "pose": ..., "mood": ..., "x": 0..1 (optional),
   "enter": "left"|"right"|"pop" (optional), "size": 1.0 }`.
-  Ben poses: `idle`, `wave`, `point` (at the element), `hold_head` (money panic), `cross_arms` (skeptical),
+  Ben poses (25): `idle`, `wave`, `point` (at the element), `hold_head` (money panic), `cross_arms` (skeptical),
   `phone` (checking the bank app), `read` (holding a receipt/bill), `count_money` (fanning cash), `shrug`,
   `think` (hand on chin), `celebrate` (both fists up), `thumbs_up`, `facepalm` (a money mistake), `explain`
-  (open hands), `sad` (slumped). Moods (Ben): `smile`, `shock`, `sad`, `worried`, `angry`, `smug`.
+  (open hands), `sad` (slumped), `sit_desk` (at a desk with a laptop: work, budgeting, online shopping),
+  `empty_pockets` (pockets turned out: broke), `credit_card` (paying by card), `shopping_bags` (impulse buys),
+  `coffee` (holding a takeaway coffee), `calculator` (doing the math), `beg` (hands together: "please"),
+  `throw_money` (wasting money, bills flying), `hug_piggy` (hugging Piggy Ben: saving), `present` (pointer stick
+  at a chart). Moods (Ben, 9): `smile`, `shock`, `sad`, `worried`, `angry`, `smug`, `money_eyes` ($ eyes),
+  `tired`, `cry`.
   Piggy Ben has no poses; moods `smile` / `shock` (sad, worried, angry map to shock). Match pose and mood to the
   line: `facepalm` + `sad` for a mistake, `celebrate` + `smile` for a win, `hold_head` + `shock` for a scary number. Omit `chars` to show the
   episode mascot; use `[]` for no character. `"mood": "shock"` makes the character hop once.
@@ -109,10 +114,17 @@ Put `"chapter"` on the first scene of each part (≥ 3 chapters, ≥ 10 s apart)
   - `compare`: `title`, `left` {label, value, color}, `right` {label, value, color}, `prefix`
   - `list`: `title`, `items` ["+ good thing", "- bad thing"] (revealed one by one)
   - `coin_drop`: a coin drops into Piggy Ben (needs a piggy in `chars`)
+  - `sketch` ("Ben's Notebook" hand drawing; best with `"bg": "notebook"`, which also opens with a page flip):
+    a hand holding a marker draws the chart stroke by stroke, then writes the labels in handwriting.
+    `kind`: `line` (`title`, `labels`, `series` [{name, values, color}] or `invest` {monthly, rate, years,
+    start_age}), `bars` (`title`, `items` [[label, value, color?], ...]), `pie` (`title`, `items` [[label, value]],
+    shares computed), `flow` (`title`, `steps` ["Paycheck +$3,000", "Savings -$300", ...]).
+    Use `"chars": []` for a full-page drawing, or one Ben (e.g. `present`, `think`) beside a smaller drawing.
+    Use sketches for ~20% of scenes, mainly to explain a concept. Add `"page_flip": false` to skip the flip.
   - add `"enter": "slide"` to slide an element in instead of popping it.
 - `lines`: `text` (English narration), `vi` (Vietnamese subtitle), optional `pause_after` (seconds, default 0.25),
   `speaker` ("narrator" default, or "none").
-- `sfx`: `{ "name": pop|coin|ding|whoosh|tick|thud|cash, "at_line": 0 }` or `{ "name": ..., "at": seconds }`.
+- `sfx`: `{ "name": pop|coin|ding|whoosh|tick|thud|cash|page|scribble, "at_line": 0 }` or `{ "name": ..., "at": seconds }`.
   An element pops in with a "pop" automatically when a scene has no sfx.
 - `transition`: `cut` (default) or `fade` (time jump / new chapter).
 - `music`: `light` (default), `thoughtful`, `none`. Voices: `am_michael` (default), `af_heart`, `am_fenrir`,

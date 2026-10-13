@@ -11,6 +11,7 @@ from PIL import Image, ImageDraw
 from engine.flatkit import Pen, font
 from engine import charkit
 import elements as EL
+import sketch
 
 INK, MUTED, CREAM = (29, 33, 45), (112, 108, 100), (246, 241, 230)
 GOLD, GREEN = (255, 196, 61), (46, 139, 87)
@@ -114,15 +115,21 @@ class Renderer:
 
     def element(self, sc, w, h, p):
         """w, h in 1920-wide design units; drawn at that size (fonts are tuned for it), then scaled."""
-        step = round(p * 90)
+        is_sketch = sc['show'].get('type') == 'sketch'
+        steps = 240 if is_sketch else 90                  # the drawing hand needs finer steps
+        step = round(p * steps)
         key = (sc['index'], step, int(w), int(h))
         if key not in self._el:
-            if len(self._el) > 400:
+            if len(self._el) > 500:
                 self._el.clear()
-            im = EL.render(sc['show'], w, h, step / 90.0, S=self.S)
+            tip = None
+            if is_sketch:
+                im, tip = sketch.render(sc['show'], w, h, step / steps, S=self.S)
+            else:
+                im = EL.render(sc['show'], w, h, step / steps, S=self.S)
             if im is not None and self.k != 1:
                 im = im.resize((max(1, int(w * self.k)), max(1, int(h * self.k))), Image.LANCZOS)
-            self._el[key] = im
+            self._el[key] = (im, tip)
         return self._el[key]
 
     def caption_img(self, text):
@@ -186,7 +193,10 @@ class Renderer:
             else:
                 n = len(chars)
                 xs.append(0.5 if n == 1 else 0.3 + 0.4 * i / (n - 1))
-        box = (700, 110, 1860, 890) if (side and chars) else (380, 110, 1540, 890)
+        if show.get('type') == 'sketch' and not chars:
+            box = (230, 70, 1840, 900)                    # a full notebook page for the drawing
+        else:
+            box = (700, 110, 1860, 890) if (side and chars) else (380, 110, 1540, 890)
         return side, xs, box
 
     def progress(self, sc, t):
@@ -194,6 +204,9 @@ class Renderer:
         run while the line that announces the change is spoken; everything else builds over the scene."""
         show = sc.get('show') or {}
         lines = sc.get('_lines') or []
+        if show.get('type') == 'sketch':                 # finish drawing at ~75% so the result can be read
+            start = 0.6 if (sc['bg'] == 'notebook' and sc.get('page_flip', True)) else 0.2
+            return EL.clamp((t - start) / max(1.2, sc['duration'] * 0.75 - start))
         counting = show.get('type') in ('money_card', 'phone') and ('to' in show or 'from' in show)
         if counting and lines:
             a = lines[1]['t0'] if len(lines) > 1 else lines[0]['t0'] + 0.3
@@ -221,14 +234,18 @@ class Renderer:
         side, xs, box = self.layout(sc)
         show = sc.get('show') or {}
         dur = sc['duration']
+        hand_tip = None
 
         # ---- element
         if side:
             bx0, by0, bx1, by1 = [v * k for v in box]
             bw, bh = bx1 - bx0, by1 - by0
             p = self.progress(sc, t)
-            el = self.element(sc, box[2] - box[0], box[3] - box[1], p)
-            if el is not None:
+            el, tip = self.element(sc, box[2] - box[0], box[3] - box[1], p)
+            if el is not None and show.get('type') == 'sketch':
+                img.alpha_composite(el, (int(bx0), int(by0)))   # draws itself stroke by stroke
+                hand_tip = (bx0 + tip[0] * k, by0 + tip[1] * k) if tip else None
+            elif el is not None:
                 if sc['bg'] == 'notebook':                      # pencil reveal, left to right
                     r = EL.clamp((t - 0.1) / max(0.8, min(2.6, dur * 0.5)))
                     cut = int(el.width * r)
@@ -277,6 +294,11 @@ class Renderer:
                 spr.resize((max(1, int(spr.width * sx)), max(1, int(spr.height * sy))), Image.BILINEAR)
             img.alpha_composite(s2, (int(x - s2.width / 2), int(y - s2.height)))
 
+        if hand_tip:
+            self._hand(img, hand_tip)
+        if sc['bg'] == 'notebook' and sc.get('page_flip', True) and t < 0.6:
+            self._page_flip(img, t / 0.6)
+
         # ---- chapter tag, transition, subtitles
         if sc.get('chapter') and t < 2.8:
             self._chapter(img, sc['chapter'], t)
@@ -289,6 +311,39 @@ class Renderer:
                 cap = self.caption_img(txt)
                 img.alpha_composite(cap, (int((W - cap.width) / 2), int(H - cap.height - 40 * k)))
         return img.convert('RGB')
+
+    def _hand(self, img, tip):
+        """The drawing hand (marker tip on `tip`), its arm coming in from the bottom-right corner."""
+        k = self.k
+        x0, y0 = int(tip[0] - 60 * k), int(tip[1] - 60 * k)
+        w, h = self.W - x0, self.H - y0
+        if w <= 0 or h <= 0:
+            return
+        p = Pen(int(w / k) + 1, int(h / k) + 1, 1 if self.S == 1 else 2)
+        sketch.draw_hand(p, 60, 60)
+        im = p.done()
+        if k != 1:
+            im = im.resize((max(1, int(im.width * k)), max(1, int(im.height * k))), Image.BILINEAR)
+        img.alpha_composite(im, (x0, y0))
+
+    def _page_flip(self, img, q):
+        """The previous notebook page lifts and turns from right to left, revealing this scene."""
+        q = EL.ease_in_out(q)
+        W, H = img.size
+        edge = W * (1 - q)
+        curl = W * 0.12 * math.sin(math.pi * q) + 2
+        lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
+        d = ImageDraw.Draw(lay)
+        d.rectangle((0, 0, edge, H), fill=(251, 248, 239, 255))          # the old page, still blank
+        for yy in range(int(150 * self.k), H, int(56 * self.k)):
+            d.line([(0, yy), (edge, yy)], fill=(170, 200, 230, 255), width=max(1, int(2 * self.k)))
+        d.line([(170 * self.k, 0), (min(edge, 170 * self.k), H)], fill=(232, 120, 120, 255), width=max(1, int(3 * self.k)))
+        for i in range(12):                                              # shadow cast by the lifted page
+            a = int(70 * (1 - i / 12))
+            d.rectangle((edge + curl + i * 4 * self.k, 0, edge + curl + (i + 1) * 4 * self.k, H), fill=(0, 0, 0, a // 3))
+        d.polygon([(edge, 0), (edge + curl, -20), (edge + curl * 0.8, H + 20), (edge, H)], fill=(236, 230, 214, 255))
+        d.line([(edge + curl, -20), (edge + curl * 0.8, H + 20)], fill=(200, 192, 172, 255), width=max(1, int(3 * self.k)))
+        img.alpha_composite(lay)
 
     def _pencil(self, img, x, y):
         k = self.k
