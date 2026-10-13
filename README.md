@@ -18,6 +18,9 @@ Horror Studio và Relatable Studio, nên không cài lại giọng đọc.
 3. Mở app → tab **3. Giọng đọc & cài đặt** → bấm **Kiểm tra kết nối**, rồi **Nghe thử**.
    Nếu Kokoro nằm chỗ khác, bấm **Chọn...** để trỏ tới `python.exe` của Kokoro và thư mục `hf_cache`.
 
+**Cài đặt riêng của bạn** (đường dẫn Kokoro, API key, âm lượng...) lưu trong `config.json`. File này không nằm trong git,
+nên `git pull` không bao giờ ghi đè nó. Giá trị mặc định nằm ở `config.default.json` (đừng sửa file này).
+
 ## Dùng hằng ngày
 1. **Lấy kịch bản** (tab 2):
    - Miễn phí: nhập chủ đề → **Copy prompt** → dán vào Claude chat → copy JSON trả về → **Dán từ clipboard** → **Lưu vào scripts**.

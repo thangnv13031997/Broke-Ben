@@ -4,5 +4,6 @@ logs/
 __pycache__/
 *.pyc
 config.local.json
+config.json
 library/music/*/
 library/sfx/*.wav

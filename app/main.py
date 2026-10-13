@@ -39,11 +39,15 @@ SUBS = [('en', 'Tiếng Anh (bản đăng YouTube)'), ('vi', 'Tiếng Việt (đ
 
 
 def load_cfg():
-    try:
-        with open(CFG_PATH, 'r', encoding='utf-8') as f:
-            return json.load(f)
-    except Exception:
-        return {}
+    """config.default.json (in the repo) overlaid with config.json (your own settings, never in git)."""
+    cfg = {}
+    for path in (os.path.join(ROOT, 'config.default.json'), CFG_PATH):
+        try:
+            with open(path, 'r', encoding='utf-8') as f:
+                cfg.update(json.load(f))
+        except Exception:
+            pass
+    return cfg
 
 
 def save_cfg(cfg):

@@ -408,8 +408,11 @@ def main():
     ap.add_argument('--preview', type=float, default=None, help='only the first N seconds')
     ap.add_argument('--no-shorts', action='store_true')
     a = ap.parse_args()
-    with open(os.path.join(ROOT, 'config.json'), 'r', encoding='utf-8') as f:
-        cfg = json.load(f)
+    cfg = {}
+    for name in ('config.default.json', 'config.json'):          # defaults, then your own settings
+        if os.path.exists(os.path.join(ROOT, name)):
+            with open(os.path.join(ROOT, name), 'r', encoding='utf-8') as f:
+                cfg.update(json.load(f))
     job = Job(cfg, a.script, subs=a.subs, test_voice=a.test, preview_secs=a.preview, shorts=not a.no_shorts,
               report=lambda k, fr, t: print(f'[{k} {fr:4.0%}] {t}', flush=True))
     print(job.run())
