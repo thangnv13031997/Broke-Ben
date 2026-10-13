@@ -72,6 +72,13 @@ def cues_for_line(text, vi, t0, dur):
     return en, vic
 
 
+def draw_start(sc):
+    """Seconds into the scene when a sketch starts drawing (after the page has flipped or slid in)."""
+    if sc['bg'] == 'notebook':
+        return 0.6
+    return 0.65 if sc.get('_enter') == 'slide' else 0.2
+
+
 def build(script, cfg, voice, fps, test=False, progress=None, cancelled=lambda: False, log=print):
     """Synthesises (or estimates) every line and returns the timeline dict used by audio and video."""
     default_voice = script['narrator'].get('voice') or cfg.get('narrator_voice', 'am_michael')
@@ -113,15 +120,17 @@ def build(script, cfg, voice, fps, test=False, progress=None, cancelled=lambda: 
             if 'at' in ev:
                 sfx_events.append((t_global + float(ev['at']), ev.get('name', 'pop')))
         stype = (sc.get('show') or {}).get('type')
-        flip = sc['bg'] == 'notebook' and sc.get('page_flip', True)
-        if flip:
+        enter = sc.get('_enter')
+        if enter == 'flip':
             sfx_events.append((t_global + 0.02, 'page'))
-        if stype == 'sketch':                                          # marker sounds while the hand draws
-            t_draw, end = (0.6 if flip else 0.2), dur * 0.75
+        elif enter == 'slide':
+            sfx_events.append((t_global + 0.02, 'whoosh'))
+        if stype == 'sketch':                                          # pencil sounds while the hand draws
+            t_draw, end = draw_start(sc), dur * 0.75
             while t_draw < end - 0.4:
                 sfx_events.append((t_global + t_draw, 'scribble'))
                 t_draw += 1.6
-        elif sc.get('show') and not any(ev.get('name') for ev in sc['sfx']):
+        elif enter == 'pop' and not any(ev.get('name') for ev in sc['sfx']):
             sfx_events.append((t_global + 0.15, 'pop'))           # element pops in
         if (sc.get('show') or {}).get('type') == 'coin_drop':
             sfx_events.append((t_global + dur * 0.48, 'coin'))

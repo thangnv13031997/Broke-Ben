@@ -1,21 +1,27 @@
 """Frame composer: background + money element + mascots + chapter tag + subtitles.
 
 Animation is cut-out style: mascots are cached sprites; life comes from breathing, blinking, lip flaps
-driven by the voice loudness, hops, pop-in/slide-in elements, a pencil reveal on notebook scenes,
-and a coin dropping into Piggy Ben.
+driven by the voice loudness, hops, pop-in/slide-in elements, Ben's spiral notebook (a tilted page on the desk:
+the page flips when the drawing goes on, slides in when the scene changes kind), and a coin dropping into Piggy Ben.
 """
 import bisect
 import math
 import random
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFilter
 from engine.flatkit import Pen, font
 from engine import charkit
 import elements as EL
 import sketch
+import timeline
 
 INK, MUTED, CREAM = (29, 33, 45), (112, 108, 100), (246, 241, 230)
 GOLD, GREEN = (255, 196, 61), (46, 139, 87)
 FLOOR_Y = 905
+PAGE_SIDE = (640, 50, 1880, 900)          # notebook page beside the characters (design units)
+PAGE_FULL = (230, 40, 1690, 905)          # notebook page when nobody is on screen
+PAGE_IN = (96, 120, 40, 34)               # drawing area inset on the page: left, top, right, bottom
+PAGE_TILT = -2.0                           # degrees (negative = clockwise)
+SLIDE, FLIP = 0.45, 0.55                   # seconds for an element sliding in / a page turning
 
 
 def _ease_out_back(t):
@@ -73,13 +79,10 @@ class Renderer:
                 x += bw
             p.rect((0, FLOOR_Y, W, H), '#5C636E')
             p.rect((0, FLOOR_Y, W, FLOOR_Y + 8), '#C9CED6')
-        elif name == 'notebook':
-            p.rect((0, 0, W, H), '#FBF8EF')
-            for y in range(150, H, 56):
-                p.line([(0, y), (W, y)], 2, (170, 200, 230), caps=False)
-            p.line([(170, 0), (170, H)], 3, (232, 120, 120), caps=False)
-            for y in (220, 540, 860):
-                p.circle(70, y, 22, (225, 220, 205))
+        elif name == 'notebook':                          # the desk the spiral notebook lies on
+            p.vgrad((0, 0, W, H), '#F3E8D4', '#E6D5B8')
+            p.rect((0, FLOOR_Y - 8, W, H), '#9A6B45')
+            p.rect((0, FLOOR_Y - 14, W, FLOOR_Y), '#B07D53')
         elif name == 'plain':
             p.rect((0, 0, W, H), CREAM)
         else:                                                             # grid (default)
@@ -116,17 +119,16 @@ class Renderer:
     def element(self, sc, w, h, p):
         """w, h in 1920-wide design units; drawn at that size (fonts are tuned for it), then scaled."""
         is_sketch = sc['show'].get('type') == 'sketch'
-        steps = 240 if is_sketch else 90                  # the drawing hand needs finer steps
-        step = round(p * steps)
-        key = (sc['index'], step, int(w), int(h))
+        q = round(p * 240) / 240 if is_sketch else EL.quantize(sc['show'], p)   # the hand needs fine steps
+        key = (sc['index'], q, int(w), int(h))
         if key not in self._el:
             if len(self._el) > 500:
                 self._el.clear()
             tip = None
             if is_sketch:
-                im, tip = sketch.render(sc['show'], w, h, step / steps, S=self.S)
+                im, tip = sketch.render(sc['show'], w, h, q, S=self.S)
             else:
-                im = EL.render(sc['show'], w, h, step / steps, S=self.S)
+                im = EL.render(sc['show'], w, h, q, S=self.S)
             if im is not None and self.k != 1:
                 im = im.resize((max(1, int(w * self.k)), max(1, int(h * self.k))), Image.LANCZOS)
             self._el[key] = (im, tip)
@@ -193,8 +195,9 @@ class Renderer:
             else:
                 n = len(chars)
                 xs.append(0.5 if n == 1 else 0.3 + 0.4 * i / (n - 1))
-        if show.get('type') == 'sketch' and not chars:
-            box = (230, 70, 1840, 900)                    # a full notebook page for the drawing
+        if sc['bg'] == 'notebook' and side:              # the element sits on a spiral notebook page
+            page = PAGE_SIDE if chars else PAGE_FULL
+            box = (page[0] + PAGE_IN[0], page[1] + PAGE_IN[1], page[2] - PAGE_IN[2], page[3] - PAGE_IN[3])
         else:
             box = (700, 110, 1860, 890) if (side and chars) else (380, 110, 1540, 890)
         return side, xs, box
@@ -205,7 +208,7 @@ class Renderer:
         show = sc.get('show') or {}
         lines = sc.get('_lines') or []
         if show.get('type') == 'sketch':                 # finish drawing at ~75% so the result can be read
-            start = 0.6 if (sc['bg'] == 'notebook' and sc.get('page_flip', True)) else 0.2
+            start = timeline.draw_start(sc)
             return EL.clamp((t - start) / max(1.2, sc['duration'] * 0.75 - start))
         counting = show.get('type') in ('money_card', 'phone') and ('to' in show or 'from' in show)
         if counting and lines:
@@ -237,33 +240,28 @@ class Renderer:
         hand_tip = None
 
         # ---- element
-        if side:
+        if side and sc['bg'] == 'notebook':
+            hand_tip = self._notebook(img, sc, t, box)
+        elif side:
             bx0, by0, bx1, by1 = [v * k for v in box]
             bw, bh = bx1 - bx0, by1 - by0
             p = self.progress(sc, t)
             el, tip = self.element(sc, box[2] - box[0], box[3] - box[1], p)
+            enter = sc.get('_enter') or 'pop'
+            if enter == 'slide' and t < SLIDE:                    # a new kind of element slides in from the right
+                q = EL.ease_in_out(t / SLIDE)
+                bx0 += (1 - q) * (W - bx0 + 40 * k)
             if el is not None and show.get('type') == 'sketch':
                 img.alpha_composite(el, (int(bx0), int(by0)))   # draws itself stroke by stroke
                 hand_tip = (bx0 + tip[0] * k, by0 + tip[1] * k) if tip else None
             elif el is not None:
-                if sc['bg'] == 'notebook':                      # pencil reveal, left to right
-                    r = EL.clamp((t - 0.1) / max(0.8, min(2.6, dur * 0.5)))
-                    cut = int(el.width * r)
-                    if cut > 0:
-                        img.alpha_composite(el.crop((0, 0, cut, el.height)), (int(bx0), int(by0)))
-                    if r < 1:
-                        self._pencil(img, bx0 + cut, by0 + bh * (0.3 + 0.4 * (0.5 + 0.5 * math.sin(t * 9))))
-                else:
-                    a = EL.clamp(t / 0.35)
-                    if show.get('enter', 'pop') == 'slide':
-                        off = (1 - EL.ease_in_out(a)) * (W - bx0)
-                        img.alpha_composite(el, (int(bx0 + off), int(by0)))
-                    elif a < 1:
-                        s = max(0.05, _ease_out_back(a))
-                        e2 = el.resize((max(1, int(bw * s)), max(1, int(bh * s))), Image.BILINEAR)
-                        img.alpha_composite(e2, (int(bx0 + (bw - e2.width) / 2), int(by0 + (bh - e2.height) / 2)))
-                    else:
-                        img.alpha_composite(el, (int(bx0), int(by0)))
+                a = EL.clamp(t / 0.35)
+                if enter == 'pop' and a < 1:
+                    s = max(0.05, _ease_out_back(a))
+                    e2 = el.resize((max(1, int(bw * s)), max(1, int(bh * s))), Image.BILINEAR)
+                    img.alpha_composite(e2, (int(bx0 + (bw - e2.width) / 2), int(by0 + (bh - e2.height) / 2)))
+                elif bx0 < W:
+                    img.alpha_composite(el, (int(bx0), int(by0)))
 
         # ---- characters
         base_h = (560 if side else 660) * k
@@ -296,8 +294,6 @@ class Renderer:
 
         if hand_tip:
             self._hand(img, hand_tip)
-        if sc['bg'] == 'notebook' and sc.get('page_flip', True) and t < 0.6:
-            self._page_flip(img, t / 0.6)
 
         # ---- chapter tag, transition, subtitles
         if sc.get('chapter') and t < 2.8:
@@ -326,24 +322,99 @@ class Renderer:
             im = im.resize((max(1, int(im.width * k)), max(1, int(im.height * k))), Image.BILINEAR)
         img.alpha_composite(im, (x0, y0))
 
-    def _page_flip(self, img, q):
-        """The previous notebook page lifts and turns from right to left, revealing this scene."""
+    # ------------------------------------------------------------ Ben's notebook
+    def _page(self, pw, ph):
+        """A blank spiral notebook page (pw x ph pixels at output scale), cached."""
+        key = ('page', pw, ph)
+        if key not in self._bg:
+            k = self.k
+            p = Pen(int(pw / k) + 1, int(ph / k) + 1, 2)
+            w, h = p.w, p.h
+            top = 38                                          # room for the spiral rings
+            p.rect((0, top, w, h), '#FFFDF6', (205, 195, 172), 3, r=14)
+            for y in range(top + 96, h - 16, 46):
+                p.line([(18, y), (w - 18, y)], 2, (175, 205, 235), caps=False)
+            p.line([(PAGE_IN[0] - 28, top + 6), (PAGE_IN[0] - 28, h - 6)], 3, (232, 120, 120), caps=False)
+            for x in range(54, w - 40, 60):
+                p.circle(x + 11, top + 14, 9, (120, 110, 100))         # punched hole
+                p.ellipse((x, 6, x + 22, top + 26), None, (90, 92, 104), 6)   # the ring over it
+            im = p.done()
+            self._bg[key] = im.resize((pw, ph), Image.LANCZOS) if im.size != (pw, ph) else im
+        return self._bg[key]
+
+    def _notebook(self, img, sc, t, box):
+        """Draws the scene's page (element on it, tilted, with a shadow); returns the pencil tip or None."""
+        k, W = self.k, self.W
+        page = PAGE_SIDE if sc['chars'] else PAGE_FULL
+        px0, py0, px1, py1 = [int(v * k) for v in page]
+        pw, ph = px1 - px0, py1 - py0
+        canvas = self._page(pw, ph).copy()
+        show = sc['show']
+        dur = sc['duration']
+        ix, iy = PAGE_IN[0] * k, PAGE_IN[1] * k
+        p = self.progress(sc, t)
+        el, tip = self.element(sc, box[2] - box[0], box[3] - box[1], p)
+        local_tip = None
+        if el is not None and show.get('type') == 'sketch':
+            canvas.alpha_composite(el, (int(ix), int(iy)))
+            local_tip = (ix + tip[0] * k, iy + tip[1] * k) if tip else None
+        elif el is not None:                                      # other elements: a pencil reveal, left to right
+            r = EL.clamp((t - 0.6) / max(0.8, min(2.6, dur * 0.5)))
+            cut = int(el.width * r)
+            if cut > 0:
+                canvas.alpha_composite(el.crop((0, 0, cut, el.height)), (int(ix), int(iy)))
+            if 0 < r < 1:
+                local_tip = (ix + cut, iy + el.height * (0.3 + 0.4 * (0.5 + 0.5 * math.sin(t * 9))))
+        enter = sc.get('_enter')
+        if enter == 'flip' and t < FLIP:
+            self._flip(canvas, t / FLIP)
+        rot = canvas.rotate(PAGE_TILT, resample=Image.BILINEAR, expand=True)
+        ox = px0 - (rot.width - pw) / 2
+        oy = py0 - (rot.height - ph) / 2
+        if enter == 'slide' and t < SLIDE:                        # the notebook slides in from the right
+            ox += (1 - EL.ease_in_out(t / SLIDE)) * (W - ox + 40 * k)
+        shadow = self._page_shadow(rot)
+        img.alpha_composite(shadow, (max(0, int(ox + 14 * k)), max(0, int(oy + 18 * k))),
+                            (max(0, -int(ox + 14 * k)), max(0, -int(oy + 18 * k))))
+        img.alpha_composite(rot, (max(0, int(ox)), max(0, int(oy))), (max(0, -int(ox)), max(0, -int(oy))))
+        if local_tip is None or (enter == 'slide' and t < SLIDE):
+            return None
+        # the same rotation for the pencil tip (PIL turns counter-clockwise for a positive angle)
+        a = math.radians(PAGE_TILT)
+        cx, cy = pw / 2, ph / 2
+        dx, dy = local_tip[0] - cx, local_tip[1] - cy
+        rx = dx * math.cos(a) + dy * math.sin(a)
+        ry = -dx * math.sin(a) + dy * math.cos(a)
+        return (ox + rot.width / 2 + rx, oy + rot.height / 2 + ry)
+
+    def _page_shadow(self, rot):
+        key = ('shadow', rot.size)
+        if key not in self._bg:
+            a = rot.getchannel('A').point(lambda v: 70 if v > 20 else 0)
+            sh = Image.new('RGBA', rot.size, (0, 0, 0, 0))
+            sh.putalpha(a.filter(ImageFilter.GaussianBlur(14 * self.k)))
+            self._bg[key] = sh
+        return self._bg[key]
+
+    def _flip(self, canvas, q):
+        """The previous page (blank) lifts and turns from right to left, revealing this one."""
         q = EL.ease_in_out(q)
-        W, H = img.size
-        edge = W * (1 - q)
-        curl = W * 0.12 * math.sin(math.pi * q) + 2
-        lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
+        W, H = canvas.size
+        old = self._page(W, H)
+        edge = int(W * (1 - q))
+        if edge <= 0:
+            return
+        top = int(38 * self.k)
+        canvas.alpha_composite(old.crop((0, 0, edge, H)), (0, 0))
+        curl = W * 0.10 * math.sin(math.pi * q) + 2
+        lay = Image.new('RGBA', canvas.size, (0, 0, 0, 0))
         d = ImageDraw.Draw(lay)
-        d.rectangle((0, 0, edge, H), fill=(251, 248, 239, 255))          # the old page, still blank
-        for yy in range(int(150 * self.k), H, int(56 * self.k)):
-            d.line([(0, yy), (edge, yy)], fill=(170, 200, 230, 255), width=max(1, int(2 * self.k)))
-        d.line([(170 * self.k, 0), (min(edge, 170 * self.k), H)], fill=(232, 120, 120, 255), width=max(1, int(3 * self.k)))
-        for i in range(12):                                              # shadow cast by the lifted page
-            a = int(70 * (1 - i / 12))
-            d.rectangle((edge + curl + i * 4 * self.k, 0, edge + curl + (i + 1) * 4 * self.k, H), fill=(0, 0, 0, a // 3))
-        d.polygon([(edge, 0), (edge + curl, -20), (edge + curl * 0.8, H + 20), (edge, H)], fill=(236, 230, 214, 255))
-        d.line([(edge + curl, -20), (edge + curl * 0.8, H + 20)], fill=(200, 192, 172, 255), width=max(1, int(3 * self.k)))
-        img.alpha_composite(lay)
+        for i in range(10):                                              # shadow cast by the lifted page
+            d.rectangle((edge + curl + i * 4 * self.k, top, edge + curl + (i + 1) * 4 * self.k, H),
+                        fill=(0, 0, 0, int(22 * (1 - i / 10))))
+        d.polygon([(edge, top), (edge + curl, top - 6), (edge + curl * 0.8, H), (edge, H)], fill=(236, 230, 214, 255))
+        d.line([(edge + curl, top - 6), (edge + curl * 0.8, H)], fill=(200, 192, 172, 255), width=max(1, int(3 * self.k)))
+        canvas.alpha_composite(lay)
 
     def _pencil(self, img, x, y):
         k = self.k

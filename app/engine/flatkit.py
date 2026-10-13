@@ -57,12 +57,31 @@ class Pen:
 
     def paste(self, other, blur=0, rotate=0, center=None):
         im = other.img
+        if not (rotate or blur):
+            self.img.alpha_composite(im)
+            self.d = ImageDraw.Draw(self.img)
+            return
+        bb = im.getbbox()
+        if not bb:
+            return
+        # work on the drawn region only (plus room for the blur and the turn): much faster than the full layer
+        W, H = im.size
+        c = (center[0] * self.S, center[1] * self.S) if center else (W / 2, H / 2)
+        m = int(blur * self.S * 3 + 4)
+        if rotate:                                   # grow the box to hold the turned corners
+            ca, sa = math.cos(math.radians(rotate)), math.sin(math.radians(rotate))
+            pts = [(c[0] + (x - c[0]) * ca + (y - c[1]) * sa, c[1] - (x - c[0]) * sa + (y - c[1]) * ca)
+                   for x in (bb[0], bb[2]) for y in (bb[1], bb[3])]
+            bb = (min([bb[0]] + [q[0] for q in pts]), min([bb[1]] + [q[1] for q in pts]),
+                  max([bb[2]] + [q[0] for q in pts]), max([bb[3]] + [q[1] for q in pts]))
+        x0, y0 = max(0, int(bb[0]) - m), max(0, int(bb[1]) - m)
+        x1, y1 = min(W, int(bb[2]) + m + 1), min(H, int(bb[3]) + m + 1)
+        part = im.crop((x0, y0, x1, y1))
         if rotate:
-            c = (center[0] * self.S, center[1] * self.S) if center else None
-            im = im.rotate(rotate, resample=Image.BICUBIC, center=c)
+            part = part.rotate(rotate, resample=Image.BILINEAR, center=(c[0] - x0, c[1] - y0))
         if blur:
-            im = im.filter(ImageFilter.GaussianBlur(blur * self.S))
-        self.img.alpha_composite(im)
+            part = part.filter(ImageFilter.GaussianBlur(blur * self.S))
+        self.img.alpha_composite(part, (x0, y0))
         self.d = ImageDraw.Draw(self.img)
 
     # -- primitives

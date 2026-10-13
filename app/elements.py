@@ -49,6 +49,7 @@ def _card(pen, x0, y0, x1, y1, r=34):
 
 # ---------------------------------------------------------------- elements
 def money_card(pen, w, h, spec, p):
+    """A money number on a card. style: sticker (default), tag (money out: red), bill (money in: green), plain."""
     v0 = float(spec.get('value', 0))
     v1 = float(spec.get('to', v0))
     k = ease_in_out(seg(p, 0.0, 0.9))           # p is timed to the line that announces the change
@@ -59,17 +60,111 @@ def money_card(pen, w, h, spec, p):
     else:
         col = COLORS.get(col, GREEN)
     label = spec.get('to_label') if (v1 != v0 and k > 0.5 and spec.get('to_label')) else spec.get('label', '')
-    cw, ch = min(w, 760), min(h, 420)
-    x0, y0 = (w - cw) / 2, (h - ch) / 2
-    _card(pen, x0, y0, x0 + cw, y0 + ch)
-    if label:
-        pen.text((w / 2, y0 + 78), label.upper(), 'bold', fit(pen, label.upper(), 'bold', 44, cw - 80), MUTED,
-                 anchor='mm')
     txt = money(v, spec.get('prefix', '$'), int(spec.get('decimals', 0)))
-    pen.text((w / 2, y0 + ch * 0.58), txt, 'display', fit(pen, txt, 'display', 190, cw - 80), col, anchor='mm')
-    if spec.get('note'):
-        pen.text((w / 2, y0 + ch - 50), spec['note'], 'body', fit(pen, spec['note'], 'body', 34, cw - 80), MUTED,
+    note = spec.get('note', '')
+    style = card_style(spec)
+    if style == 'tag':
+        _price_tag(pen, w, h, label, txt, note, col, p)
+    elif style == 'bill':
+        _bill(pen, w, h, label, txt, note, p)
+    elif style == 'plain':
+        cw, ch = min(w, 760), min(h, 420)
+        x0, y0 = (w - cw) / 2, (h - ch) / 2
+        _card(pen, x0, y0, x0 + cw, y0 + ch)
+        if label:
+            pen.text((w / 2, y0 + 78), label.upper(), 'bold', fit(pen, label.upper(), 'bold', 44, cw - 80), MUTED,
+                     anchor='mm')
+        pen.text((w / 2, y0 + ch * 0.58), txt, 'display', fit(pen, txt, 'display', 190, cw - 80), col, anchor='mm')
+        if note:
+            pen.text((w / 2, y0 + ch - 50), note, 'body', fit(pen, note, 'body', 34, cw - 80), MUTED, anchor='mm')
+    else:
+        _sticker(pen, w, h, label, txt, note, col)
+
+
+def card_style(spec):
+    """Picks the look of a money card from what it shows; `style` in the script overrides it."""
+    st = spec.get('style')
+    if st in ('sticker', 'tag', 'bill', 'plain'):
+        return st
+    if 'to' in spec:
+        return 'sticker'                        # counting numbers stay on the sticker
+    return {'red': 'tag', 'green': 'bill'}.get(spec.get('color'), 'sticker')
+
+
+def _soft_shadow(pen, shape, rotate=0, blur=10, alpha=60, off=(12, 16)):
+    sh = pen.layer()
+    sh.poly([(x + off[0], y + off[1]) for x, y in shape], (0, 0, 0, alpha))
+    pen.paste(sh, blur=blur, rotate=rotate)
+
+
+def _sticker(pen, w, h, label, txt, note, col):
+    """Bold sticker: thick outline, hard offset shadow, coloured tab with the label, slightly tilted."""
+    cw, ch = min(w - 60, 760), min(h - 60, 440)
+    x0, y0 = (w - cw) / 2, (h - ch) / 2
+    lay = pen.layer()
+    lay.rect((x0 + 20, y0 + 22, x0 + cw + 20, y0 + ch + 22), INK, r=30)
+    lay.rect((x0, y0, x0 + cw, y0 + ch), (255, 255, 255), INK, 6, r=30)
+    tab = 112
+    lay.rect((x0, y0, x0 + cw, y0 + tab), col, INK, 6, r=30)
+    lay.rect((x0 + 3, y0 + tab - 40, x0 + cw - 3, y0 + tab), col)
+    lay.line([(x0, y0 + tab), (x0 + cw, y0 + tab)], 6, INK, caps=False)
+    lab = (label or '').upper()
+    if lab:
+        lay.text((w / 2, y0 + tab / 2 + 2), lab, 'display', fit(lay, lab, 'display', 68, cw - 70), (255, 255, 255),
                  anchor='mm')
+    body = ch - tab
+    lay.text((w / 2, y0 + tab + body * (0.44 if note else 0.5)), txt, 'display',
+             fit(lay, txt, 'display', 190, cw - 80), col, anchor='mm')
+    if note:
+        lay.text((w / 2, y0 + ch - 48), note, 'semi', fit(lay, note, 'semi', 38, cw - 80), MUTED, anchor='mm')
+    pen.paste(lay, rotate=-3)
+
+
+def _price_tag(pen, w, h, label, txt, note, col, p):
+    """A price tag on a string that swings in and settles: for money going out."""
+    tw, th = min(w - 120, 820), min(h - 200, 400)
+    x0, y0 = (w - tw) / 2 + 30, (h - th) / 2 + 40
+    hole = (x0 + 80, y0 + th / 2)
+    shape = [(x0 + 150, y0), (x0 + tw - 20, y0), (x0 + tw, y0 + 20), (x0 + tw, y0 + th - 20), (x0 + tw - 20, y0 + th),
+             (x0 + 150, y0 + th), (x0, y0 + th / 2)]
+    swing = 7 + 9 * math.exp(-8 * p) * math.cos(22 * p)
+    _soft_shadow(pen, shape, rotate=swing)
+    lay = pen.layer()
+    lay.line([hole, (hole[0] - 160, 0)], 5, INK)               # the string goes up out of the box
+    lay.poly(shape, (255, 238, 236) if col == RED else (238, 248, 240), INK, 6)
+    lay.circle(hole[0], hole[1], 26, (246, 241, 230), INK, 5)
+    lay.line([(x0 + 184, y0 + 40), (x0 + tw - 40, y0 + 40)], 3, (240, 190, 190) if col == RED else (190, 225, 200),
+             caps=False)
+    head = ' · '.join(x for x in ((label or '').upper(), (note or '').upper()) if x)
+    cx = x0 + 150 + (tw - 170) / 2
+    if head:
+        lay.text((cx, y0 + 100), head, 'bold', fit(lay, head, 'bold', 44, tw - 220), shade_of(col), anchor='mm')
+    lay.text((cx, y0 + th * 0.62), txt, 'display', fit(lay, txt, 'display', 190, tw - 220), col, anchor='mm')
+    pen.paste(lay, rotate=swing, center=hole)
+
+
+def _bill(pen, w, h, label, txt, note, p):
+    """A banknote: for money coming in or money kept."""
+    bw, bh = min(w - 60, 900), min(h - 80, 440)
+    x0, y0 = (w - bw) / 2, (h - bh) / 2
+    dark, light = (36, 110, 70), (214, 236, 214)
+    _soft_shadow(pen, [(x0, y0), (x0 + bw, y0), (x0 + bw, y0 + bh), (x0, y0 + bh)])
+    pen.rect((x0, y0, x0 + bw, y0 + bh), light, dark, 8, r=18)
+    pen.rect((x0 + 26, y0 + 26, x0 + bw - 26, y0 + bh - 26), None, dark, 3, r=10)
+    for i in range(14):                                         # engraved rings behind the number
+        pen.circle(w / 2, y0 + bh / 2 + 20, 60 + i * 7, None, (160, 200, 168), 1.5)
+    for cx, cy in ((x0 + 70, y0 + 70), (x0 + bw - 70, y0 + 70), (x0 + 70, y0 + bh - 70), (x0 + bw - 70, y0 + bh - 70)):
+        pen.text((cx, cy), '$', 'display', 60, dark, anchor='mm')
+    lab = (label or '').upper()
+    if lab:
+        pen.text((w / 2, y0 + 62), lab, 'bold', fit(pen, lab, 'bold', 40, bw - 220), dark, anchor='mm')
+    pen.text((w / 2, y0 + bh / 2 + 20), txt, 'display', fit(pen, txt, 'display', 170, bw - 200), GREEN, anchor='mm',
+             stroke=6, stroke_fill=light)
+    pen.text((w / 2, y0 + bh - 66), (note or 'THE UNITED STATES OF BEN').upper(), 'semi', 30, dark, anchor='mm')
+
+
+def shade_of(col):
+    return tuple(int(c * 0.7) for c in col[:3])
 
 
 def big_text(pen, w, h, spec, p):
@@ -182,6 +277,47 @@ def receipt(pen, w, h, spec, p):
 
 
 def phone(pen, w, h, spec, p):
+    """Bank notifications that slide in one by one (style "phone" keeps the old phone screen)."""
+    if spec.get('style') == 'phone':
+        return _phone_screen(pen, w, h, spec, p)
+    b1 = float(spec.get('balance', 0))
+    b0 = float(spec.get('from', b1))
+    b = b0 + (b1 - b0) * ease_in_out(seg(p, 0.0, 0.9))
+    items = [(str(a), float(b_)) for a, b_ in (spec.get('items') or [])][:4]
+    tw = min(w - 40, 980)
+    x0 = (w - tw) / 2
+    head_h = 210
+    gap = 22
+    th = min(150, (h - head_h - gap - 20) / max(1, len(items)) - gap) if items else 0
+    total = head_h + (gap + th) * len(items)
+    y = (h - total) / 2
+    good = b >= b0 and b > 0
+    _toast(pen, x0, y, tw, head_h, spec.get('label', 'Checking'), 'Available balance', money(b, '$', 2),
+           GREEN if good else RED, 1.0, big=True)
+    for i, (lab, amt) in enumerate(items):
+        q = ease_in_out(seg(p, 0.12 + i * 0.16, 0.3 + i * 0.16))
+        if q <= 0:
+            continue
+        yy = y + head_h + gap + i * (th + gap)
+        off = (1 - q) * (w - x0 + 40)
+        _toast(pen, x0 + off, yy, tw, th, lab, 'Card payment', '-' + money(amt), RED, q)
+
+
+def _toast(pen, x, y, w, h, title, sub, amount, col, q, big=False):
+    pen.rect((x + 8, y + 12, x + w + 8, y + h + 12), (0, 0, 0, 45), r=h / 2 if not big else 46)
+    pen.rect((x, y, x + w, y + h), (255, 255, 255), (214, 214, 220), 3, r=h / 2 if not big else 46)
+    r = h * 0.3
+    pen.circle(x + h * 0.5, y + h / 2, r, col)
+    pen.text((x + h * 0.5, y + h / 2 + 3), '$', 'display', r * 1.3, (255, 255, 255), anchor='mm')
+    tx = x + h * 0.5 + r + 30
+    amt_size = fit(pen, amount, 'display', 110 if big else 72, w * 0.45)
+    room = w - (tx - x) - pen.text_w(amount, 'display', amt_size) - 60
+    pen.text((tx, y + h * 0.36), title, 'bold', fit(pen, title, 'bold', 50 if big else 42, room), INK, anchor='lm')
+    pen.text((tx, y + h * 0.7), sub, 'body', fit(pen, sub, 'body', 34 if big else 30, room), MUTED, anchor='lm')
+    pen.text((x + w - 40, y + h / 2), amount, 'display', amt_size, col, anchor='rm')
+
+
+def _phone_screen(pen, w, h, spec, p):
     pw, ph = 380, min(h, 680)
     x0, y0 = (w - pw) / 2, (h - ph) / 2
     pen.rect((x0 + 12, y0 + 16, x0 + pw + 12, y0 + ph + 16), (0, 0, 0, 60), r=52)
@@ -226,6 +362,71 @@ def compare(pen, w, h, spec, p):
 
 
 def checklist(pen, w, h, spec, p):
+    """A yellow sticky note with a handwritten list, ticked or crossed line by line (style "card": the old list)."""
+    if spec.get('style') == 'card':
+        return _checklist_plain(pen, w, h, spec, p)
+    items = spec.get('items', [])
+    title = spec.get('title', '')
+    nw = min(w - 80, 820)
+    rh = 96 if len(items) <= 4 else max(64, 96 - (len(items) - 4) * 10)
+    nh = min(h - 70, (150 if title else 50) + rh * len(items) + 50)
+    x0, y0 = (w - nw) / 2, (h - nh) / 2 + 10
+    shape = [(x0, y0), (x0 + nw, y0), (x0 + nw, y0 + nh), (x0, y0 + nh)]
+    _soft_shadow(pen, shape, rotate=2, blur=12, alpha=55)
+    lay = pen.layer()
+    lay.poly(shape, (255, 232, 120))
+    lay.poly([(x0 + nw - 80, y0 + nh), (x0 + nw, y0 + nh - 80), (x0 + nw, y0 + nh)], (236, 205, 90))
+    y = y0 + 40
+    if title:
+        size = fit(lay, title, 'hand', 76, nw - 100)
+        lay.text((x0 + 50, y + 34), title, 'hand', size, INK, anchor='lm')
+        lay.line([(x0 + 50, y + 82), (x0 + 50 + min(nw - 100, lay.text_w(title, 'hand', size)), y + 79)], 4, RED)
+        y += 130
+    shown = len(items) * seg(p, 0.0, 0.8)
+    for i, it in enumerate(items):
+        q = clamp(shown - i)
+        if q <= 0:
+            break
+        good = not str(it).startswith('-')
+        text = str(it).lstrip('+- ')
+        yy = y + i * rh + rh / 2
+        mark = clamp(q * 1.6)
+        if good:
+            _part_line(lay, [(x0 + 54, yy), (x0 + 72, yy + 20), (x0 + 104, yy - 22)], mark, 8, GREEN)
+        else:
+            _part_line(lay, [(x0 + 54, yy - 18), (x0 + 90, yy + 18)], clamp(mark * 2), 8, RED)
+            _part_line(lay, [(x0 + 90, yy - 18), (x0 + 54, yy + 18)], clamp(mark * 2 - 1), 8, RED)
+        size = fit(lay, text, 'hand', 60, nw - 170)
+        tl = lay.layer()                                     # the words are written left to right
+        tl.text((x0 + 120, yy + 2), text, 'hand', size, INK, anchor='lm')
+        if q < 1:
+            cut = int((x0 + 120 + lay.text_w(text, 'hand', size) * q) * tl.S)
+            tl.img.paste((0, 0, 0, 0), (cut, 0, tl.img.width, tl.img.height))
+        lay.paste(tl)
+    tape = lay.layer()
+    tape.rect((w / 2 - 120, y0 - 26, w / 2 + 120, y0 + 30), (190, 220, 255, 170))
+    lay.paste(tape, rotate=-4)
+    pen.paste(lay, rotate=2)
+
+
+def _part_line(pen, pts, f, width, col):
+    """Draws the first fraction f of a polyline (a pen stroke being made)."""
+    if f <= 0:
+        return
+    segs = [math.dist(a, b) for a, b in zip(pts, pts[1:])]
+    left = sum(segs) * f
+    out = [pts[0]]
+    for (a, b), L in zip(zip(pts, pts[1:]), segs):
+        if left >= L:
+            out.append(b)
+            left -= L
+        else:
+            out.append((a[0] + (b[0] - a[0]) * left / L, a[1] + (b[1] - a[1]) * left / L))
+            break
+    pen.line(out, width, col)
+
+
+def _checklist_plain(pen, w, h, spec, p):
     items = spec.get('items', [])
     title = spec.get('title', '')
     y = 40
@@ -250,6 +451,25 @@ def checklist(pen, w, h, spec, p):
 
 DRAW = {'money_card': money_card, 'big_text': big_text, 'invest_chart': invest_chart, 'chart': chart,
         'receipt': receipt, 'phone': phone, 'compare': compare, 'list': checklist}
+
+
+def quantize(spec, p):
+    """The progress values an element is actually redrawn at: still cards are drawn once, moving parts get
+    just enough steps to look smooth. Frames between steps reuse the cached image."""
+    t = spec.get('type')
+    if t == 'money_card':
+        if 'to' in spec:
+            return round(p * 90) / 90
+        if card_style(spec) == 'tag':
+            return round(p * 50) / 50 if p < 0.6 else 1.0       # swings, then hangs still
+        return 1.0
+    if t == 'big_text':
+        return 1.0
+    if t == 'list':
+        return round(p * 48) / 48
+    if t == 'phone':
+        return round(p * 60) / 60
+    return round(p * 90) / 90
 
 
 def render(spec, w, h, p, S=2):

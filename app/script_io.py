@@ -30,6 +30,11 @@ def load(path):
         return normalise(json.load(f))
 
 
+# element families for transitions: changing family slides, staying in one pops
+KIND = {'money_card': 'card', 'phone': 'card', 'list': 'card', 'receipt': 'card',
+        'chart': 'chart', 'compare': 'chart', 'invest_chart': 'chart', 'sketch': 'chart', 'big_text': 'text'}
+
+
 def normalise(s):
     s = dict(s)
     s.setdefault('title', 'Untitled')
@@ -43,6 +48,7 @@ def normalise(s):
     s.setdefault('thumbnail', {})
     scenes = []
     prev_bg = 'grid'
+    prev_kind = None
     for i, sc in enumerate(s.get('scenes') or []):
         sc = dict(sc)
         sc['index'] = i
@@ -71,6 +77,20 @@ def normalise(s):
         sc['lines'] = lines
         sc.setdefault('transition', 'cut')
         sc['sfx'] = list(sc.get('sfx') or [])
+        # how the element comes in: the notebook page flips when the drawing continues on the next page,
+        # anything else slides in when the kind of element changes and pops when it stays the same
+        show = sc.get('show') or {}
+        stype = show.get('type') if isinstance(show, dict) else None
+        kind = None if stype in (None, 'coin_drop') else ('page' if sc['bg'] == 'notebook' else KIND.get(stype, stype))
+        if kind is None:
+            sc['_enter'] = None
+        elif kind == 'page':
+            sc['_enter'] = 'flip' if (prev_kind == 'page' and sc.get('page_flip', True)) else 'slide'
+        elif show.get('enter') in ('slide', 'pop'):
+            sc['_enter'] = show['enter']
+        else:
+            sc['_enter'] = 'pop' if prev_kind == kind else 'slide'
+        prev_kind = kind
         scenes.append(sc)
     s['scenes'] = scenes
     return s

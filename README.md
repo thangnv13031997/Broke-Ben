@@ -45,10 +45,12 @@ Horror Studio và Relatable Studio, nên không cài lại giọng đọc.
 ## Video trông như thế nào
 - Nhân vật **Ben** (người trẻ đi làm: tóc rối kiểu hiện đại, hoodie xanh, thẻ nhân viên đeo cổ) với **25 dáng và 9 cảm xúc** (xem `docs/ben_poses.png`),
   và **Piggy Ben** (heo đất nứt dán băng, vai phụ). Nhân vật thở, chớp mắt, **mấp máy miệng theo giọng đọc**, nhảy lên khi sốc hoặc ăn mừng.
-- Thành phần tiền bạc tự tính số, không gõ tay: thẻ tiền đếm lên/xuống, biểu đồ lãi kép, hóa đơn in từng dòng, điện thoại số dư,
-  cột so sánh, danh sách tích/gạch, đồng xu rơi vào heo.
-- 6 nền: lưới sổ kế toán, phòng của Ben, bàn làm việc, thành phố, **Ben's Notebook** (trang sổ kẻ dòng), nền trơn.
-- **Đoạn vẽ tay (Ben's Notebook)**: lật trang sổ, bàn tay cầm bút chì (ảnh CC0 từ Openclipart, nền trong suốt, xem `assets/hand/README.txt`) vẽ biểu đồ từng nét (đường, cột, tròn, sơ đồ dòng tiền); chữ viết và màu tô hiện dần theo ngòi bút
+- Thành phần tiền bạc tự tính số, không gõ tay, mỗi loại một kiểu cho bắt mắt: **sticker** viền đậm (số đếm lên/xuống),
+  **thẻ giá treo dây** lắc lư (tiền ra), **tờ tiền** (tiền vào/để dành), **thông báo ngân hàng** trượt vào từng cái,
+  **giấy note vàng** viết tay cho danh sách, hóa đơn in từng dòng, biểu đồ lãi kép, cột so sánh, đồng xu rơi vào heo.
+- 6 nền: lưới sổ kế toán, phòng của Ben, bàn làm việc, thành phố, **Ben's Notebook** (sổ lò xo đặt nghiêng trên bàn), nền trơn.
+- Chuyển cảnh tự động: vẽ tiếp trên sổ thì **lật trang**; đổi từ thẻ sang trang sổ, trang sang thẻ hay sang loại khác thì **trượt vào**.
+- **Đoạn vẽ tay (Ben's Notebook)**: trang sổ lò xo trượt vào (hoặc lật sang trang mới nếu vẽ tiếp), bàn tay cầm bút chì (ảnh CC0 từ Openclipart, nền trong suốt, xem `assets/hand/README.txt`) vẽ biểu đồ từng nét (đường, cột, tròn, sơ đồ dòng tiền); chữ viết và màu tô hiện dần theo ngòi bút
   rồi viết chữ tay; có tiếng lật giấy và tiếng bút. Dùng `"show": {"type": "sketch", ...}` với `"bg": "notebook"`.
 - Nhạc nền và hiệu ứng tự tạo (không lo bản quyền); nhạc tự nhỏ lại khi có lời. Muốn dùng nhạc của bạn: xem `library\README.txt`.
 

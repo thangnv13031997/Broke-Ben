@@ -17,7 +17,7 @@ Hướng dẫn đầy đủ (tiếng Anh, để Claude đọc): `docs/PROMPT_FOR
 ## Mỗi cảnh (3-7 giây lời đọc)
 - **purpose**: hook, promise, setup, open_loop, beat, rehook, payoff, action, outro.
 - **chapter**: tên chương YouTube (cần ≥ 3 chương).
-- **bg**: `grid`, `room`, `desk`, `city`, `notebook` (bút chì vẽ dần), `plain`. Giữ nguyên cho cảnh sau đến khi đổi.
+- **bg**: `grid`, `room`, `desk`, `city`, `notebook` (trang sổ lò xo đặt nghiêng trên bàn, bàn tay vẽ lên đó), `plain`. Giữ nguyên cho cảnh sau đến khi đổi.
 - **chars**: `who` (ben/piggy), `pose`, `mood`, `x` (0..1),
   `enter` (left, right, pop), `size`. Bỏ trống thì hiện linh vật mặc định; `[]` là không có nhân vật.
   - Dáng của Ben (25): idle (đứng), wave (vẫy tay), point (chỉ), hold_head (ôm đầu), cross_arms (khoanh tay),
@@ -30,19 +30,23 @@ Hướng dẫn đầy đủ (tiếng Anh, để Claude đọc): `docs/PROMPT_FOR
     tired (mệt), cry (khóc).
   - Piggy Ben: không có dáng; cảm xúc smile / shock.
 - **show** (thành phần bên phải nhân vật):
-  - `money_card`: `label`, `value`, `to` (đếm từ value tới to), `to_label`, `color`, `note`
+  - `money_card`: `label`, `value`, `to` (đếm từ value tới to), `to_label`, `color`, `note`.
+    Kiểu thẻ tự chọn: `color: red` → thẻ giá treo dây (tiền ra), `color: green` → tờ tiền (tiền vào/để dành),
+    còn lại → sticker. Muốn ép kiểu: `"style": "sticker" | "tag" | "bill" | "plain"`.
   - `big_text`: `text`, `sub`, `color`
   - `invest_chart`: `monthly`, `rate`, `years`, `start_age`, `compounding` – tool tự tính đường lãi kép
   - `chart`: `title`, `labels`, `series`
   - `receipt`: `title`, `income`, `items` – tool tự tính LEFT OVER
-  - `phone`: `label`, `balance`, `from`, `items`
+  - `phone`: `label`, `balance`, `from`, `items` (tối đa 4) → thông báo ngân hàng trượt vào từng cái (`"style": "phone"` = màn hình điện thoại cũ)
   - `compare`: `title`, `left`, `right`
-  - `list`: `title`, `items` ("+ ..." tích xanh, "- ..." gạch đỏ)
+  - `list`: `title`, `items` ("+ ..." tích xanh, "- ..." gạch đỏ) → giấy note vàng, viết tay từng dòng (`"style": "card"` = kiểu cũ)
   - `coin_drop`: đồng xu rơi vào Piggy Ben (cần piggy trong `chars`)
-  - `sketch`: **Ben's Notebook** – lật trang sổ, bàn tay cầm bút vẽ biểu đồ từng nét rồi viết chữ tay.
+  - `sketch`: **Ben's Notebook** – bàn tay cầm bút chì vẽ biểu đồ từng nét lên trang sổ rồi viết chữ tay.
     `kind`: `line` (đường, hoặc `invest` tự tính lãi kép), `bars` (cột), `pie` (tròn, tự tính %), `flow` (sơ đồ dòng tiền).
     Dùng với `"bg": "notebook"`; `"chars": []` để vẽ cả trang. Nên dùng khoảng 20% số cảnh, để giải thích khái niệm.
-  - thêm `"enter": "slide"` để trượt vào thay vì bật ra.
+  - **Chuyển cảnh tự động**: cảnh notebook nối tiếp cảnh notebook → **lật trang**; đổi sang loại khác
+    (thẻ → trang, trang → thẻ, thẻ → biểu đồ...) → **trượt vào** từ bên phải; cùng loại (thẻ → thẻ) → **bật ra**.
+    `"page_flip": false` để trang trượt thay vì lật; `"enter": "slide"|"pop"` để ép kiểu cho thành phần thường.
 - **lines**: `text` (tiếng Anh để đọc, số viết bằng chữ, `*từ*` để tô vàng), **`vi`** (phụ đề tiếng Việt), `pause_after`, `speaker` ("none" để nhân vật không mấp máy miệng).
-- **sfx**: `{ "name": pop|coin|ding|whoosh|tick|thud|cash|page|scribble, "at_line": 0 }` (cảnh vẽ tay tự có tiếng lật trang và tiếng bút).
+- **sfx**: `{ "name": pop|coin|ding|whoosh|tick|thud|cash|page|scribble, "at_line": 0 }` (tool tự thêm tiếng lật trang, tiếng trượt "whoosh" và tiếng bút).
 - **transition**: `cut` hoặc `fade`.

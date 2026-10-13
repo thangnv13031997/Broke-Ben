@@ -86,7 +86,8 @@ Put `"chapter"` on the first scene of each part (≥ 3 chapters, ≥ 10 s apart)
 
 ### Scene fields
 - `bg`: `grid` (ledger paper, default), `room` (Ben's room at night), `desk`, `city`, `notebook`
-  ("Ben's Notebook": the element is drawn in by a pencil – use for ~20% of scenes, for concepts), `plain`.
+  ("Ben's Notebook": a spiral notebook page lies tilted on Ben's desk and the element is drawn on it by a hand
+  holding a pencil – use for ~20% of scenes, for concepts), `plain`.
   The background carries over to the next scene until you change it.
 - `chars`: 0–3 of `{ "who": "ben"|"piggy", "pose": ..., "mood": ..., "x": 0..1 (optional),
   "enter": "left"|"right"|"pop" (optional), "size": 1.0 }`.
@@ -104,26 +105,35 @@ Put `"chapter"` on the first scene of each part (≥ 3 chapters, ≥ 10 s apart)
   episode mascot; use `[]` for no character. `"mood": "shock"` makes the character hop once.
   The first character's mouth moves with the narration; set a line's `"speaker": "none"` to keep it still.
 - `show` (optional, one per scene; appears beside the characters):
-  - `money_card`: `label`, `value`, optional `to` (counts from value to to), `to_label`, `color` (auto|green|red), `note`
+  - `money_card`: `label`, `value`, optional `to` (counts from value to to), `to_label`, `color` (auto|green|red), `note`.
+    The look follows the money: `"color": "red"` = a swinging **price tag** (money going out), `"color": "green"` =
+    a **banknote** (money coming in or kept), anything else (and every counting card) = a bold **sticker**.
+    Override with `"style": "sticker"|"tag"|"bill"|"plain"`.
   - `big_text`: `text`, `sub`, `color` (ink|green|red|gold)
   - `invest_chart`: `monthly`, `rate` (0.07), `years`, `start_age`, `start`, `compounding` (monthly|yearly);
     the tool computes and labels the curve
   - `chart`: `title`, `sub`, `labels` [..], `series` [{ `name`, `values` [..], `color` }], `prefix`
   - `receipt`: `title`, `income`, `items` [[label, amount], ...]; the tool computes LEFT OVER
-  - `phone`: `label`, `balance`, `from` (optional, counts down), `items` [[label, amount], ...]
+  - `phone`: `label`, `balance`, `from` (optional, counts down), `items` [[label, amount], ...] (max 4): shown as
+    **bank notifications** sliding in one by one under the balance. `"style": "phone"` = the old phone screen.
   - `compare`: `title`, `left` {label, value, color}, `right` {label, value, color}, `prefix` (default "$"),
     `suffix` (e.g. `"prefix": "", "suffix": "%"` for percentages)
   - `money_card` also takes `decimals` (e.g. 2 for $4.80)
-  - `list`: `title`, `items` ["+ good thing", "- bad thing"] (revealed one by one)
+  - `list`: `title`, `items` ["+ good thing", "- bad thing"]: a **yellow sticky note**, each line ticked/crossed and
+    handwritten one by one (max ~5 short items). `"style": "card"` = the old plain list.
   - `coin_drop`: a coin drops into Piggy Ben (needs a piggy in `chars`)
-  - `sketch` ("Ben's Notebook" hand drawing; best with `"bg": "notebook"`, which also opens with a page flip):
-    a hand holding a marker draws the chart stroke by stroke, then writes the labels in handwriting.
+  - `sketch` ("Ben's Notebook" hand drawing; use with `"bg": "notebook"`): a hand holding a pencil draws the chart
+    stroke by stroke on the notebook page, then writes the labels in handwriting.
     `kind`: `line` (`title`, `labels`, `series` [{name, values, color}] or `invest` {monthly, rate, years,
     start_age}), `bars` (`title`, `items` [[label, value, color?], ...]), `pie` (`title`, `items` [[label, value]],
     shares computed), `flow` (`title`, `steps` ["Paycheck +$3,000", "Savings -$300", ...]).
     Use `"chars": []` for a full-page drawing, or one Ben (e.g. `present`, `think`) beside a smaller drawing.
-    Use sketches for ~20% of scenes, mainly to explain a concept. Add `"page_flip": false` to skip the flip.
-  - add `"enter": "slide"` to slide an element in instead of popping it.
+    Use sketches for ~20% of scenes, mainly to explain a concept. Put 2–3 notebook scenes in a row when the
+    explanation continues: the page then turns between them.
+  - Transitions are automatic: the notebook page **turns** when the previous scene was also a notebook page
+    (`"page_flip": false` makes it slide instead); an element **slides in** from the right when the previous
+    scene showed a different kind of element (card → notebook, notebook → card, card → chart...), and **pops**
+    when it is the same kind. `"enter": "slide"|"pop"` on a non-notebook element overrides this.
 - `lines`: `text` (English narration), `vi` (Vietnamese subtitle), optional `pause_after` (seconds, default 0.25),
   `speaker` ("narrator" default, or "none").
 - `sfx`: `{ "name": pop|coin|ding|whoosh|tick|thud|cash|page|scribble, "at_line": 0 }` or `{ "name": ..., "at": seconds }`.

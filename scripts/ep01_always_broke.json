@@ -269,12 +269,12 @@
      "who": "ben",
      "pose": "hug_piggy",
      "mood": "worried",
-     "x": 0.32
+     "x": 0.13
     },
     {
      "who": "piggy",
      "mood": "shock",
-     "x": 0.7,
+     "x": 0.3,
      "enter": "right"
     }
    ],
@@ -1133,7 +1133,8 @@
      "name": "cash",
      "at_line": 0
     }
-   ]
+   ],
+   "bg": "grid"
   },
   {
    "purpose": "beat",
@@ -1463,12 +1464,12 @@
      "who": "ben",
      "pose": "point",
      "mood": "smile",
-     "x": 0.32
+     "x": 0.13
     },
     {
      "who": "piggy",
      "mood": "smile",
-     "x": 0.7
+     "x": 0.3
     }
    ],
    "show": {
@@ -1840,12 +1841,12 @@
      "who": "ben",
      "pose": "empty_pockets",
      "mood": "cry",
-     "x": 0.32
+     "x": 0.13
     },
     {
      "who": "piggy",
      "mood": "shock",
-     "x": 0.7
+     "x": 0.3
     }
    ],
    "show": {
@@ -1946,12 +1947,12 @@
      "who": "ben",
      "pose": "hug_piggy",
      "mood": "smile",
-     "x": 0.32
+     "x": 0.13
     },
     {
      "who": "piggy",
      "mood": "smile",
-     "x": 0.7
+     "x": 0.3
     }
    ],
    "show": {
