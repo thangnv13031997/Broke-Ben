@@ -11,6 +11,10 @@ Kinds (show.type = "sketch", show.kind = ...):
   flow  : title, steps ["Paycheck +$3,000", "Rent -$1,450", ...]  (boxes joined by arrows)
 """
 import math
+import os
+
+from PIL import Image
+
 from engine.flatkit import Pen
 import elements as EL
 import money_math
@@ -237,70 +241,45 @@ def _text_left(pen, x, s, size, anchor):
     return x - tw if anchor == 'r' else x - tw / 2 if anchor == 'c' else x
 
 
-# The drawing hand, traced from the creator's whiteboard reference (units: reference pixels, pencil tip at REF_TIP).
-# Plain line art: white hand, thin black outline, bare forearm running off the frame, grey pencil.
-REF_TIP = (213, 420)
+# The drawing hand is the creator's reference picture, cut out by tools/make_hand.py -> assets/hand_pencil.png
+# (same pixel coordinates as assets/hand_reference.jpg). The forearm is cut across at ARM_CUT and continued here.
+HAND_PNG = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'assets', 'hand_pencil.png')
+HAND_TIP = (210, 421)
+ARM_CUT = ((995, 820), (842, 925))
+ARM_DIR = (0.65, 0.76)
 HAND_SCALE = 0.27
-HAND_FILL, HAND_LINE = (255, 255, 255), (20, 20, 20)
-PENCIL, PENCIL_LIGHT = (214, 214, 214), (236, 236, 236)
-_OUTER = [(342, 392), (385, 370), (450, 334), (515, 296), (548, 286), (590, 296), (660, 330), (722, 360),
-          (790, 388), (818, 412), (832, 455), (846, 545), (872, 650), (930, 760), (1022, 850)]
-_INNER = [(334, 455), (342, 520), (346, 570), (370, 598), (420, 600), (470, 615), (540, 680), (620, 740),
-          (705, 778), (760, 830), (880, 970)]
-_FINGERS = [((370, 522), (38, 25)), ((372, 566), (34, 23)), ((398, 600), (30, 19))]
-_INDEX = [(338, 400), (352, 384), (392, 374), (440, 384), (474, 410), (440, 428), (380, 420), (346, 414)]
-_THUMB = [(318, 430), (330, 410), (360, 404), (410, 422), (452, 456), (474, 496), (452, 516), (404, 514),
-          (362, 490), (330, 464)]
-_CREASES = [[(536, 300), (548, 322)], [(430, 372), (446, 388)], [(372, 425), (396, 436)],
-            [(520, 660), (560, 682)], [(352, 540), (372, 538)], [(356, 578), (378, 576)]]
-_WEB = [[(470, 470), (520, 440), (560, 452)], [(480, 520), (530, 500), (590, 520)]]   # under the pencil
+_hand_cache = {}
+
+
+def _hand_png(scale):
+    key = round(scale, 4)
+    if key not in _hand_cache:
+        im = Image.open(HAND_PNG).convert('RGBA')
+        _hand_cache[key] = im.resize((max(1, round(im.width * scale)), max(1, round(im.height * scale))),
+                                     Image.LANCZOS)
+    return _hand_cache[key]
 
 
 def draw_hand(pen, x, y):
-    """A hand holding a pencil in plain whiteboard line art; the pencil tip sits on (x, y).
-    The bare forearm comes in from the bottom right. Drawn by the scene on the full frame so the arm is
-    never clipped by the chart box."""
+    """The reference hand holding its pencil, pencil tip on (x, y); the forearm runs off the frame to the
+    bottom right. Drawn by the scene on the full frame so the arm is never clipped by the chart box."""
     s = HAND_SCALE
 
     def P(pt):
-        return (x + (pt[0] - REF_TIP[0]) * s, y + (pt[1] - REF_TIP[1]) * s)
+        return (x + (pt[0] - HAND_TIP[0]) * s, y + (pt[1] - HAND_TIP[1]) * s)
 
-    def shape(pts, fill, w=2.2):
-        pen.poly([P(q) for q in pts], fill, HAND_LINE, w)
-
-    # forearm edges continue off the frame along their last direction
-    def run_off(edge):
-        (ax, ay), (bx, by) = edge[-2], edge[-1]
-        d = math.hypot(bx - ax, by - ay)
-        return edge + [(bx + (bx - ax) / d * 6000, by + (by - ay) / d * 6000)]
-
-    outer, inner = run_off(_OUTER), run_off(_INNER)
-    pen.poly([P(q) for q in outer + inner[::-1]], HAND_FILL)
-    pen.line([P(q) for q in outer], 2.4, HAND_LINE)
-    pen.line([P(q) for q in inner], 2.4, HAND_LINE)
-    pen.line([P(_OUTER[0]), P(_INNER[0])], 2.4, HAND_LINE)
-    for (cx, cy), (rx, ry) in _FINGERS:
-        shape([(cx + rx * math.cos(t), cy + ry * math.sin(t)) for t in (i * math.pi / 14 for i in range(28))],
-              HAND_FILL)
-    for c in _WEB:
-        pen.line([P(q) for q in c], 1.6, HAND_LINE)
-
-    # the pencil, in a frame u along it (tip -> end) and v across it
-    ex, ey = 930, 510
-    L = math.hypot(ex - REF_TIP[0], ey - REF_TIP[1])
-    du = ((ex - REF_TIP[0]) / L, (ey - REF_TIP[1]) / L)
-    dv = (-du[1], du[0])
-
-    def Q(u, v):
-        return (REF_TIP[0] + du[0] * u + dv[0] * v, REF_TIP[1] + du[1] * u + dv[1] * v)
-
-    shape([Q(0, 0), Q(92, -32), Q(L, -32), Q(L, 32), Q(92, 32)], PENCIL)
-    pen.poly([P(Q(4, -1)), P(Q(92, -30)), P(Q(L - 2, -30)), P(Q(L - 2, -6)), P(Q(92, -6))], PENCIL_LIGHT)
-    pen.line([P(Q(92, -32)), P(Q(92, 32))], 2.2, HAND_LINE)
-    shape(_INDEX, HAND_FILL)
-    shape(_THUMB, HAND_FILL)
-    for c in _CREASES:
-        pen.line([P(q) for q in c], 1.6, HAND_LINE)
+    (o, i), (dx, dy) = ARM_CUT, ARM_DIR
+    o2, i2 = (o[0] + dx * 9000, o[1] + dy * 9000), (i[0] + dx * 9000, i[1] + dy * 9000)
+    nx, ny = dy * 1.5, -dx * 1.5                           # overlap the cut a little so no seam shows
+    pen.poly([P((o[0] - dx * 3 - nx, o[1] - dy * 3 - ny)), P(o2), P(i2), P((i[0] - dx * 3 + nx, i[1] - dy * 3 + ny))],
+             (255, 255, 255))
+    lw = max(1.0, 4.2 * s)
+    pen.line([P(o), P(o2)], lw, (20, 20, 20))
+    pen.line([P(i), P(i2)], lw, (20, 20, 20))
+    im = _hand_png(s * pen.S)
+    layer = Image.new('RGBA', pen.img.size, (0, 0, 0, 0))
+    layer.paste(im, (round((x - HAND_TIP[0] * s) * pen.S), round((y - HAND_TIP[1] * s) * pen.S)))
+    pen.img.alpha_composite(layer)
 
 
 def render(spec, w, h, p, S=2):
