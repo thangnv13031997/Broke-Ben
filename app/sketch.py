@@ -241,45 +241,47 @@ def _text_left(pen, x, s, size, anchor):
     return x - tw if anchor == 'r' else x - tw / 2 if anchor == 'c' else x
 
 
-# The drawing hand is the creator's reference picture, cut out by tools/make_hand.py -> assets/hand_pencil.png
-# (same pixel coordinates as assets/hand_reference.jpg). The forearm is cut across at ARM_CUT and continued here.
-HAND_PNG = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'assets', 'hand_pencil.png')
-HAND_TIP = (210, 421)
-ARM_CUT = ((995, 820), (842, 925))
-ARM_DIR = (0.65, 0.76)
-HAND_SCALE = 0.27
+# The drawing hand: assets/hand_pencil.png (Openclipart 172946, CC0; see assets/hand/README.txt), or
+# assets/hand_custom.png when present. Any transparent PNG works if its pencil points to the left: the tip
+# is found automatically as the left-most solid pixel. The wrist ends inside the picture (a short hand).
+ASSETS = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'assets')
+HAND_WIDTH = 250                                            # width of the hand picture on a 1920x1080 frame
 _hand_cache = {}
 
 
-def _hand_png(scale):
-    key = round(scale, 4)
+def _hand_png(px_scale):
+    """(picture resized for px_scale, tip (x, y) in the resized picture)."""
+    key = round(px_scale, 4)
     if key not in _hand_cache:
-        im = Image.open(HAND_PNG).convert('RGBA')
-        _hand_cache[key] = im.resize((max(1, round(im.width * scale)), max(1, round(im.height * scale))),
-                                     Image.LANCZOS)
+        path = os.path.join(ASSETS, 'hand_custom.png')
+        if not os.path.exists(path):
+            path = os.path.join(ASSETS, 'hand_pencil.png')
+        im = Image.open(path).convert('RGBA')
+        im = im.crop(im.getbbox())
+        f = HAND_WIDTH * px_scale / im.width
+        im = im.resize((max(1, round(im.width * f)), max(1, round(im.height * f))), Image.LANCZOS)
+        a = im.getchannel('A').point(lambda v: 255 if v > 128 else 0)
+        col = a.crop((0, 0, max(1, im.width // 4), im.height)).getbbox()
+        tx = col[0] if col else 0
+        ys = [y for y in range(im.height) if a.getpixel((tx, y))]
+        _hand_cache[key] = (im, (tx, ys[len(ys) // 2] if ys else im.height // 2))
     return _hand_cache[key]
 
 
 def draw_hand(pen, x, y):
-    """The reference hand holding its pencil, pencil tip on (x, y); the forearm runs off the frame to the
-    bottom right. Drawn by the scene on the full frame so the arm is never clipped by the chart box."""
-    s = HAND_SCALE
-
-    def P(pt):
-        return (x + (pt[0] - HAND_TIP[0]) * s, y + (pt[1] - HAND_TIP[1]) * s)
-
-    (o, i), (dx, dy) = ARM_CUT, ARM_DIR
-    o2, i2 = (o[0] + dx * 9000, o[1] + dy * 9000), (i[0] + dx * 9000, i[1] + dy * 9000)
-    nx, ny = dy * 1.5, -dx * 1.5                           # overlap the cut a little so no seam shows
-    pen.poly([P((o[0] - dx * 3 - nx, o[1] - dy * 3 - ny)), P(o2), P(i2), P((i[0] - dx * 3 + nx, i[1] - dy * 3 + ny))],
-             (255, 255, 255))
-    lw = max(1.0, 4.2 * s)
-    pen.line([P(o), P(o2)], lw, (20, 20, 20))
-    pen.line([P(i), P(i2)], lw, (20, 20, 20))
-    im = _hand_png(s * pen.S)
+    """The hand holding its pencil with the pencil tip on (x, y). Drawn by the scene on the full frame so it
+    is never clipped by the chart box."""
+    im, (tx, ty) = _hand_png(pen.S)
     layer = Image.new('RGBA', pen.img.size, (0, 0, 0, 0))
-    layer.paste(im, (round((x - HAND_TIP[0] * s) * pen.S), round((y - HAND_TIP[1] * s) * pen.S)))
+    layer.paste(im, (round(x * pen.S) - tx, round(y * pen.S) - ty))
     pen.img.alpha_composite(layer)
+
+
+def _clip_right(layer, x):
+    """Erase everything right of x on a Pen layer (reveals stay sharp-edged like pencil work)."""
+    xs = max(0, int(x * layer.S))
+    if xs < layer.img.width:
+        layer.img.paste((0, 0, 0, 0), (xs, 0, layer.img.width, layer.img.height))
 
 
 def render(spec, w, h, p, S=2):
@@ -305,16 +307,27 @@ def render(spec, w, h, p, S=2):
         elif op[0] == 'text':
             _, x, y, s, size, col, anchor = op
             left = _text_left(pen, x, s, size, anchor)
-            n = len(s) if frac >= 1 else int(len(s) * frac)
-            if n:
-                pen.text((left, y), s[:n], 'hand', size, col, anchor='lm')
-            tip = (left + pen.text_w(s[:n], 'hand', size), y + size * 0.3)
+            tw = pen.text_w(s, 'hand', size)
+            edge = left + tw * frac                         # handwriting: a smooth left-to-right reveal
+            layer = pen.layer()
+            layer.text((left, y), s, 'hand', size, col, anchor='lm')
+            if frac < 1:
+                _clip_right(layer, edge)
+            pen.paste(layer)
+            wob = math.sin(frac * len(s) * 2.2) * size * 0.22   # the pencil bobs up and down as it writes
+            tip = (edge, y + size * 0.15 + wob)
         else:
-            col = op[2][:3] + (int(op[2][3] * frac),)
-            fills.poly(op[1], col)
             xs = [q[0] for q in op[1]]
             ys = [q[1] for q in op[1]]
-            tip = (sum(xs) / len(xs), sum(ys) / len(ys))
+            x0, x1, y0, y1 = min(xs), max(xs), min(ys), max(ys)
+            edge = x0 + (x1 - x0) * frac                    # colouring in: a wipe from left to right
+            layer = fills.layer()
+            layer.poly(op[1], op[2])
+            if frac < 1:
+                _clip_right(layer, edge)
+            fills.paste(layer)
+            zig = 0.5 + 0.5 * math.sin(frac * math.pi * max(3, (x1 - x0) / 18))   # scribbling strokes
+            tip = (edge, y0 + (y1 - y0) * (0.15 + 0.7 * zig))
     base = pen.layer()                                      # fills sit under the ink
     base.paste(fills)
     base.paste(pen)
