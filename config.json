@@ -1,0 +1,19 @@
+{
+  "kokoro_python": "E:\\LocalTTS\\env_en\\Scripts\\python.exe",
+  "hf_home": "E:\\LocalTTS\\hf_cache",
+  "kokoro_device": "",
+  "narrator_voice": "am_michael",
+  "speed": 1.0,
+  "subtitles": "en",
+  "fps": 30,
+  "quality": 2,
+  "encoder": "auto",
+  "x264_preset": "veryfast",
+  "workers": "auto",
+  "voice_volume": 1.0,
+  "music_volume": 0.35,
+  "sfx_volume": 0.8,
+  "make_shorts": true,
+  "anthropic_api_key": "",
+  "claude_model": "claude-opus-5-5"
+}
