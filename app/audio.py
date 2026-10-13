@@ -83,12 +83,20 @@ def sfx(name):
         t = np.linspace(0, 1, len(n))
         y = (n - _lowpass(n, 6)) * np.sin(np.pi * t) ** 1.5 * 0.5
         return y.astype(np.float32)
-    if name == 'scribble':                               # marker on paper, ~1.6 s
+    if name == 'scribble':                               # soft pencil on paper, ~1.6 s, kept quiet
         n = _noise(1.6, 11)
-        t = np.arange(len(n)) / SR
-        strokes = 0.5 + 0.5 * np.sin(2 * np.pi * 5.3 * t) * np.sin(2 * np.pi * 1.7 * t + 1)
-        y = (n - _lowpass(n, 3)) * np.clip(strokes, 0, 1) * 0.22
-        f = int(0.08 * SR)
+        band = _lowpass(n, 4) - _lowpass(n, 18)          # a soft paper "shh", no harsh hiss
+        rng = np.random.default_rng(12)
+        env = np.zeros(len(n), np.float32)               # short, uneven strokes like handwriting
+        pos = 0.0
+        while pos < 1.6:
+            ln = rng.uniform(0.12, 0.28)
+            a, b = int(pos * SR), int(min(1.6, pos + ln) * SR)
+            if b > a:
+                env[a:b] = np.sin(np.linspace(0, np.pi, b - a)) * rng.uniform(0.6, 1.0)
+            pos += ln + rng.uniform(0.04, 0.12)
+        y = band * env * 0.25
+        f = int(0.15 * SR)
         y[:f] *= np.linspace(0, 1, f)
         y[-f:] *= np.linspace(1, 0, f)
         return y.astype(np.float32)
@@ -175,8 +183,12 @@ def mix(voice, events, total_secs, style, ff, cfg):
     duck = 1 - 0.6 * np.clip(loud / 0.05, 0, 1)
     out += bed[:n] * duck.astype(np.float32)
     vol = float(cfg.get('sfx_volume', 0.8))
+    draw_vol = float(cfg.get('draw_volume', 0.5))           # the pencil has its own volume (0 = silent)
     for t, name in events:
-        s = sfx(name) * vol
+        g = vol * (draw_vol if name == 'scribble' else 1.0)
+        if g <= 0:
+            continue
+        s = sfx(name) * g
         i = int(t * SR)
         if 0 <= i < n:
             m = min(len(s), n - i)

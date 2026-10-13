@@ -546,7 +546,8 @@ class App:
         r += 1
         self.v_music = tk.DoubleVar(value=float(self.cfg.get('music_volume', 0.35)))
         self.v_sfx = tk.DoubleVar(value=float(self.cfg.get('sfx_volume', 0.8)))
-        for lab, var in (('Nhạc nền:', self.v_music), ('Hiệu ứng:', self.v_sfx)):
+        self.v_draw = tk.DoubleVar(value=float(self.cfg.get('draw_volume', 0.5)))
+        for lab, var in (('Nhạc nền:', self.v_music), ('Hiệu ứng:', self.v_sfx), ('Tiếng bút vẽ (0 = tắt):', self.v_draw)):
             ttk.Label(f, text=lab, style='Panel.TLabel').grid(row=r, column=0, sticky='w')
             ttk.Scale(f, from_=0, to=1, variable=var).grid(row=r, column=1, sticky='ew', padx=6)
             r += 1
@@ -583,7 +584,7 @@ class App:
         self.cfg.update({'kokoro_python': self.v_py.get().strip(), 'hf_home': self.v_hf.get().strip(),
                          'narrator_voice': self.v_voice.get().strip() or 'am_michael',
                          'speed': round(float(self.v_speed.get()), 2), 'music_volume': round(self.v_music.get(), 2),
-                         'sfx_volume': round(self.v_sfx.get(), 2), 'encoder': self.v_enc.get(),
+                         'sfx_volume': round(self.v_sfx.get(), 2), 'draw_volume': round(self.v_draw.get(), 2), 'encoder': self.v_enc.get(),
                          'anthropic_api_key': self.v_key.get().strip(), 'claude_model': self.v_model.get().strip()})
         save_cfg(self.cfg)
         self.voice_status.configure(text='Đã lưu cài đặt.')
