@@ -238,25 +238,36 @@ def _text_left(pen, x, s, size, anchor):
 
 
 def draw_hand(pen, x, y):
-    """A hand holding a marker; the marker tip sits on (x, y). The arm comes in from the bottom right.
+    """A hand gripping a short marker; the marker tip sits on (x, y). The arm comes in from the bottom right.
     Drawn by the scene on the full frame so the arm is never clipped by the chart box."""
     ang = math.radians(40)
     dx, dy = math.cos(ang), math.sin(ang)
-    nx, ny = -dy, dx
-    tip = (x, y)
-    m1 = (x + dx * 18, y + dy * 18)
-    m2 = (x + dx * 118, y + dy * 118)
-    pen.poly([tip, (m1[0] + nx * 6, m1[1] + ny * 6), (m1[0] - nx * 6, m1[1] - ny * 6)], INK)
-    pen.poly([(m1[0] + nx * 8, m1[1] + ny * 8), (m2[0] + nx * 8, m2[1] + ny * 8),
-              (m2[0] - nx * 8, m2[1] - ny * 8), (m1[0] - nx * 8, m1[1] - ny * 8)], (230, 70, 60), OUTLINE, 2.5)
-    hx, hy = x + dx * 70, y + dy * 70
-    far = 2400                                             # the slim arm runs off the frame
-    pen.line([(hx + dx * 26, hy + dy * 26), (hx + dx * far, hy + dy * far)], 34, OUTLINE)
-    pen.line([(hx + dx * 26, hy + dy * 26), (hx + dx * far, hy + dy * far)], 28, HOOD)
-    pen.line([(hx + dx * 30 - nx * 8, hy + dy * 30 - ny * 8), (hx + dx * far - nx * 8, hy + dy * far - ny * 8)],
-             9, HOOD_SH)
-    pen.ellipse((hx - 22, hy - 19, hx + 22, hy + 19), SKIN, OUTLINE, 3)
-    pen.ellipse((hx - 27, hy - 4, hx - 9, hy + 12), SKIN, OUTLINE, 2.5)
+    nx, ny = -dy, dx                                       # +v = the side facing the viewer (lower left)
+
+    def P(u, v):
+        return (x + dx * u + nx * v, y + dy * u + ny * v)
+
+    def oval(cu, cv, ru, rv, fill, w=2.5):
+        pts = [P(cu + ru * math.cos(t), cv + rv * math.sin(t)) for t in (i * math.pi / 18 for i in range(36))]
+        pen.poly(pts, fill, OUTLINE, w)
+
+    # sleeve running off the frame, then the cuff and the wrist
+    far = 2400
+    pen.poly([P(92, -17), P(far, -17), P(far, 17), P(92, 17)], HOOD, OUTLINE, 3)
+    pen.poly([P(96, 6), P(far, 6), P(far, 15), P(96, 15)], HOOD_SH)
+    pen.poly([P(86, -19), P(98, -19), P(98, 19), P(86, 19)], HOOD_SH, OUTLINE, 3)
+    pen.poly([P(66, -13), P(88, -13), P(88, 13), P(66, 13)], SKIN, OUTLINE, 2.5)
+    # the marker: small felt tip and a short red body, held through the fist
+    pen.poly([P(0, 0), P(9, -3.5), P(9, 3.5)], INK)
+    pen.poly([P(8, -5), P(62, -5), P(62, 5), P(8, 5)], (230, 70, 60), OUTLINE, 2)
+    pen.poly([P(8, 1.5), P(62, 1.5), P(62, 5), P(8, 5)], (190, 50, 45))
+    # fist around the marker, curled fingers on the viewer side, index finger along the top, thumb
+    oval(54, 2, 21, 17, SKIN, 3)
+    pen.poly([P(44, 12), P(66, 12), P(66, 17), P(44, 17)], SKIN_SH)
+    for cu in (40, 50, 60):
+        oval(cu, 15, 6.5, 5, SKIN, 2)
+    oval(36, -6, 13, 5, SKIN, 2)
+    oval(38, 6, 9, 5.5, SKIN, 2)
 
 
 def render(spec, w, h, p, S=2):
